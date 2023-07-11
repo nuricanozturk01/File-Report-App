@@ -92,8 +92,6 @@ namespace FileReporterApp
                     .build();
         }
 
-        private void reportFormatGroup_Enter(object sender, EventArgs e) => ReportButton.Enabled = true;
-
         private void browseTargetButton_Click(object sender, EventArgs e)
         {
             Stream myStream;

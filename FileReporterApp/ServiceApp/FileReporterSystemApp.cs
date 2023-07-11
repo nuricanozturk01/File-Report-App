@@ -24,7 +24,6 @@ namespace FileAccessProject.ServiceApp
             _filterService = new FilterService();
         }
 
-
         public IEnumerable<FileInfo> GetBeforeFiles(DateTime dateTime) => Directory.GetFiles(_destinationPath).Select(f => new FileInfo(f)).Where(f => filter(f, dateTime, TimeEnum.BEFORE));
         public IEnumerable<FileInfo> GetAfterFiles(DateTime dateTime) => Directory.GetFiles(_destinationPath).Select(f => new FileInfo(f)).Where(f => filter(f, dateTime, TimeEnum.AFTER));
 
@@ -32,21 +31,16 @@ namespace FileAccessProject.ServiceApp
         {
             return _dateOption switch
             {
-                DateOptions.CREATED => time == TimeEnum.BEFORE ? _filterService.filterByCreationDateBefore(f, dateTime) :
-                                           _filterService.filterByCreationDateAfter(f, dateTime),
-                DateOptions.ACCESSED => time == TimeEnum.BEFORE ? _filterService.filterByAccessDateBefore(f, dateTime) :
-                                                _filterService.filterByAccessDateAfter(f, dateTime),
-                DateOptions.MODIFIED => time == TimeEnum.BEFORE ? _filterService.filterByModifiedDateBefore(f, dateTime) :
-                                                _filterService.filterByModifiedDateAfter(f, dateTime),
+                DateOptions.CREATED => _filterService.filterByCreationDate(f, dateTime, time),
+                DateOptions.ACCESSED => _filterService.filterByAccessDate(f, dateTime, time),
+                DateOptions.MODIFIED => _filterService.filterByModifiedDate(f, dateTime, time),
 
                 _ => throw new NotImplementedException("UNSUPPORTED OPERATION!"),
             };
         }
 
-      
-
-         public void writeFileTest(List<FileInfo> list) => File.WriteAllLines(_targetPath, list
-             .Select(f => String.Format("{0} | {1} | {2} | {3} | {4}\n", f.Name, f.FullName, f.CreationTime, f.LastWriteTime, f.LastAccessTime)));
+        public void writeFileTest(List<FileInfo> list) => File.WriteAllLines(_targetPath, list
+            .Select(f => String.Format("{0} | {1} | {2} | {3} | {4}\n", f.Name, f.FullName, f.CreationTime, f.LastWriteTime, f.LastAccessTime)));
 
         public class Builder
         {
