@@ -1,0 +1,17 @@
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.csproj.AssemblyReference.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.csproj.GenerateResource.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.AssemblyInfoInputs.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.AssemblyInfo.cs
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.csproj.CoreCompileInputs.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.FileSystemReporterForm.resources
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReporterApp.exe
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReporterApp.deps.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReporterApp.runtimeconfig.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReporterApp.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReporterApp.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\refint\FileReporterApp.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.genruntimeconfig.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\ref\FileReporterApp.dll
