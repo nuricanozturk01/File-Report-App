@@ -121,6 +121,7 @@
             ReportButton.TabIndex = 16;
             ReportButton.Text = "Report";
             ReportButton.UseVisualStyleBackColor = true;
+            ReportButton.Click += ReportButton_Click;
             // 
             // RunButton
             // 
@@ -183,9 +184,8 @@
             // 
             // TargetPathTextBox
             // 
-            //TargetPathTextBox.
-            TargetPathTextBox.Enabled = false;
             TargetPathTextBox.BackColor = Color.White;
+            TargetPathTextBox.Enabled = false;
             TargetPathTextBox.Location = new Point(24, 271);
             TargetPathTextBox.Margin = new Padding(4);
             TargetPathTextBox.Name = "TargetPathTextBox";
@@ -291,12 +291,13 @@
             // 
             // ThreadCounter
             // 
-            ThreadCounter.Minimum = 1;
             ThreadCounter.Location = new Point(780, 110);
             ThreadCounter.Margin = new Padding(4);
+            ThreadCounter.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             ThreadCounter.Name = "ThreadCounter";
             ThreadCounter.Size = new Size(140, 23);
             ThreadCounter.TabIndex = 6;
+            ThreadCounter.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // DateTimePicker
             // 
@@ -380,10 +381,8 @@
             // 
             // PathTextBox
             // 
-            
-            
-            PathTextBox.Enabled = false;
             PathTextBox.BackColor = Color.White;
+            PathTextBox.Enabled = false;
             PathTextBox.Location = new Point(24, 32);
             PathTextBox.Margin = new Padding(4);
             PathTextBox.Name = "PathTextBox";

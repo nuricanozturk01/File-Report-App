@@ -24,8 +24,8 @@ namespace FileAccessProject.ServiceApp
             _filterService = new FilterService();
         }
 
-        public IEnumerable<FileInfo> GetBeforeFiles(DateTime dateTime) => Directory.GetFiles(_destinationPath).Select(f => new FileInfo(f)).Where(f => filter(f, dateTime, TimeEnum.BEFORE));
-        public IEnumerable<FileInfo> GetAfterFiles(DateTime dateTime) => Directory.GetFiles(_destinationPath).Select(f => new FileInfo(f)).Where(f => filter(f, dateTime, TimeEnum.AFTER));
+        public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum) => Directory.GetFiles(_destinationPath).Select(f => new FileInfo(f)).Where(f => filter(f, dateTime, timeEnum));
+        
 
         private bool filter(FileInfo f, DateTime dateTime, TimeEnum time)
         {

@@ -49,8 +49,8 @@ namespace FileReporterApp
                 _fileReportService = createFilterService(destinationPath, targetPath, dateOpt, threadCount, fileOpt, otherOpts);
 
                 var startTime = Stopwatch.GetTimestamp();
-                var beforeFileList = _fileReportService.GetBeforeFiles(DateTimePicker.Value);
-                var afterFileList = _fileReportService.GetAfterFiles(DateTimePicker.Value);
+                var beforeFileList = _fileReportService.GetFiles(DateTimePicker.Value, TimeEnum.BEFORE);
+                var afterFileList = _fileReportService.GetFiles(DateTimePicker.Value, TimeEnum.AFTER);
                 var finishTime = Stopwatch.GetTimestamp();
 
                 addToListBox(beforeFileList, afterFileList);
@@ -105,6 +105,12 @@ namespace FileReporterApp
                 myStream.Close();
 
             TargetPathTextBox.Text = Path.GetFullPath(saveFileDialog1.FileName);
+        }
+
+        private void ReportButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("NOT IMPLEMENTED YET");
+            throw new NotImplementedException("NOT IMPLEMENTED YET");
         }
     }
 }
