@@ -3,6 +3,7 @@ using FileReporterApp.exception;
 using FileReporterApp.ServiceApp;
 using FileReporterApp.ServiceApp.FileWriter;
 using FileReporterApp.ServiceApp.options;
+using System;
 using System.Diagnostics;
 
 namespace FileReporterApp
@@ -51,19 +52,21 @@ namespace FileReporterApp
 
                 _fileReportService = FileReporterFactory.CreateReporterService(destinationPath, targetPath, dateOpt, threadCount, fileOpt, otherOpts);
 
-                var startTime = Stopwatch.GetTimestamp();
+
                 var beforeFileList = _fileReportService.GetFiles(DateTimePicker.Value, TimeEnum.BEFORE);
                 var afterFileList = _fileReportService.GetFiles(DateTimePicker.Value, TimeEnum.AFTER);
-                var finishTime = Stopwatch.GetTimestamp();
 
-                Scan(afterFileList, beforeFileList, startTime, finishTime);
+                Enumerable.Range(0, 5).ToList().ForEach(i => ResultListBox.Items.Add(""));
+
+                Scan(beforeFileList.Concat(afterFileList).ToList());
+
 
                 /*if (CopyRadioButton.Checked)
                     CopyNewFilesToTarget(afterFileList, targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked);
                 if (MoveRadioButton.Checked)
                     MoveNewFilesToTarget(afterFileList, targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked);
             */
-                }
+            }
             catch (RadioButtonNotSelectedException ex)
             {
                 ex.CreateMessage();
@@ -80,26 +83,27 @@ namespace FileReporterApp
             throw new NotImplementedException();
         }
 
-        private void Scan(IEnumerable<FileInfo> afterFileList, IEnumerable<FileInfo> beforeFileList, long startTime, long finishTime)
+        private async void Scan(List<FileInfo> mergedList)
         {
-            AddToListBox(beforeFileList, afterFileList);
 
-            ResultListBox.Items.Add("Scan was completed! Total Elapsed Time: " + String.Format("{0}", TimeSpan.FromMilliseconds(finishTime - startTime).ToString(@"hh\:mm\:ss")));
-        }
+            if (ResultListBox.InvokeRequired)
+            {
+                ResultListBox.Invoke(() => Scan(mergedList));
+                return;
+            }
 
-        private void AddToListBox(IEnumerable<FileInfo> beforeFileList, IEnumerable<FileInfo> afterFileList)
-        {
-            ResultListBox.Items.Add(beforeFileList.Count() + afterFileList.Count() + " items were scanned!");
-            ResultListBox.Items.Add("Before Date");
+            var startTime = Stopwatch.GetTimestamp();
 
-            beforeFileList.ToList().ForEach(beforeFile => ResultListBox.Items.Add(beforeFile));
-            ResultListBox.Items.Add("");
-            ResultListBox.Items.Add("");
-            ResultListBox.Items.Add("After Date\n");
-
-            afterFileList.ToList().ForEach(beforeFile => ResultListBox.Items.Add(beforeFile));
-            ResultListBox.Items.Add("");
-            ResultListBox.Items.Add("");
+            for (var i = 0; i < mergedList.Count; ++i)
+            {
+                ResultListBox.Items[0] = (i + 1) + " items were scanned!";
+                ResultListBox.Items[2] = mergedList[i];
+                await Task.Delay(45);
+            }
+                
+            var finishTime = Stopwatch.GetTimestamp();
+            
+            ResultListBox.Items[4] = "Scan was completed! Total Elapsed Time: " + String.Format("{0}", TimeSpan.FromMilliseconds(finishTime - startTime).ToString(@"hh\:mm\:ss"));
         }
 
         private void BrowseTargetButton_Click(object sender, EventArgs e)
@@ -120,6 +124,7 @@ namespace FileReporterApp
         private void ReportButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("NOT IMPLEMENTED YET");
+
             throw new NotImplementedException("NOT IMPLEMENTED YET");
         }
     }
