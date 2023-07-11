@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace FileReporterApp
+﻿namespace FileReporterApp.exception
 {
     public class RadioButtonNotSelectedException : Exception
     {
@@ -15,7 +8,7 @@ namespace FileReporterApp
             this.listBox = listBox;
         }
 
-        public void createMessage() => listBox.Items.Add(Message.ToUpper());
+        public void CreateMessage() => listBox.Items.Add(Message.ToUpper());
 
 
     }

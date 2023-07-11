@@ -6,11 +6,11 @@ namespace FileReporterApp.ServiceApp.filter
     {
         public FilterService() { }
 
-        public bool filterByCreationDate(FileInfo filterObj, DateTime date, TimeEnum timeEnum) => 
+        public bool FilterByCreationDate(FileInfo filterObj, DateTime date, TimeEnum timeEnum) => 
             timeEnum == TimeEnum.BEFORE ? filterObj.CreationTime.CompareTo(date) < 0 : filterObj.CreationTime.CompareTo(date) >= 0;
-        public bool filterByModifiedDate(FileInfo filterObj, DateTime date, TimeEnum timeEnum) =>
+        public bool FilterByModifiedDate(FileInfo filterObj, DateTime date, TimeEnum timeEnum) =>
             timeEnum == TimeEnum.BEFORE ? filterObj.LastAccessTime.CompareTo(date) < 0 : filterObj.LastAccessTime.CompareTo(date) >= 0;
-        public bool filterByAccessDate(FileInfo filterObj, DateTime date, TimeEnum timeEnum) => 
+        public bool FilterByAccessDate(FileInfo filterObj, DateTime date, TimeEnum timeEnum) => 
             timeEnum == TimeEnum.BEFORE ? filterObj.LastAccessTime.CompareTo(date) < 0 : filterObj.LastAccessTime.CompareTo(date) >= 0;
     }
 }

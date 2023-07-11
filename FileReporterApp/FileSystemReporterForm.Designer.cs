@@ -180,7 +180,7 @@
             browseTargetButton.TabIndex = 10;
             browseTargetButton.Text = "Browse";
             browseTargetButton.UseVisualStyleBackColor = true;
-            browseTargetButton.Click += browseTargetButton_Click;
+            browseTargetButton.Click += BrowseTargetButton_Click;
             // 
             // TargetPathTextBox
             // 
@@ -261,7 +261,6 @@
             CopyRadioButton.Name = "CopyRadioButton";
             CopyRadioButton.Size = new Size(53, 19);
             CopyRadioButton.TabIndex = 2;
-            CopyRadioButton.TabStop = true;
             CopyRadioButton.Text = "Copy";
             CopyRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -273,13 +272,13 @@
             MoveRadioButton.Name = "MoveRadioButton";
             MoveRadioButton.Size = new Size(55, 19);
             MoveRadioButton.TabIndex = 1;
-            MoveRadioButton.TabStop = true;
             MoveRadioButton.Text = "Move";
             MoveRadioButton.UseVisualStyleBackColor = true;
             // 
             // ScanRadioButton
             // 
             ScanRadioButton.AutoSize = true;
+            ScanRadioButton.Checked = true;
             ScanRadioButton.Location = new Point(8, 22);
             ScanRadioButton.Margin = new Padding(4);
             ScanRadioButton.Name = "ScanRadioButton";

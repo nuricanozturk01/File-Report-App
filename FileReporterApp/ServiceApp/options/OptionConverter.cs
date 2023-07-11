@@ -2,7 +2,7 @@
 {
     internal class OptionConverter
     {
-        public static DateOptions toDateOption(string option)
+        public static DateOptions ToDateOption(string option)
         {
             return option switch
             {
@@ -13,7 +13,7 @@
         }
 
 
-        public static BasicOptions toBasicOption(string option)
+        public static BasicOptions ToBasicOption(string option)
         {
             return option switch
             {
@@ -23,7 +23,7 @@
             };
         }
 
-        public static OtherOptions toOtherOption(string option)
+        public static OtherOptions ToOtherOption(string option)
         {
             return option switch
             {
@@ -33,7 +33,7 @@
             };
         }
 
-        public static List<OtherOptions> toOtherOptionList(List<string> optionList) =>
-            optionList.Select(opt => toOtherOption(opt)).ToList();
+        public static List<OtherOptions> ToOtherOptionList(List<string> optionList) =>
+            optionList.Select(opt => ToOtherOption(opt)).ToList();
     }
 }
