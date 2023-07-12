@@ -19,9 +19,13 @@ namespace FileAccessProject.ServiceApp
         private readonly IFilterService<FileInfo> _filterService;
         private List<FileInfo> _scannedMergedList;
         private FileReporterSystemApp() => _filterService = new FilterService();
+
+
+
         internal void SetScannedMergedList(List<FileInfo> scannedMergedFiles) => _scannedMergedList = scannedMergedFiles;
-        public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum) => Directory.GetFiles(_destinationPath).Select(f => new FileInfo(f)).Where(f => Filter(f, dateTime, timeEnum));
+        public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum) => new DirectoryInfo(_destinationPath).GetFiles("*", SearchOption.AllDirectories).Where(f => Filter(f, dateTime, timeEnum));
         
+
 
         private bool Filter(FileInfo f, DateTime dateTime, TimeEnum time)
         {
@@ -37,17 +41,14 @@ namespace FileAccessProject.ServiceApp
 
         internal void MoveFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
         {
-            afterFileList.AsParallel().ForAll(fi => File.Move(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
+            afterFileList.AsParallel().ForAll(async fi => await Task.Run(() => File.Move(fi.FullName, targetPath + "\\" + fi.Name, overwrite)));
+           
         }
 
         internal async void CopyFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
         {
-            foreach(FileInfo fi in afterFileList)
-            {
+            foreach(var fi in afterFileList)
                 await Task.Run(() => File.Copy(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
-                
-            }
-            //afterFileList.AsParallel().ForAll(fi => File.Copy(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
         }
 
         internal async void Scan(List<FileInfo> mergedList, ListBox ResultListBox)

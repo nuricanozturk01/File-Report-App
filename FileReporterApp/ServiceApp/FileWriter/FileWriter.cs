@@ -20,7 +20,6 @@ namespace FileReporterApp.ServiceApp.FileWriter
             switch (format)
             {
                 case FileType.EXCEL:
-                    
                     getInstance()._excelFileWriter.Write(scannedMergedList, targetPath);
                     break;
 
