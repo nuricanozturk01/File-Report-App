@@ -1,6 +1,12 @@
-﻿namespace FileReporterApp.exception
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FileReporterApp.exception
 {
-    public class RadioButtonNotSelectedException : Exception
+    internal class RadioButtonNotSelectedException : Exception
     {
         private readonly ListBox listBox;
         public RadioButtonNotSelectedException(string? message, ListBox listBox) : base(message)
@@ -9,7 +15,5 @@
         }
 
         public void CreateMessage() => listBox.Items.Add(Message.ToUpper());
-
-
     }
 }

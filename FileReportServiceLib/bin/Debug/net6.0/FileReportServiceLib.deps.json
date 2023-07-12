@@ -6,13 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "FileReporterApp/1.0.0": {
+      "FileReportServiceLib/1.0.0": {
         "dependencies": {
-          "FileReportServiceLib": "1.0.0",
           "IronXL.Excel": "2023.7.4"
         },
         "runtime": {
-          "FileReporterApp.dll": {}
+          "FileReportServiceLib.dll": {}
         }
       },
       "BitMiracle.LibTiff.NET/2.4.649": {
@@ -55,19 +54,11 @@
           }
         }
       },
-      "System.Memory/4.5.5": {},
-      "FileReportServiceLib/1.0.0": {
-        "dependencies": {
-          "IronXL.Excel": "2023.7.4"
-        },
-        "runtime": {
-          "FileReportServiceLib.dll": {}
-        }
-      }
+      "System.Memory/4.5.5": {}
     }
   },
   "libraries": {
-    "FileReporterApp/1.0.0": {
+    "FileReportServiceLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -106,11 +97,6 @@
       "sha512": "sha512-XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",
       "path": "system.memory/4.5.5",
       "hashPath": "system.memory.4.5.5.nupkg.sha512"
-    },
-    "FileReportServiceLib/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

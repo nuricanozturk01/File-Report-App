@@ -12,4 +12,8 @@
     <PackageReference Include="IronXL.Excel" Version="2023.7.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FileReportServiceLib\FileReportServiceLib.csproj" />
+  </ItemGroup>
+
 </Project>

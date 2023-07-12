@@ -1,6 +1,6 @@
 ﻿namespace FileReporterApp.ServiceApp.options
 {
-    internal class EnumConverter
+    public class EnumConverter
     {
         public static DateOptions ToDateOption(string option)
         {
@@ -36,7 +36,7 @@
         public static List<OtherOptions> ToOtherOptionList(List<string> optionList) =>
             optionList.Select(opt => ToOtherOption(opt)).ToList();
 
-        internal static FileType toFileType(int filterIndex)
+        public static FileType toFileType(int filterIndex)
         {
             return filterIndex == 1 ? FileType.TEXT : FileType.EXCEL;
         }

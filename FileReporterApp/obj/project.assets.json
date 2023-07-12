@@ -77,6 +77,9 @@
       "FileReportServiceLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "IronXL.Excel": "2023.7.4"
+        },
         "compile": {
           "bin/placeholder/FileReportServiceLib.dll": {}
         },

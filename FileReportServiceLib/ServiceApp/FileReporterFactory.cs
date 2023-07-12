@@ -10,12 +10,12 @@ namespace FileReporterApp.ServiceApp
 {
     public class FileReporterFactory
     {
-        public static FileReporterSystemApp CreateReporterService(string destinationPath, string targetPath, RadioButton dateOpt, int threadCount, RadioButton fileOpt, List<CheckBox> otherOpts)
+        public static FileReporterSystemApp CreateReporterService(string destinationPath, string targetPath, string dateOptName, int threadCount, string fileOptName, List<string> otherOpts)
         {
             return new FileReporterSystemApp.Builder()
-                    .SetBasicOption(EnumConverter.ToBasicOption(fileOpt.Name))
-                    .SetOtherOptions(EnumConverter.ToOtherOptionList(otherOpts.Select(opt => opt.Name).ToList()))
-                    .SetDateOption((EnumConverter.ToDateOption(dateOpt.Name)))
+                    .SetBasicOption(EnumConverter.ToBasicOption(fileOptName))
+                    .SetOtherOptions(EnumConverter.ToOtherOptionList(otherOpts))
+                    .SetDateOption((EnumConverter.ToDateOption(dateOptName)))
                     .SetDestinationPath(destinationPath)
                     .SetTargetPath(targetPath)
                     .SetThreadCount(threadCount)

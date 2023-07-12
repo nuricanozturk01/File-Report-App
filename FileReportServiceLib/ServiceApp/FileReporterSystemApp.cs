@@ -20,7 +20,7 @@ namespace FileAccessProject.ServiceApp
         private List<FileInfo> _scannedMergedList;
         private FileReporterSystemApp() => _filterService = new FilterService();
 
-        internal void SetScannedMergedList(List<FileInfo> scannedMergedFiles) => _scannedMergedList = scannedMergedFiles;
+        public void SetScannedMergedList(List<FileInfo> scannedMergedFiles) => _scannedMergedList = scannedMergedFiles;
         public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum) => new DirectoryInfo(_destinationPath).GetFiles("*", SearchOption.AllDirectories).Where(f => Filter(f, dateTime, timeEnum));
 
 
@@ -36,40 +36,20 @@ namespace FileAccessProject.ServiceApp
             };
         }
 
-        internal void MoveFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
+        public void MoveFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
         {
             afterFileList.AsParallel().ForAll(async fi => await Task.Run(() => File.Move(fi.FullName, targetPath + "\\" + fi.Name, overwrite)));
 
         }
 
-        internal async void CopyFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
+        public async void CopyFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
         {
             foreach (var fi in afterFileList)
                 await Task.Run(() => File.Copy(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
         }
 
-        internal async void Scan(List<FileInfo> mergedList, ListBox ResultListBox)
-        {
-            if (ResultListBox.InvokeRequired)
-            {
-                ResultListBox.Invoke(() => Scan(mergedList, ResultListBox));
-                return;
-            }
-
-            var startTime = Stopwatch.GetTimestamp();
-
-            for (var i = 0; i < mergedList.Count; ++i)
-            {
-                ResultListBox.Items[0] = (i + 1) + " items were scanned!";
-                ResultListBox.Items[2] = mergedList[i];
-                await Task.Delay(5);
-            }
-
-            var finishTime = Stopwatch.GetTimestamp();
-
-            ResultListBox.Items[4] = "Scan was completed! Total Elapsed Time: " + String.Format("{0}", TimeSpan.FromMilliseconds(finishTime - startTime).ToString(@"hh\:mm\:ss"));
-        }
-        internal void ReportByFileFormat(FileType format, string path) => ExceptionUtil.DoForAction(() => ReportByFileFormatCallback(format, path), () => MessageBox.Show("Somethings are wrong!"));
+        
+        public void ReportByFileFormat(FileType format, string path) => ExceptionUtil.DoForAction<Exception>(() => ReportByFileFormatCallback(format, path), "Somethings are wrong!");
 
 
         // [QUESTION] Burada WriteFile'ın içindeki Excel Writer ve TextFileWriter da asenkron kullanıldı. Sadece burada kullanılsa olur mu?
@@ -78,7 +58,7 @@ namespace FileAccessProject.ServiceApp
         {
             await Task.Run(() => FileWriter.WriteFile(_scannedMergedList, format, path));
 
-            MessageBox.Show("Report exported successfully!");
+         
         }
 
         public class Builder

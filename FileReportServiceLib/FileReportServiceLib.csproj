@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="IronXL.Excel" Version="2023.7.4" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@ using FileAccessProject.ServiceApp;
 using FileReporterApp.exception;
 using FileReporterApp.ServiceApp;
 using FileReporterApp.ServiceApp.options;
+using System.Diagnostics;
 
 namespace FileReporterApp
 {
@@ -15,7 +16,27 @@ namespace FileReporterApp
         private void CopyRadioButton_CheckedChanged(object sender, EventArgs e) => browseTargetButton.Enabled = CopyRadioButton.Checked;
         private void MoveNewFilesToTarget(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders) => _fileReporterSystemService.MoveFiles(afterFileList, targetPath, overwrite, ntfsPermission, emptyFolders);
         private void CopyNewFilesToTarget(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders) => _fileReporterSystemService.CopyFiles(afterFileList, targetPath, overwrite, ntfsPermission, emptyFolders);
-        private void Scan(List<FileInfo> mergedList) => _fileReporterSystemService.Scan(mergedList, ResultListBox);
+        private async void Scan(List<FileInfo> mergedList)
+        {
+            if (ResultListBox.InvokeRequired)
+            {
+                ResultListBox.Invoke(() => Scan(mergedList));
+                return;
+            }
+
+            var startTime = Stopwatch.GetTimestamp();
+
+            for (var i = 0; i < mergedList.Count; ++i)
+            {
+                ResultListBox.Items[0] = (i + 1) + " items were scanned!";
+                ResultListBox.Items[2] = mergedList[i];
+                await Task.Delay(5);
+            }
+
+            var finishTime = Stopwatch.GetTimestamp();
+
+            ResultListBox.Items[4] = "Scan was completed! Total Elapsed Time: " + String.Format("{0}", TimeSpan.FromMilliseconds(finishTime - startTime).ToString(@"hh\:mm\:ss"));
+        }
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             var folderBrowser = new FolderBrowserDialog();
@@ -48,7 +69,8 @@ namespace FileReporterApp
                 if (fileOpt is null)
                     throw new RadioButtonNotSelectedException("Please Select the File option!", ResultListBox);
 
-                _fileReporterSystemService = FileReporterFactory.CreateReporterService(destinationPath, targetPath, dateOpt, threadCount, fileOpt, otherOpts);
+                _fileReporterSystemService = FileReporterFactory.CreateReporterService(destinationPath, targetPath, dateOpt.Name, threadCount, 
+                    fileOpt.Name, otherOpts.Select(fi => fi.Name).ToList());
 
                 createOperation(targetPath);
 
