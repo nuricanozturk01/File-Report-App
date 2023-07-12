@@ -13,9 +13,9 @@ namespace FileReporterApp.ServiceApp
         public static FileReporterSystemApp CreateReporterService(string destinationPath, string targetPath, RadioButton dateOpt, int threadCount, RadioButton fileOpt, List<CheckBox> otherOpts)
         {
             return new FileReporterSystemApp.Builder()
-                    .SetBasicOption(OptionConverter.ToBasicOption(fileOpt.Name))
-                    .SetOtherOptions(OptionConverter.ToOtherOptionList(otherOpts.Select(opt => opt.Name).ToList()))
-                    .SetDateOption((OptionConverter.ToDateOption(dateOpt.Name)))
+                    .SetBasicOption(EnumConverter.ToBasicOption(fileOpt.Name))
+                    .SetOtherOptions(EnumConverter.ToOtherOptionList(otherOpts.Select(opt => opt.Name).ToList()))
+                    .SetDateOption((EnumConverter.ToDateOption(dateOpt.Name)))
                     .SetDestinationPath(destinationPath)
                     .SetTargetPath(targetPath)
                     .SetThreadCount(threadCount)

@@ -1,8 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "2guwe3i1sb+Tq/9q+PVwxmQ5+UN7htPSiBuYrUMBb7ctCxQQ6P9OsxTILFcPNYKCUkgtwD2Yyc4+dh9Cfr6V+w==",
+  "dgSpecHash": "Ugm03s1blZVNvwnYkq77jkbB9qCNqFH2UHr8OIQ4J8ZsyW1uPPSS/XoLLA9AR25SFVRJvuUHn3SvAviW9Fvlbg==",
   "success": true,
   "projectFilePath": "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterApp\\FileReporterApp.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\hp\\.nuget\\packages\\bitmiracle.libtiff.net\\2.4.649\\bitmiracle.libtiff.net.2.4.649.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\ironsoftware.system.drawing\\2023.7.1\\ironsoftware.system.drawing.2023.7.1.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\ironxl.excel\\2023.7.4\\ironxl.excel.2023.7.4.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\sixlabors.imagesharp\\3.0.0\\sixlabors.imagesharp.3.0.0.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FileReporterApp.ServiceApp.options
 {
-    internal enum FileType
+    public enum FileType
     {
         TEXT, EXCEL
     }

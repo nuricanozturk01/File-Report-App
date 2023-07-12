@@ -2,6 +2,8 @@
 using FileReporterApp.ServiceApp.FileWriter;
 using FileReporterApp.ServiceApp.filter;
 using FileReporterApp.ServiceApp.options;
+using System.Diagnostics;
+using System.Security.AccessControl;
 
 namespace FileAccessProject.ServiceApp
 {
@@ -15,12 +17,9 @@ namespace FileAccessProject.ServiceApp
         private List<OtherOptions> _otherOptionList;
 
         private readonly IFilterService<FileInfo> _filterService;
-
-        private FileReporterSystemApp()
-        {
-            _filterService = new FilterService();
-        }
-
+        private List<FileInfo> _scannedMergedList;
+        private FileReporterSystemApp() => _filterService = new FilterService();
+        internal void SetScannedMergedList(List<FileInfo> scannedMergedFiles) => _scannedMergedList = scannedMergedFiles;
         public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum) => Directory.GetFiles(_destinationPath).Select(f => new FileInfo(f)).Where(f => Filter(f, dateTime, timeEnum));
         
 
@@ -36,8 +35,55 @@ namespace FileAccessProject.ServiceApp
             };
         }
 
-       /* public void writeFileTest(List<FileInfo> list) => File.WriteAllLines(_targetPath, list
-            .Select(f => String.Format("{0} | {1} | {2} | {3} | {4}\n", f.Name, f.FullName, f.CreationTime, f.LastWriteTime, f.LastAccessTime)));*/
+        internal void MoveFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
+        {
+            afterFileList.AsParallel().ForAll(fi => File.Move(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
+        }
+
+        internal async void CopyFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
+        {
+            foreach(FileInfo fi in afterFileList)
+            {
+                await Task.Run(() => File.Copy(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
+                
+            }
+            //afterFileList.AsParallel().ForAll(fi => File.Copy(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
+        }
+
+        internal async void Scan(List<FileInfo> mergedList, ListBox ResultListBox)
+        {
+            if (ResultListBox.InvokeRequired)
+            {
+                ResultListBox.Invoke(() => Scan(mergedList, ResultListBox));
+                return;
+            }
+
+            var startTime = Stopwatch.GetTimestamp();
+
+            for (var i = 0; i < mergedList.Count; ++i)
+            {
+                ResultListBox.Items[0] = (i + 1) + " items were scanned!";
+                ResultListBox.Items[2] = mergedList[i];
+                await Task.Delay(45);
+            }
+
+            var finishTime = Stopwatch.GetTimestamp();
+
+            ResultListBox.Items[4] = "Scan was completed! Total Elapsed Time: " + String.Format("{0}", TimeSpan.FromMilliseconds(finishTime - startTime).ToString(@"hh\:mm\:ss"));
+        }
+
+        internal void ReportByFileFormat(FileType format, string path)
+        {
+            try
+            {
+                FileWriter.WriteFile(_scannedMergedList, format, path);
+                MessageBox.Show("Report exported successfully!");
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
 
         public class Builder
         {
@@ -83,6 +129,4 @@ namespace FileAccessProject.ServiceApp
             public FileReporterSystemApp Build() => _reporterSystem;
         }
     }
-
-
 }
