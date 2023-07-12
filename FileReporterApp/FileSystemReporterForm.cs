@@ -11,6 +11,11 @@ namespace FileReporterApp
         private List<FileInfo> _scannedMergedFiles;
         public FileSystemReporterForm() => InitializeComponent();
 
+        private void MoveRadioButton_CheckedChanged(object sender, EventArgs e) => browseTargetButton.Enabled = MoveRadioButton.Checked;
+        private void CopyRadioButton_CheckedChanged(object sender, EventArgs e) => browseTargetButton.Enabled = CopyRadioButton.Checked;
+        private void MoveNewFilesToTarget(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders) => _fileReporterSystemService.MoveFiles(afterFileList, targetPath, overwrite, ntfsPermission, emptyFolders);
+        private void CopyNewFilesToTarget(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders) => _fileReporterSystemService.CopyFiles(afterFileList, targetPath, overwrite, ntfsPermission, emptyFolders);
+        private void Scan(List<FileInfo> mergedList) => _fileReporterSystemService.Scan(mergedList, ResultListBox);
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             var folderBrowser = new FolderBrowserDialog();
@@ -46,7 +51,7 @@ namespace FileReporterApp
                 _fileReporterSystemService = FileReporterFactory.CreateReporterService(destinationPath, targetPath, dateOpt, threadCount, fileOpt, otherOpts);
 
                 createOperation(targetPath);
-               
+
                 TargetPathTextBox.ResetText();
                 PathTextBox.ResetText();
                 OtherOptionsGroup.ResetText();
@@ -80,9 +85,6 @@ namespace FileReporterApp
             if (MoveRadioButton.Checked)
                 MoveNewFilesToTarget(newFileList, targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked);
         }
-        private void MoveNewFilesToTarget(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders) => _fileReporterSystemService.MoveFiles(afterFileList, targetPath, overwrite, ntfsPermission, emptyFolders);
-        private void CopyNewFilesToTarget(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders) => _fileReporterSystemService.CopyFiles(afterFileList, targetPath, overwrite, ntfsPermission, emptyFolders);
-        private void Scan(List<FileInfo> mergedList) => _fileReporterSystemService.Scan(mergedList, ResultListBox);
         private void ReportButton_Click(object sender, EventArgs e)
         {
             try
@@ -109,7 +111,5 @@ namespace FileReporterApp
                 MessageBox.Show("Please run the scan!");
             }
         }
-        private void MoveRadioButton_CheckedChanged(object sender, EventArgs e) => browseTargetButton.Enabled = MoveRadioButton.Checked;
-        private void CopyRadioButton_CheckedChanged(object sender, EventArgs e) => browseTargetButton.Enabled = CopyRadioButton.Checked;
     }
 }

@@ -73,6 +73,16 @@
         "runtime": {
           "lib/netcoreapp2.1/_._": {}
         }
+      },
+      "FileReportServiceLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/FileReportServiceLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/FileReportServiceLib.dll": {}
+        }
       }
     }
   },
@@ -173,10 +183,16 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "FileReportServiceLib/1.0.0": {
+      "type": "project",
+      "path": "../FileReportServiceLib/FileReportServiceLib.csproj",
+      "msbuildProject": "../FileReportServiceLib/FileReportServiceLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
+      "FileReportServiceLib >= 1.0.0",
       "IronXL.Excel >= 2023.7.4"
     ]
   },
@@ -206,7 +222,11 @@
       "frameworks": {
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReportServiceLib\\FileReportServiceLib.csproj": {
+              "projectPath": "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReportServiceLib\\FileReportServiceLib.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
