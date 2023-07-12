@@ -10,38 +10,45 @@ namespace FileReporterApp.ServiceApp.FileWriter
 
         private async void writeExcelFileCallback(string targetPath, List<FileInfo> scannedMergedList)
         {
-            _workBook = WorkBook.Load(targetPath);
-            WorkSheet workSheet = _workBook.DefaultWorkSheet;
-            prepareTitles(workSheet);
-
-
-            for (int i = 0, j = 2; i < scannedMergedList.Count; ++i, j++)
+            try
             {
-                workSheet["A" + j].Value = scannedMergedList[i].FullName;
-                workSheet["A" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Justify;
-                workSheet["A" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                _workBook = WorkBook.Load(targetPath);
+                WorkSheet workSheet = _workBook.DefaultWorkSheet;
+                prepareTitles(workSheet);
 
-                workSheet["B" + j].Value = scannedMergedList[i].CreationTime.ToString("dd.MM.yyyy hh:mm:ss");
-                workSheet["B" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                workSheet["B" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                if (scannedMergedList != null)
+                {
+                    for (int i = 0, j = 2; i < scannedMergedList.Count; ++i, j++)
+                    {
+                        workSheet["A" + j].Value = scannedMergedList[i].FullName;
+                        workSheet["A" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Justify;
+                        workSheet["A" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+
+                        workSheet["B" + j].Value = scannedMergedList[i].CreationTime.ToString("dd.MM.yyyy hh:mm:ss");
+                        workSheet["B" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
+                        workSheet["B" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
 
 
-                workSheet["C" + j].Value = scannedMergedList[i].LastWriteTime.ToString("dd.MM.yyyy hh:mm:ss");
-                workSheet["C" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                workSheet["C" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                        workSheet["C" + j].Value = scannedMergedList[i].LastWriteTime.ToString("dd.MM.yyyy hh:mm:ss");
+                        workSheet["C" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
+                        workSheet["C" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
 
-                workSheet["D" + j].Value = scannedMergedList[i].LastAccessTime.ToString("dd.MM.yyyy hh:mm:ss");
-                workSheet["D" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                workSheet["D" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                        workSheet["D" + j].Value = scannedMergedList[i].LastAccessTime.ToString("dd.MM.yyyy hh:mm:ss");
+                        workSheet["D" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
+                        workSheet["D" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
 
-                workSheet["E" + j].Value = scannedMergedList[i].Length;
-                workSheet["E" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                workSheet["E" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                        workSheet["E" + j].Value = scannedMergedList[i].Length;
+                        workSheet["E" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
+                        workSheet["E" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                    }
+
+                    Enumerable.Range(0, workSheet.ColumnCount).ToList().ForEach(i => workSheet.AutoSizeColumn(i));
+
+                    _workBook.Save();
+                }
             }
-
-            Enumerable.Range(0, workSheet.ColumnCount).ToList().ForEach(i => workSheet.AutoSizeColumn(i));
-
-            _workBook.Save();
+            catch (FileNotFoundException ex){ }
+            
         }
 
         private async void prepareTitles(WorkSheet workSheet)

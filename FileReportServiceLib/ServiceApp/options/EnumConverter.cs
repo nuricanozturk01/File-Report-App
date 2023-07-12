@@ -33,12 +33,8 @@
             };
         }
 
-        public static List<OtherOptions> ToOtherOptionList(List<string> optionList) =>
-            optionList.Select(opt => ToOtherOption(opt)).ToList();
+        public static List<OtherOptions> ToOtherOptionList(List<string> optionList) => optionList.Select(opt => ToOtherOption(opt)).ToList();
 
-        public static FileType toFileType(int filterIndex)
-        {
-            return filterIndex == 1 ? FileType.TEXT : FileType.EXCEL;
-        }
+        public static FileType ToFileType(int filterIndex) => filterIndex == 1 ? FileType.TEXT : FileType.EXCEL;
     }
 }

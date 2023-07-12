@@ -30,12 +30,12 @@ namespace FileReporterApp
             {
                 ResultListBox.Items[0] = (i + 1) + " items were scanned!";
                 ResultListBox.Items[2] = mergedList[i];
-                await Task.Delay(5);
+                await Task.Delay(1);
             }
-
+            
             var finishTime = Stopwatch.GetTimestamp();
-
-            ResultListBox.Items[4] = "Scan was completed! Total Elapsed Time: " + String.Format("{0}", TimeSpan.FromMilliseconds(finishTime - startTime).ToString(@"hh\:mm\:ss"));
+            TargetPathTextBox.Text = "FINISH!";
+            ResultListBox.Items[4] = "Scan was completed! Total Elapsed Time: " + String.Format("{0}", TimeSpan.FromMilliseconds(finishTime - startTime).ToString("hh\\:mm\\:ss"));
         }
         private void BrowseButton_Click(object sender, EventArgs e)
         {
@@ -122,7 +122,7 @@ namespace FileReporterApp
 
                 RunButton_Click(sender, e);
 
-                _fileReporterSystemService.ReportByFileFormat(EnumConverter.toFileType(SaveDialog.FilterIndex), SaveDialog.FileName);
+                _fileReporterSystemService.ReportByFileFormat(EnumConverter.ToFileType(SaveDialog.FilterIndex), SaveDialog.FileName);
             }
             catch (NullReferenceException ex)
             {

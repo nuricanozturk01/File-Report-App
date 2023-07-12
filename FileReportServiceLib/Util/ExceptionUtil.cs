@@ -20,7 +20,19 @@
             }
             catch (Exception ex)
             {
-                ThrowException<T>(msg, ex);
+                //ThrowException<T>(msg, ex);
+            }
+        }
+
+        public static void DoForFileAction(Action actionCallback)
+        {
+            try
+            {
+                actionCallback();
+            }
+            catch(FileNotFoundException ex)
+            {
+
             }
         }
         public static void DoForAction(Action actionCallback, Action exceptionMessageBox) 

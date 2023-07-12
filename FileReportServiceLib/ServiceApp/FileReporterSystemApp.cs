@@ -3,7 +3,6 @@ using FileReporterApp.ServiceApp.FileWriter;
 using FileReporterApp.ServiceApp.filter;
 using FileReporterApp.ServiceApp.options;
 using FileReporterApp.Util;
-using System.Diagnostics;
 
 namespace FileAccessProject.ServiceApp
 {
@@ -39,7 +38,6 @@ namespace FileAccessProject.ServiceApp
         public void MoveFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
         {
             afterFileList.AsParallel().ForAll(async fi => await Task.Run(() => File.Move(fi.FullName, targetPath + "\\" + fi.Name, overwrite)));
-
         }
 
         public async void CopyFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
@@ -48,7 +46,7 @@ namespace FileAccessProject.ServiceApp
                 await Task.Run(() => File.Copy(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
         }
 
-        
+
         public void ReportByFileFormat(FileType format, string path) => ExceptionUtil.DoForAction<Exception>(() => ReportByFileFormatCallback(format, path), "Somethings are wrong!");
 
 
@@ -57,8 +55,6 @@ namespace FileAccessProject.ServiceApp
         private async void ReportByFileFormatCallback(FileType format, string path)
         {
             await Task.Run(() => FileWriter.WriteFile(_scannedMergedList, format, path));
-
-         
         }
 
         public class Builder

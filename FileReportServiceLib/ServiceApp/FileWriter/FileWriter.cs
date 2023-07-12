@@ -6,7 +6,7 @@ namespace FileReporterApp.ServiceApp.FileWriter
     {
         private IFileWrite _textFileWriter;
         private IFileWrite _excelFileWriter;
-        private static readonly FileWriter _fileWriter = new FileWriter();
+        private static readonly FileWriter _fileWriter = new();
         private FileWriter()
         {
             _textFileWriter = new TextFileWriter();
