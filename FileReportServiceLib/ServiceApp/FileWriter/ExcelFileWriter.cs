@@ -6,16 +6,16 @@ namespace FileReporterApp.ServiceApp.FileWriter
     {
         private WorkBook _workBook;
 
-        public async void Write(List<FileInfo> scannedMergedList, string targetPath) => await Task.Run(() => writeExcelFileCallback(targetPath, scannedMergedList));
+        public async void Write(List<FileInfo> scannedMergedList, string targetPath) => await Task.Run(() => WriteExcelFileCallback(targetPath, scannedMergedList));
 
-        private void writeExcelFileCallback(string targetPath, List<FileInfo> scannedMergedList)
+        private void WriteExcelFileCallback(string targetPath, List<FileInfo> scannedMergedList)
         {
             try
             {
                 _workBook = WorkBook.Load(targetPath);
                 WorkSheet workSheet = _workBook.DefaultWorkSheet;
-                prepareTitles(workSheet);
-                
+                PrepareTitles(workSheet);
+
                 if (scannedMergedList != null)
                 {
                     for (int i = 0, j = 2; i < scannedMergedList.Count; ++i, j++)
@@ -46,14 +46,14 @@ namespace FileReporterApp.ServiceApp.FileWriter
 
                     _workBook.Save();
                     _workBook.Close();
-                    
+
                 }
             }
-            catch (FileNotFoundException ex){ }
-            
+            catch (FileNotFoundException ex) { }
+
         }
 
-        private void prepareTitles(WorkSheet workSheet)
+        private void PrepareTitles(WorkSheet workSheet)
         {
             var titleCells = new string[2, 5] { { "A1", "B1", "C1", "D1", "E1" },
                 { "File Path","File Created Date", "File Modified Date", "File Accessed Date", "File Size (bytes)" } };

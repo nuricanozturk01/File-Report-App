@@ -4,9 +4,9 @@
     {
         private readonly string DELIMITER = "|";
 
-        public async void Write(List<FileInfo> scannedMergedList, string targetPath) => await Task.Run(() => WriteTextFile(scannedMergedList, targetPath));
+        public async void Write(List<FileInfo> scannedMergedList, string targetPath) => await Task.Run(() => WriteTextFileCallback(scannedMergedList, targetPath));
 
-        private void WriteTextFile(List<FileInfo> scannedMergedList, string targetPath)
+        private void WriteTextFileCallback(List<FileInfo> scannedMergedList, string targetPath)
         {
             try
             {

@@ -1,29 +1,63 @@
-﻿
-using FileReporterApp.ServiceApp.FileWriter;
+﻿using FileReporterApp.ServiceApp.FileWriter;
 using FileReporterApp.ServiceApp.filter;
 using FileReporterApp.ServiceApp.options;
 using FileReporterApp.Util;
-using System;
 
 namespace FileAccessProject.ServiceApp
 {
     public class FileReporterSystemApp
     {
         private string _destinationPath;
-        private string _targetPath;
+        private string _targetPath; // DELETE (?)
         private DateOptions _dateOption;
-        private BasicOptions _basicOption;
+        private BasicOptions _basicOption; // DELETE (UNUSED)
         private int _threadCount;
-        private List<OtherOptions> _otherOptionList;
+        private List<OtherOptions> _otherOptionList; // DELETE (UNUSED)
         private DateTime _dateTime;
         private readonly IFilterService<FileInfo> _filterService;
         private List<FileInfo> _scannedMergedList;
-        private FileReporterSystemApp() => _filterService = new FilterService();
 
+
+        private FileReporterSystemApp() => _filterService = new FilterService();
         public void SetScannedMergedList(List<FileInfo> scannedMergedFiles) => _scannedMergedList = scannedMergedFiles;
-        public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum) => new DirectoryInfo(_destinationPath).GetFiles("*", SearchOption.AllDirectories).Where(f => Filter(f, dateTime, timeEnum));
-        public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum, List<string> path) =>
-            path.SelectMany(path => new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories).Where(f => Filter(f, dateTime, timeEnum)));
+
+
+        public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum)
+        {
+            return new DirectoryInfo(_destinationPath).GetFiles("*", SearchOption.AllDirectories).Where(f => Filter(f, dateTime, timeEnum));
+        }
+        public IEnumerable<FileInfo> GetFiles(DateTime dateTime, TimeEnum timeEnum, List<string> path)
+        {
+            return path.SelectMany(path => new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories).Where(f => Filter(f, dateTime, timeEnum)));
+        }
+
+
+
+        public void ReportByFileFormat(FileType format, string path)
+        {
+            ExceptionUtil.DoForAction<Exception>(() => Task.Run(() =>
+                          FileWriter.WriteFile(_scannedMergedList, format, path)), "Somethings are wrong!");
+        }
+
+        private IEnumerable<string> GetFullFolders(string path)
+        {
+            return Directory.GetDirectories(path, "*", SearchOption.AllDirectories)
+                    .Where(dir => Directory.GetFiles(dir).Any(f => Filter(new FileInfo(f), _dateTime, TimeEnum.AFTER)))
+                    .Where(dir => Directory.GetFiles(dir).Length != 0);
+        }
+
+
+        public void MoveFilesAnother(string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
+        {
+            GetFullFolders(_destinationPath).AsParallel().ForAll(async dir => await Task.Run(() => Directory.CreateDirectory(dir.Replace(_destinationPath, targetPath))));
+            GetFiles(_dateTime, TimeEnum.AFTER).AsParallel().ForAll(async dir => await Task.Run(() => File.Move(dir.FullName, dir.FullName.Replace(_destinationPath, targetPath), overwrite)));
+        }
+
+        public void CopyFilesAnother(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
+        {
+            GetFullFolders(_destinationPath).AsParallel().ForAll(async dir => await Task.Run(() => Directory.CreateDirectory(dir.Replace(_destinationPath, targetPath))));
+            GetFiles(_dateTime, TimeEnum.AFTER).AsParallel().ForAll(async dir => await Task.Run(() => File.Copy(dir.FullName, dir.FullName.Replace(_destinationPath, targetPath), overwrite)));
+        }
 
 
         private bool Filter(FileInfo f, DateTime dateTime, TimeEnum time)
@@ -38,40 +72,7 @@ namespace FileAccessProject.ServiceApp
             };
         }
 
-        public void MoveFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
-        {
-            afterFileList.AsParallel().ForAll(async fi => await Task.Run(() => File.Move(fi.FullName, targetPath + "\\" + fi.Name, overwrite)));
-        }
 
-        public async void CopyFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
-        {
-            foreach (var fi in afterFileList)
-                await Task.Run(() => File.Copy(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
-        }
-
-        public async void ReportByFileFormat(FileType format, string path) =>
-            ExceptionUtil.DoForAction<Exception>(() => Task.Run(() => ReportByFileFormatCallback(format, path)), "Somethings are wrong!");
-
-        private void ReportByFileFormatCallback(FileType format, string path) => FileWriter.WriteFile(_scannedMergedList, format, path);
-
-        private IEnumerable<string> GetEmptyFolders(string path) =>
-            Directory.GetDirectories(path, "*", SearchOption.AllDirectories).Where(dir => Directory.GetFiles(dir).Length == 0);
-        private IEnumerable<string> GetFullFolders(string path) =>
-            Directory.GetDirectories(path, "*", SearchOption.AllDirectories)
-            .Where(dir => Directory.GetFiles(dir).Any(f => Filter(new FileInfo(f), _dateTime, TimeEnum.AFTER)))
-            .Where(dir => Directory.GetFiles(dir).Length != 0);
-
-        public void MoveFilesAnother(string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
-        {
-            GetFullFolders(_destinationPath).AsParallel().ForAll(async dir => await Task.Run(() => Directory.CreateDirectory(dir.Replace(_destinationPath, targetPath))));
-            GetFiles(_dateTime, TimeEnum.AFTER).AsParallel().ForAll(async dir => await Task.Run(() => File.Move(dir.FullName, dir.FullName.Replace(_destinationPath, targetPath), overwrite)));
-        }
-
-        public void CopyFilesAnother(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
-        {
-            GetFullFolders(_destinationPath).AsParallel().ForAll(async dir => await Task.Run(() => Directory.CreateDirectory(dir.Replace(_destinationPath, targetPath))));
-            GetFiles(_dateTime, TimeEnum.AFTER).AsParallel().ForAll(async dir => await Task.Run(() => File.Copy(dir.FullName, dir.FullName.Replace(_destinationPath, targetPath), overwrite)));
-        }
 
         public class Builder
         {
@@ -120,5 +121,19 @@ namespace FileAccessProject.ServiceApp
 
             public FileReporterSystemApp Build() => _reporterSystem;
         }
+
+        //Delete (UNUSED)
+        public void MoveFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
+        {
+            afterFileList.AsParallel().ForAll(async fi => await Task.Run(() => File.Move(fi.FullName, targetPath + "\\" + fi.Name, overwrite)));
+        }
+        //Delete (UNUSED)
+        public async void CopyFiles(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
+        {
+            foreach (var fi in afterFileList)
+                await Task.Run(() => File.Copy(fi.FullName, targetPath + "\\" + fi.Name, overwrite));
+        }
+        //Delete (UNUSED)
+        private IEnumerable<string> GetEmptyFolders(string path) => Directory.GetDirectories(path, "*", SearchOption.AllDirectories).Where(dir => Directory.GetFiles(dir).Length == 0);
     }
 }

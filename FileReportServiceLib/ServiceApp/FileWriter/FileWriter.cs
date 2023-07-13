@@ -13,18 +13,18 @@ namespace FileReporterApp.ServiceApp.FileWriter
             _excelFileWriter = new ExcelFileWriter();
         }
 
-        public static FileWriter getInstance() => _fileWriter is null ? new FileWriter() : _fileWriter;
+        public static FileWriter GetInstance() => _fileWriter is null ? new FileWriter() : _fileWriter;
 
         public static void WriteFile(List<FileInfo> scannedMergedList, FileType format, string targetPath)
         {
             switch (format)
             {
                 case FileType.EXCEL:
-                    getInstance()._excelFileWriter.Write(scannedMergedList, targetPath);
+                    GetInstance()._excelFileWriter.Write(scannedMergedList, targetPath);
                     break;
 
                 default:
-                    getInstance()._textFileWriter.Write(scannedMergedList, targetPath);
+                    GetInstance()._textFileWriter.Write(scannedMergedList, targetPath);
                     break;
             }
         }
