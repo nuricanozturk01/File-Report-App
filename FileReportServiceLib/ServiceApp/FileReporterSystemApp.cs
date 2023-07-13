@@ -52,9 +52,6 @@ namespace FileAccessProject.ServiceApp
         public async void ReportByFileFormat(FileType format, string path) =>
             ExceptionUtil.DoForAction<Exception>(() => Task.Run(() => ReportByFileFormatCallback(format, path)), "Somethings are wrong!");
 
-
-        // [QUESTION] Burada WriteFile'ın içindeki Excel Writer ve TextFileWriter da asenkron kullanıldı. Sadece burada kullanılsa olur mu?
-        // Burada Kullanılma amacı Senaryo başarılı ilerlediğinde MessageBox'un işlemden sonra çıkmasını sağlamak
         private void ReportByFileFormatCallback(FileType format, string path) => FileWriter.WriteFile(_scannedMergedList, format, path);
 
         private IEnumerable<string> GetEmptyFolders(string path) =>
@@ -63,8 +60,6 @@ namespace FileAccessProject.ServiceApp
             Directory.GetDirectories(path, "*", SearchOption.AllDirectories)
             .Where(dir => Directory.GetFiles(dir).Any(f => Filter(new FileInfo(f), _dateTime, TimeEnum.AFTER)))
             .Where(dir => Directory.GetFiles(dir).Length != 0);
-            
-
 
         public void MoveFilesAnother(string targetPath, bool overwrite, bool ntfsPermission, bool emptyFolders)
         {
