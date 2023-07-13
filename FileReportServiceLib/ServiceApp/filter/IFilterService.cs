@@ -6,11 +6,8 @@ namespace FileReporterApp.ServiceApp.filter
     {
         bool FilterByCreationDate(T filterObj, DateTime date, TimeEnum timeEnum);
 
-
         bool FilterByModifiedDate(T filterObj, DateTime date, TimeEnum timeEnum);
 
-
         bool FilterByAccessDate(T filterObj, DateTime date, TimeEnum timeEnum);
-
     }
 }

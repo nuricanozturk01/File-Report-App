@@ -216,6 +216,7 @@ namespace FileReporterApp
             // OverwriteChoiceBox
             // 
             OverwriteChoiceBox.AutoSize = true;
+            OverwriteChoiceBox.Enabled = false;
             OverwriteChoiceBox.Location = new Point(335, 31);
             OverwriteChoiceBox.Margin = new Padding(5);
             OverwriteChoiceBox.Name = "OverwriteChoiceBox";
@@ -227,6 +228,7 @@ namespace FileReporterApp
             // NtfsChoiceBox
             // 
             NtfsChoiceBox.AutoSize = true;
+            NtfsChoiceBox.Enabled = false;
             NtfsChoiceBox.Location = new Point(168, 31);
             NtfsChoiceBox.Margin = new Padding(5);
             NtfsChoiceBox.Name = "NtfsChoiceBox";
@@ -238,6 +240,7 @@ namespace FileReporterApp
             // EmptyFoldersChoiceBox
             // 
             EmptyFoldersChoiceBox.AutoSize = true;
+            EmptyFoldersChoiceBox.Enabled = false;
             EmptyFoldersChoiceBox.Location = new Point(9, 31);
             EmptyFoldersChoiceBox.Margin = new Padding(5);
             EmptyFoldersChoiceBox.Name = "EmptyFoldersChoiceBox";
@@ -296,6 +299,7 @@ namespace FileReporterApp
             ScanRadioButton.TabStop = true;
             ScanRadioButton.Text = "Scan";
             ScanRadioButton.UseVisualStyleBackColor = true;
+            ScanRadioButton.CheckedChanged += ScanRadioButton_CheckedChanged;
             // 
             // ThreadCounter
             // 
@@ -421,6 +425,7 @@ namespace FileReporterApp
             DateOptionGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
             ResumeLayout(false);
+            EmptyFoldersChoiceBox.Checked = false;
         }
 
         #endregion

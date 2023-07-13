@@ -5,7 +5,7 @@ namespace FileReporterApp.ServiceApp
 {
     public class FileReporterFactory
     {
-        public static FileReporterSystemApp CreateReporterService(string destinationPath, string targetPath, string dateOptName, int threadCount, string fileOptName, List<string> otherOpts)
+        public static FileReporterSystemApp CreateReporterService(string destinationPath, string targetPath, DateTime dateTime, string dateOptName, int threadCount, string fileOptName, List<string> otherOpts)
         {
             return new FileReporterSystemApp.Builder()
                     .SetBasicOption(EnumConverter.ToBasicOption(fileOptName))
@@ -13,6 +13,7 @@ namespace FileReporterApp.ServiceApp
                     .SetDateOption((EnumConverter.ToDateOption(dateOptName)))
                     .SetDestinationPath(destinationPath)
                     .SetTargetPath(targetPath)
+                    .setDateTime(dateTime)
                     .SetThreadCount(threadCount)
                     .Build();
         }
