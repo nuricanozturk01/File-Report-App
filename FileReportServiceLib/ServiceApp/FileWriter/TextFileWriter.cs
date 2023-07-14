@@ -1,4 +1,6 @@
-﻿namespace FileReporterApp.ServiceApp.FileWriter
+﻿using System.Text;
+
+namespace FileReporterApp.ServiceApp.FileWriter
 {
     internal class TextFileWriter : IFileWrite
     {

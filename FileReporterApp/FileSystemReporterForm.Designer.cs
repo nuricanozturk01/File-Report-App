@@ -36,8 +36,10 @@ namespace FileReporterApp
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            ResultListBox = new ListBox();
-            ProgressBar = new ProgressBar();
+            TimeLabel = new Label();
+            ScannigLabel = new Label();
+            ScannedSizeLabel = new Label();
+            ScanProgressBar = new ProgressBar();
             ReportButton = new Button();
             RunButton = new Button();
             label3 = new Label();
@@ -75,8 +77,10 @@ namespace FileReporterApp
             // 
             // panel1
             // 
-            panel1.Controls.Add(ResultListBox);
-            panel1.Controls.Add(ProgressBar);
+            panel1.Controls.Add(TimeLabel);
+            panel1.Controls.Add(ScannigLabel);
+            panel1.Controls.Add(ScannedSizeLabel);
+            panel1.Controls.Add(ScanProgressBar);
             panel1.Controls.Add(ReportButton);
             panel1.Controls.Add(RunButton);
             panel1.Controls.Add(label3);
@@ -100,23 +104,43 @@ namespace FileReporterApp
             panel1.Size = new Size(1064, 833);
             panel1.TabIndex = 0;
             // 
-            // ResultListBox
+            // TimeLabel
             // 
-            ResultListBox.FormattingEnabled = true;
-            ResultListBox.ItemHeight = 20;
-            ResultListBox.Location = new Point(27, 631);
-            ResultListBox.Margin = new Padding(5);
-            ResultListBox.Name = "ResultListBox";
-            ResultListBox.Size = new Size(1021, 184);
-            ResultListBox.TabIndex = 18;
+            TimeLabel.AutoSize = true;
+            TimeLabel.Location = new Point(27, 744);
+            TimeLabel.MinimumSize = new Size(500, 0);
+            TimeLabel.Name = "TimeLabel";
+            TimeLabel.Size = new Size(500, 20);
+            TimeLabel.TabIndex = 20;
+            TimeLabel.Text = "-------------";
             // 
-            // ProgressBar
+            // ScannigLabel
             // 
-            ProgressBar.Location = new Point(27, 557);
-            ProgressBar.Margin = new Padding(5);
-            ProgressBar.Name = "ProgressBar";
-            ProgressBar.Size = new Size(1019, 49);
-            ProgressBar.TabIndex = 17;
+            ScannigLabel.AutoSize = true;
+            ScannigLabel.Location = new Point(27, 690);
+            ScannigLabel.MinimumSize = new Size(1000, 0);
+            ScannigLabel.Name = "ScannigLabel";
+            ScannigLabel.Size = new Size(1000, 20);
+            ScannigLabel.TabIndex = 19;
+            ScannigLabel.Text = "-------------";
+            // 
+            // ScannedSizeLabel
+            // 
+            ScannedSizeLabel.AutoSize = true;
+            ScannedSizeLabel.Location = new Point(27, 645);
+            ScannedSizeLabel.MinimumSize = new Size(500, 0);
+            ScannedSizeLabel.Name = "ScannedSizeLabel";
+            ScannedSizeLabel.Size = new Size(500, 20);
+            ScannedSizeLabel.TabIndex = 18;
+            ScannedSizeLabel.Text = "0 items were scanned";
+            // 
+            // ScanProgressBar
+            // 
+            ScanProgressBar.Location = new Point(27, 557);
+            ScanProgressBar.Margin = new Padding(5);
+            ScanProgressBar.Name = "ScanProgressBar";
+            ScanProgressBar.Size = new Size(1019, 49);
+            ScanProgressBar.TabIndex = 17;
             // 
             // ReportButton
             // 
@@ -425,7 +449,6 @@ namespace FileReporterApp
             DateOptionGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
             ResumeLayout(false);
-            EmptyFoldersChoiceBox.Checked = false;
         }
 
         #endregion
@@ -454,12 +477,14 @@ namespace FileReporterApp
         private Label label2;
         private Button browseTargetButton;
         private TextBox TargetPathTextBox;
-        private ListBox ResultListBox;
-        private ProgressBar ProgressBar;
+        private ProgressBar ScanProgressBar;
         private Button ReportButton;
         private Button RunButton;
         private FileSystemWatcher fileSystemWatcher1;
         private SaveFileDialog SaveDialog;
+        private Label TimeLabel;
+        private Label ScannigLabel;
+        private Label ScannedSizeLabel;
     }
 }
 

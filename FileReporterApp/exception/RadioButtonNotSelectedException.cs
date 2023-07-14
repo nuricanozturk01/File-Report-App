@@ -8,12 +8,12 @@ namespace FileReporterApp.exception
 {
     internal class RadioButtonNotSelectedException : Exception
     {
-        private readonly ListBox listBox;
-        public RadioButtonNotSelectedException(string? message, ListBox listBox) : base(message)
+        private readonly Label label;
+        public RadioButtonNotSelectedException(string? message) : base(message)
         {
-            this.listBox = listBox;
+            
         }
 
-        public void CreateMessage() => listBox.Items.Add(Message.ToUpper());
+        public void CreateMessage() => label.Text = Message.ToUpper();
     }
 }

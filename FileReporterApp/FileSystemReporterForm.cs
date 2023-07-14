@@ -1,3 +1,4 @@
+﻿using BitMiracle.LibTiff.Classic;
 using FileAccessProject.ServiceApp;
 using FileReporterApp.exception;
 using FileReporterApp.ServiceApp;
@@ -10,14 +11,13 @@ namespace FileReporterApp
     {
         private FileReporterSystemApp _fileReporterSystemService;
         private List<FileInfo> _scannedMergedFiles;
+        private int scannedFileCounter;
         public FileSystemReporterForm() => InitializeComponent();
 
-        private void RunButton_Click(object sender, EventArgs e)
+        private void StartApp(Func<object, Task> action)
         {
             try
             {
-                ResultListBox.Items.Clear();
-
                 var destinationPath = PathTextBox.Text;
                 var targetPath = TargetPathTextBox.Text;
                 var dateOpt = DateOptionGroup.Controls.OfType<RadioButton>().FirstOrDefault(rb => rb.Checked);
@@ -26,14 +26,14 @@ namespace FileReporterApp
                 var otherOpts = OtherOptionsGroup.Controls.OfType<CheckBox>().Where(rb => rb.Checked).ToList();
 
                 if (dateOpt is null)
-                    throw new RadioButtonNotSelectedException("Please Select the Date option!", ResultListBox);
+                    throw new RadioButtonNotSelectedException("Please Select the Date option!");
                 if (fileOpt is null)
-                    throw new RadioButtonNotSelectedException("Please Select the File option!", ResultListBox);
+                    throw new RadioButtonNotSelectedException("Please Select the File option!");
 
                 _fileReporterSystemService = FileReporterFactory.CreateReporterService(destinationPath, targetPath, DateTimePicker.Value, dateOpt.Name, threadCount,
                     fileOpt.Name, otherOpts.Select(fi => fi.Name).ToList());
 
-                CreateOperation(targetPath);
+                CreateOperation(targetPath, action);
 
                 TargetPathTextBox.ResetText();
                 PathTextBox.ResetText();
@@ -48,6 +48,7 @@ namespace FileReporterApp
                 MessageBox.Show("Please select the path before run");
             }
         }
+        private void RunButton_Click(object sender, EventArgs e) => StartApp(null);
         private void ReportButton_Click(object sender, EventArgs e)
         {
             try
@@ -61,9 +62,7 @@ namespace FileReporterApp
                 if (SaveDialog.ShowDialog() == DialogResult.OK && (myStream = SaveDialog.OpenFile()) != null)
                     myStream.Close();
 
-                RunButton_Click(sender, e);
-
-                _fileReporterSystemService.ReportByFileFormat(EnumConverter.ToFileType(SaveDialog.FilterIndex), SaveDialog.FileName);
+                StartApp(async n => await Task.Run(() => _fileReporterSystemService.ReportByFileFormat(EnumConverter.ToFileType(SaveDialog.FilterIndex), SaveDialog.FileName, n.ToString())));
             }
             catch (NullReferenceException ex)
             {
@@ -109,57 +108,101 @@ namespace FileReporterApp
             NtfsChoiceBox.Enabled = false;
         }
 
-
-        private void CreateOperation(string targetPath)
+        private void CreateOperation(string targetPath, Func<object, Task>? action)
         {
-            Enumerable.Range(0, 5).ToList().ForEach(i => ResultListBox.Items.Add(""));
-
-            var newFileList = _fileReporterSystemService.GetFiles(DateTimePicker.Value, TimeEnum.AFTER);
-            _scannedMergedFiles = _fileReporterSystemService.GetFiles(DateTimePicker.Value, TimeEnum.BEFORE).Concat(newFileList).ToList();
-
-            _fileReporterSystemService.SetScannedMergedList(_scannedMergedFiles);
+            TimeLabel.ResetText();
+            ScannedSizeLabel.ResetText();
+            ScannigLabel.ResetText();
 
             if (ScanRadioButton.Checked)
-                Scan(_scannedMergedFiles);
+                ScanStartAsync(false, null);
 
-            else Scan(newFileList.ToList());
+            if (action is not null)
+                ScanStartAsync(false, action);
 
             if (CopyRadioButton.Checked)
-                CopyNewFilesToTarget(newFileList, targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked);
+                ScanStartAsync(false, (no_param) => Task.Run(() => ScanAndCopyAsync(targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked)));
 
             if (MoveRadioButton.Checked)
-                MoveNewFilesToTarget(newFileList, targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked);
+                ScanStartAsync(false, (no_param) => Task.Run(() => ScanAndMoveAsync(targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked)));
         }
 
-        private async void Scan(List<FileInfo> mergedList)
+        private async void ScanStartAsync(bool isBefore, Func<object, Task>? reportAction)
         {
-            if (ResultListBox.InvokeRequired)
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            var dirInfo = new DirectoryInfo(PathTextBox.Text);
+
+            await Scan(dirInfo, TimeEnum.AFTER, scannedFileCounter, reportAction);
+
+            if (isBefore)
+                await Scan(dirInfo, TimeEnum.BEFORE, scannedFileCounter, reportAction);
+
+            stopWatch.Stop();
+
+            TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + stopWatch.Elapsed;
+        }
+        private async Task Scan(DirectoryInfo directoryInfo, TimeEnum timeEnum, int counter, Func<object, Task> action)
+        {
+            var directories = new Stack<string>();
+            var totalFileCount = Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories).Length;
+
+            directories.Push(directoryInfo.FullName);
+
+            while (directories.Count > 0)
             {
-                ResultListBox.Invoke(() => Scan(mergedList));
-                return;
+                var currentDirectory = directories.Pop();
+                var di = new DirectoryInfo(currentDirectory);
+
+                foreach (var file in di.GetFiles())
+                {
+                    // Writing Excel Or File
+                    if (_fileReporterSystemService.Filter(file, DateTimePicker.Value, timeEnum))
+                    {
+                        action?.Invoke(file.FullName);
+
+                        if (++counter % 1000 == 0)
+                        {
+                            ScannedSizeLabel.Text = counter + " items were scanned!";
+                            ScannigLabel.Text = file.FullName;
+                            ScanProgressBar.Value = (int) Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
+                            await Task.Delay(1);
+                        }
+                    }
+                }
+
+                foreach (var directory in di.GetDirectories())
+                    directories.Push(directory.FullName);
             }
 
-            var startTime = Stopwatch.GetTimestamp();
-
-            for (var i = 0; i < mergedList.Count; ++i)
+            if (counter < 1000)
             {
-                ResultListBox.Items[0] = (i + 1) + " items were scanned!";
-                ResultListBox.Items[2] = mergedList[i];
-                await Task.Delay(1);
+                ScannedSizeLabel.Text = counter + " items were scanned!";
+                ScannigLabel.Text = directoryInfo.FullName;
             }
-            var finishTime = Stopwatch.GetTimestamp();
-
-            ResultListBox.Items[4] = "Scan was completed! Total Elapsed Time: " + String.Format("{0}", TimeSpan.FromMilliseconds(finishTime - startTime).ToString("hh\\:mm\\:ss"));
+            ScanProgressBar.Value = ScanProgressBar.Maximum;
         }
 
-        private void MoveNewFilesToTarget(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool emptyFolders, bool ntfsPermission)
+        private void MoveNewFilesToTarget(string targetPath, bool overwrite, bool emptyFolders, bool ntfsPermission)
         {
             _fileReporterSystemService.MoveFilesAnother(targetPath, overwrite, ntfsPermission, emptyFolders);
         }
 
-        private void CopyNewFilesToTarget(IEnumerable<FileInfo> afterFileList, string targetPath, bool overwrite, bool emptyFolders, bool ntfsPermission)
+        private void CopyNewFilesToTarget(string targetPath, bool overwrite, bool emptyFolders, bool ntfsPermission)
         {
-            _fileReporterSystemService.CopyFilesAnother(afterFileList, targetPath, overwrite, ntfsPermission, emptyFolders);
+            _fileReporterSystemService.CopyFilesAnother(targetPath, overwrite, ntfsPermission, emptyFolders);
         }
+
+        private void ScanAndMoveAsync(string targetPath, bool overwrite, bool emptyFolders, bool ntfsPermissions)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ScanAndCopyAsync(string targetPath, bool overwrite, bool emptyFolders, bool ntfsPermissions)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
