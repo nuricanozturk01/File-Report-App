@@ -99,55 +99,55 @@ namespace FileReporterApp
             panel1.Controls.Add(PathTextBox);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
-            panel1.Margin = new Padding(5);
+            panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1064, 833);
+            panel1.Size = new Size(931, 625);
             panel1.TabIndex = 0;
             // 
             // TimeLabel
             // 
             TimeLabel.AutoSize = true;
-            TimeLabel.Location = new Point(27, 744);
-            TimeLabel.MinimumSize = new Size(500, 0);
+            TimeLabel.Location = new Point(24, 558);
+            TimeLabel.MinimumSize = new Size(438, 0);
             TimeLabel.Name = "TimeLabel";
-            TimeLabel.Size = new Size(500, 20);
+            TimeLabel.Size = new Size(438, 15);
             TimeLabel.TabIndex = 20;
             TimeLabel.Text = "-------------";
             // 
             // ScannigLabel
             // 
             ScannigLabel.AutoSize = true;
-            ScannigLabel.Location = new Point(27, 690);
-            ScannigLabel.MinimumSize = new Size(1000, 0);
+            ScannigLabel.Location = new Point(24, 518);
+            ScannigLabel.MinimumSize = new Size(875, 0);
             ScannigLabel.Name = "ScannigLabel";
-            ScannigLabel.Size = new Size(1000, 20);
+            ScannigLabel.Size = new Size(875, 15);
             ScannigLabel.TabIndex = 19;
             ScannigLabel.Text = "-------------";
             // 
             // ScannedSizeLabel
             // 
             ScannedSizeLabel.AutoSize = true;
-            ScannedSizeLabel.Location = new Point(27, 645);
-            ScannedSizeLabel.MinimumSize = new Size(500, 0);
+            ScannedSizeLabel.Location = new Point(24, 484);
+            ScannedSizeLabel.MinimumSize = new Size(438, 0);
             ScannedSizeLabel.Name = "ScannedSizeLabel";
-            ScannedSizeLabel.Size = new Size(500, 20);
+            ScannedSizeLabel.Size = new Size(438, 15);
             ScannedSizeLabel.TabIndex = 18;
             ScannedSizeLabel.Text = "0 items were scanned";
             // 
             // ScanProgressBar
             // 
-            ScanProgressBar.Location = new Point(27, 557);
-            ScanProgressBar.Margin = new Padding(5);
+            ScanProgressBar.Location = new Point(24, 418);
+            ScanProgressBar.Margin = new Padding(4);
             ScanProgressBar.Name = "ScanProgressBar";
-            ScanProgressBar.Size = new Size(1019, 49);
+            ScanProgressBar.Size = new Size(892, 37);
             ScanProgressBar.TabIndex = 17;
             // 
             // ReportButton
             // 
-            ReportButton.Location = new Point(555, 495);
-            ReportButton.Margin = new Padding(5);
+            ReportButton.Location = new Point(486, 371);
+            ReportButton.Margin = new Padding(4);
             ReportButton.Name = "ReportButton";
-            ReportButton.Size = new Size(485, 41);
+            ReportButton.Size = new Size(424, 31);
             ReportButton.TabIndex = 16;
             ReportButton.Text = "Report";
             ReportButton.UseVisualStyleBackColor = true;
@@ -155,10 +155,10 @@ namespace FileReporterApp
             // 
             // RunButton
             // 
-            RunButton.Location = new Point(27, 497);
-            RunButton.Margin = new Padding(5);
+            RunButton.Location = new Point(24, 373);
+            RunButton.Margin = new Padding(4);
             RunButton.Name = "RunButton";
-            RunButton.Size = new Size(503, 40);
+            RunButton.Size = new Size(440, 30);
             RunButton.TabIndex = 15;
             RunButton.Text = "Run";
             RunButton.UseVisualStyleBackColor = true;
@@ -167,47 +167,47 @@ namespace FileReporterApp
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(33, 407);
-            label3.Margin = new Padding(5, 0, 5, 0);
+            label3.Location = new Point(29, 305);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(126, 20);
+            label3.Size = new Size(100, 15);
             label3.TabIndex = 14;
             label3.Text = "Folder Exceptions";
             // 
             // ExceptionTextBox
             // 
-            ExceptionTextBox.Location = new Point(245, 432);
-            ExceptionTextBox.Margin = new Padding(5);
+            ExceptionTextBox.Location = new Point(214, 324);
+            ExceptionTextBox.Margin = new Padding(4);
             ExceptionTextBox.Name = "ExceptionTextBox";
-            ExceptionTextBox.Size = new Size(791, 27);
+            ExceptionTextBox.Size = new Size(693, 23);
             ExceptionTextBox.TabIndex = 13;
             // 
             // ExceptionBox
             // 
             ExceptionBox.FormattingEnabled = true;
-            ExceptionBox.Location = new Point(27, 431);
-            ExceptionBox.Margin = new Padding(5);
+            ExceptionBox.Location = new Point(24, 323);
+            ExceptionBox.Margin = new Padding(4);
             ExceptionBox.Name = "ExceptionBox";
-            ExceptionBox.Size = new Size(207, 28);
+            ExceptionBox.Size = new Size(182, 23);
             ExceptionBox.TabIndex = 12;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(33, 337);
-            label2.Margin = new Padding(5, 0, 5, 0);
+            label2.Location = new Point(29, 253);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(82, 20);
+            label2.Size = new Size(66, 15);
             label2.TabIndex = 11;
             label2.Text = "Target Path";
             // 
             // browseTargetButton
             // 
             browseTargetButton.Enabled = false;
-            browseTargetButton.Location = new Point(936, 357);
-            browseTargetButton.Margin = new Padding(5);
+            browseTargetButton.Location = new Point(819, 268);
+            browseTargetButton.Margin = new Padding(4);
             browseTargetButton.Name = "browseTargetButton";
-            browseTargetButton.Size = new Size(101, 35);
+            browseTargetButton.Size = new Size(88, 26);
             browseTargetButton.TabIndex = 10;
             browseTargetButton.Text = "Browse";
             browseTargetButton.UseVisualStyleBackColor = true;
@@ -217,10 +217,10 @@ namespace FileReporterApp
             // 
             TargetPathTextBox.BackColor = Color.White;
             TargetPathTextBox.Enabled = false;
-            TargetPathTextBox.Location = new Point(27, 361);
-            TargetPathTextBox.Margin = new Padding(5);
+            TargetPathTextBox.Location = new Point(24, 271);
+            TargetPathTextBox.Margin = new Padding(4);
             TargetPathTextBox.Name = "TargetPathTextBox";
-            TargetPathTextBox.Size = new Size(899, 27);
+            TargetPathTextBox.Size = new Size(787, 23);
             TargetPathTextBox.TabIndex = 9;
             // 
             // OtherOptionsGroup
@@ -228,11 +228,11 @@ namespace FileReporterApp
             OtherOptionsGroup.Controls.Add(OverwriteChoiceBox);
             OtherOptionsGroup.Controls.Add(NtfsChoiceBox);
             OtherOptionsGroup.Controls.Add(EmptyFoldersChoiceBox);
-            OtherOptionsGroup.Location = new Point(555, 228);
-            OtherOptionsGroup.Margin = new Padding(5);
+            OtherOptionsGroup.Location = new Point(486, 171);
+            OtherOptionsGroup.Margin = new Padding(4);
             OtherOptionsGroup.Name = "OtherOptionsGroup";
-            OtherOptionsGroup.Padding = new Padding(5);
-            OtherOptionsGroup.Size = new Size(495, 77);
+            OtherOptionsGroup.Padding = new Padding(4);
+            OtherOptionsGroup.Size = new Size(433, 58);
             OtherOptionsGroup.TabIndex = 8;
             OtherOptionsGroup.TabStop = false;
             OtherOptionsGroup.Text = "Other Options";
@@ -241,10 +241,10 @@ namespace FileReporterApp
             // 
             OverwriteChoiceBox.AutoSize = true;
             OverwriteChoiceBox.Enabled = false;
-            OverwriteChoiceBox.Location = new Point(335, 31);
-            OverwriteChoiceBox.Margin = new Padding(5);
+            OverwriteChoiceBox.Location = new Point(293, 23);
+            OverwriteChoiceBox.Margin = new Padding(4);
             OverwriteChoiceBox.Name = "OverwriteChoiceBox";
-            OverwriteChoiceBox.Size = new Size(95, 24);
+            OverwriteChoiceBox.Size = new Size(77, 19);
             OverwriteChoiceBox.TabIndex = 2;
             OverwriteChoiceBox.Text = "Overwrite";
             OverwriteChoiceBox.UseVisualStyleBackColor = true;
@@ -253,10 +253,10 @@ namespace FileReporterApp
             // 
             NtfsChoiceBox.AutoSize = true;
             NtfsChoiceBox.Enabled = false;
-            NtfsChoiceBox.Location = new Point(168, 31);
-            NtfsChoiceBox.Margin = new Padding(5);
+            NtfsChoiceBox.Location = new Point(147, 23);
+            NtfsChoiceBox.Margin = new Padding(4);
             NtfsChoiceBox.Name = "NtfsChoiceBox";
-            NtfsChoiceBox.Size = new Size(145, 24);
+            NtfsChoiceBox.Size = new Size(119, 19);
             NtfsChoiceBox.TabIndex = 1;
             NtfsChoiceBox.Text = "NTFS Permissions";
             NtfsChoiceBox.UseVisualStyleBackColor = true;
@@ -265,10 +265,10 @@ namespace FileReporterApp
             // 
             EmptyFoldersChoiceBox.AutoSize = true;
             EmptyFoldersChoiceBox.Enabled = false;
-            EmptyFoldersChoiceBox.Location = new Point(9, 31);
-            EmptyFoldersChoiceBox.Margin = new Padding(5);
+            EmptyFoldersChoiceBox.Location = new Point(8, 23);
+            EmptyFoldersChoiceBox.Margin = new Padding(4);
             EmptyFoldersChoiceBox.Name = "EmptyFoldersChoiceBox";
-            EmptyFoldersChoiceBox.Size = new Size(125, 24);
+            EmptyFoldersChoiceBox.Size = new Size(101, 19);
             EmptyFoldersChoiceBox.TabIndex = 0;
             EmptyFoldersChoiceBox.Text = "Empty Folders";
             EmptyFoldersChoiceBox.UseVisualStyleBackColor = true;
@@ -278,11 +278,11 @@ namespace FileReporterApp
             OptionsGroup.Controls.Add(CopyRadioButton);
             OptionsGroup.Controls.Add(MoveRadioButton);
             OptionsGroup.Controls.Add(ScanRadioButton);
-            OptionsGroup.Location = new Point(27, 228);
-            OptionsGroup.Margin = new Padding(5);
+            OptionsGroup.Location = new Point(24, 171);
+            OptionsGroup.Margin = new Padding(4);
             OptionsGroup.Name = "OptionsGroup";
-            OptionsGroup.Padding = new Padding(5);
-            OptionsGroup.Size = new Size(503, 77);
+            OptionsGroup.Padding = new Padding(4);
+            OptionsGroup.Size = new Size(440, 58);
             OptionsGroup.TabIndex = 7;
             OptionsGroup.TabStop = false;
             OptionsGroup.Text = "Options";
@@ -290,10 +290,10 @@ namespace FileReporterApp
             // CopyRadioButton
             // 
             CopyRadioButton.AutoSize = true;
-            CopyRadioButton.Location = new Point(359, 29);
-            CopyRadioButton.Margin = new Padding(5);
+            CopyRadioButton.Location = new Point(314, 22);
+            CopyRadioButton.Margin = new Padding(4);
             CopyRadioButton.Name = "CopyRadioButton";
-            CopyRadioButton.Size = new Size(64, 24);
+            CopyRadioButton.Size = new Size(53, 19);
             CopyRadioButton.TabIndex = 2;
             CopyRadioButton.Text = "Copy";
             CopyRadioButton.UseVisualStyleBackColor = true;
@@ -302,10 +302,10 @@ namespace FileReporterApp
             // MoveRadioButton
             // 
             MoveRadioButton.AutoSize = true;
-            MoveRadioButton.Location = new Point(189, 29);
-            MoveRadioButton.Margin = new Padding(5);
+            MoveRadioButton.Location = new Point(165, 22);
+            MoveRadioButton.Margin = new Padding(4);
             MoveRadioButton.Name = "MoveRadioButton";
-            MoveRadioButton.Size = new Size(67, 24);
+            MoveRadioButton.Size = new Size(55, 19);
             MoveRadioButton.TabIndex = 1;
             MoveRadioButton.Text = "Move";
             MoveRadioButton.UseVisualStyleBackColor = true;
@@ -315,10 +315,10 @@ namespace FileReporterApp
             // 
             ScanRadioButton.AutoSize = true;
             ScanRadioButton.Checked = true;
-            ScanRadioButton.Location = new Point(9, 29);
-            ScanRadioButton.Margin = new Padding(5);
+            ScanRadioButton.Location = new Point(8, 22);
+            ScanRadioButton.Margin = new Padding(4);
             ScanRadioButton.Name = "ScanRadioButton";
-            ScanRadioButton.Size = new Size(61, 24);
+            ScanRadioButton.Size = new Size(50, 19);
             ScanRadioButton.TabIndex = 0;
             ScanRadioButton.TabStop = true;
             ScanRadioButton.Text = "Scan";
@@ -327,30 +327,30 @@ namespace FileReporterApp
             // 
             // ThreadCounter
             // 
-            ThreadCounter.Location = new Point(891, 147);
-            ThreadCounter.Margin = new Padding(5);
+            ThreadCounter.Location = new Point(780, 110);
+            ThreadCounter.Margin = new Padding(4);
             ThreadCounter.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             ThreadCounter.Name = "ThreadCounter";
-            ThreadCounter.Size = new Size(160, 27);
+            ThreadCounter.Size = new Size(140, 23);
             ThreadCounter.TabIndex = 6;
             ThreadCounter.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // DateTimePicker
             // 
-            DateTimePicker.Location = new Point(555, 147);
-            DateTimePicker.Margin = new Padding(5);
+            DateTimePicker.Location = new Point(486, 110);
+            DateTimePicker.Margin = new Padding(4);
             DateTimePicker.Name = "DateTimePicker";
-            DateTimePicker.Size = new Size(317, 27);
+            DateTimePicker.Size = new Size(278, 23);
             DateTimePicker.TabIndex = 5;
             DateTimePicker.Value = new DateTime(2023, 7, 10, 11, 2, 11, 0);
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(33, 13);
-            label1.Margin = new Padding(5, 0, 5, 0);
+            label1.Location = new Point(29, 10);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(37, 20);
+            label1.Size = new Size(31, 15);
             label1.TabIndex = 4;
             label1.Text = "Path";
             // 
@@ -359,11 +359,11 @@ namespace FileReporterApp
             DateOptionGroup.Controls.Add(AccessedDateRadioButton);
             DateOptionGroup.Controls.Add(ModifiedDateRadioButton);
             DateOptionGroup.Controls.Add(CreatedDateRadioButton);
-            DateOptionGroup.Location = new Point(27, 121);
-            DateOptionGroup.Margin = new Padding(5);
+            DateOptionGroup.Location = new Point(24, 91);
+            DateOptionGroup.Margin = new Padding(4);
             DateOptionGroup.Name = "DateOptionGroup";
-            DateOptionGroup.Padding = new Padding(5);
-            DateOptionGroup.Size = new Size(503, 71);
+            DateOptionGroup.Padding = new Padding(4);
+            DateOptionGroup.Size = new Size(440, 53);
             DateOptionGroup.TabIndex = 3;
             DateOptionGroup.TabStop = false;
             DateOptionGroup.Text = "Date Option";
@@ -371,10 +371,10 @@ namespace FileReporterApp
             // AccessedDateRadioButton
             // 
             AccessedDateRadioButton.AutoSize = true;
-            AccessedDateRadioButton.Location = new Point(359, 31);
-            AccessedDateRadioButton.Margin = new Padding(5);
+            AccessedDateRadioButton.Location = new Point(314, 23);
+            AccessedDateRadioButton.Margin = new Padding(4);
             AccessedDateRadioButton.Name = "AccessedDateRadioButton";
-            AccessedDateRadioButton.Size = new Size(127, 24);
+            AccessedDateRadioButton.Size = new Size(101, 19);
             AccessedDateRadioButton.TabIndex = 2;
             AccessedDateRadioButton.Text = "Accessed Date";
             AccessedDateRadioButton.UseVisualStyleBackColor = true;
@@ -382,10 +382,10 @@ namespace FileReporterApp
             // ModifiedDateRadioButton
             // 
             ModifiedDateRadioButton.AutoSize = true;
-            ModifiedDateRadioButton.Location = new Point(189, 31);
-            ModifiedDateRadioButton.Margin = new Padding(5);
+            ModifiedDateRadioButton.Location = new Point(165, 23);
+            ModifiedDateRadioButton.Margin = new Padding(4);
             ModifiedDateRadioButton.Name = "ModifiedDateRadioButton";
-            ModifiedDateRadioButton.Size = new Size(123, 24);
+            ModifiedDateRadioButton.Size = new Size(97, 19);
             ModifiedDateRadioButton.TabIndex = 1;
             ModifiedDateRadioButton.Text = "ModifiedDate";
             ModifiedDateRadioButton.UseVisualStyleBackColor = true;
@@ -394,10 +394,10 @@ namespace FileReporterApp
             // 
             CreatedDateRadioButton.AutoSize = true;
             CreatedDateRadioButton.Checked = true;
-            CreatedDateRadioButton.Location = new Point(9, 31);
-            CreatedDateRadioButton.Margin = new Padding(5);
+            CreatedDateRadioButton.Location = new Point(8, 23);
+            CreatedDateRadioButton.Margin = new Padding(4);
             CreatedDateRadioButton.Name = "CreatedDateRadioButton";
-            CreatedDateRadioButton.Size = new Size(114, 24);
+            CreatedDateRadioButton.Size = new Size(90, 19);
             CreatedDateRadioButton.TabIndex = 0;
             CreatedDateRadioButton.TabStop = true;
             CreatedDateRadioButton.Text = "CreatedDate";
@@ -405,10 +405,10 @@ namespace FileReporterApp
             // 
             // BrowseButton
             // 
-            BrowseButton.Location = new Point(936, 43);
-            BrowseButton.Margin = new Padding(5);
+            BrowseButton.Location = new Point(819, 32);
+            BrowseButton.Margin = new Padding(4);
             BrowseButton.Name = "BrowseButton";
-            BrowseButton.Size = new Size(101, 35);
+            BrowseButton.Size = new Size(88, 26);
             BrowseButton.TabIndex = 1;
             BrowseButton.Text = "Browse";
             BrowseButton.UseVisualStyleBackColor = true;
@@ -418,10 +418,10 @@ namespace FileReporterApp
             // 
             PathTextBox.BackColor = Color.White;
             PathTextBox.Enabled = false;
-            PathTextBox.Location = new Point(27, 43);
-            PathTextBox.Margin = new Padding(5);
+            PathTextBox.Location = new Point(24, 32);
+            PathTextBox.Margin = new Padding(4);
             PathTextBox.Name = "PathTextBox";
-            PathTextBox.Size = new Size(899, 27);
+            PathTextBox.Size = new Size(787, 23);
             PathTextBox.TabIndex = 0;
             // 
             // fileSystemWatcher1
@@ -431,11 +431,11 @@ namespace FileReporterApp
             // 
             // FileSystemReporterForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1064, 833);
+            ClientSize = new Size(931, 625);
             Controls.Add(panel1);
-            Margin = new Padding(5);
+            Margin = new Padding(4);
             Name = "FileSystemReporterForm";
             Text = "FileSystemReporterForm";
             panel1.ResumeLayout(false);
@@ -481,10 +481,10 @@ namespace FileReporterApp
         private Button ReportButton;
         private Button RunButton;
         private FileSystemWatcher fileSystemWatcher1;
-        private SaveFileDialog SaveDialog;
         private Label TimeLabel;
         private Label ScannigLabel;
         private Label ScannedSizeLabel;
+        private SaveFileDialog SaveDialog;
     }
 }
 

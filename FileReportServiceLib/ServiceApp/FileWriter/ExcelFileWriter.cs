@@ -1,70 +1,79 @@
-﻿using IronXL;
+﻿using ClosedXML.Excel;
 
 namespace FileReporterApp.ServiceApp.FileWriter
 {
     internal class ExcelFileWriter : IFileWrite
     {
-        private WorkBook _workBook;
+        private XLWorkbook _workBook;
 
-        public async void Write(List<FileInfo> scannedMergedList, string targetPath) => await Task.Run(() => WriteExcelFileCallback(targetPath, scannedMergedList));
+        public async void Write(List<FileInfo> scannedMergedList, string targetPath) => await WriteExcelFileCallback(targetPath, scannedMergedList);
 
-        private void WriteExcelFileCallback(string targetPath, List<FileInfo> scannedMergedList)
+        private async Task WriteExcelFileCallback(string targetPath, List<FileInfo> scannedMergedList)
         {
             try
             {
-                _workBook = WorkBook.Load(targetPath);
-                WorkSheet workSheet = _workBook.DefaultWorkSheet;
+                _workBook = new XLWorkbook();
+                var workSheet = _workBook.AddWorksheet("file_rport");
+
                 PrepareTitles(workSheet);
 
                 if (scannedMergedList != null)
                 {
                     for (int i = 0, j = 2; i < scannedMergedList.Count; ++i, j++)
                     {
-                        workSheet["A" + j].Value = scannedMergedList[i].FullName;
-                        workSheet["A" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Justify;
-                        workSheet["A" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                        var filePathCell = workSheet.Cell("A" + j);
+                        filePathCell.Value = scannedMergedList[i].FullName;
+                        filePathCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Justify;
+                        filePathCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-                        workSheet["B" + j].Value = scannedMergedList[i].CreationTime.ToString("dd.MM.yyyy hh:mm:ss");
-                        workSheet["B" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                        workSheet["B" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                        var creationDateCell = workSheet.Cell("B" + j);
+                        creationDateCell.Value = scannedMergedList[i].CreationTime.ToString("dd.MM.yyyy hh:mm:ss");
+                        creationDateCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        creationDateCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
+                        var lastModifiedDateCell = workSheet.Cell("C" + j);
+                        lastModifiedDateCell.Value = scannedMergedList[i].LastWriteTime.ToString("dd.MM.yyyy hh:mm:ss");
+                        lastModifiedDateCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        lastModifiedDateCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-                        workSheet["C" + j].Value = scannedMergedList[i].LastWriteTime.ToString("dd.MM.yyyy hh:mm:ss");
-                        workSheet["C" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                        workSheet["C" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                        var lastAccessTimeCell = workSheet.Cell("D" + j);
+                        lastAccessTimeCell.Value = scannedMergedList[i].LastAccessTime.ToString("dd.MM.yyyy hh:mm:ss");
+                        lastAccessTimeCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        lastAccessTimeCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-                        workSheet["D" + j].Value = scannedMergedList[i].LastAccessTime.ToString("dd.MM.yyyy hh:mm:ss");
-                        workSheet["D" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                        workSheet["D" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
-
-                        workSheet["E" + j].Value = scannedMergedList[i].Length;
-                        workSheet["E" + j].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                        workSheet["E" + j].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                        var lengthCell = workSheet.Cell("E" + j);
+                        lengthCell.Value = scannedMergedList[i].Length;
+                        lengthCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        lengthCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     }
+                    workSheet.Columns().AdjustToContents();
+                    _workBook.SaveAs(targetPath);
 
-                    Enumerable.Range(0, workSheet.ColumnCount).ToList().ForEach(i => workSheet.AutoSizeColumn(i));
-
-                    _workBook.Save();
-                    _workBook.Close();
 
                 }
             }
             catch (FileNotFoundException ex) { }
+            finally
+            {
 
+
+            }
         }
 
-        private void PrepareTitles(WorkSheet workSheet)
+        private void PrepareTitles(IXLWorksheet workSheet)
         {
             var titleCells = new string[2, 5] { { "A1", "B1", "C1", "D1", "E1" },
                 { "File Path","File Created Date", "File Modified Date", "File Accessed Date", "File Size (bytes)" } };
 
             for (int i = 0; i < 5; i++)
             {
-                workSheet[titleCells[0, i]].Value = titleCells[1, i];
-                workSheet[titleCells[0, i]].Style.Font.Bold = true;
-                workSheet[titleCells[0, i]].Style.WrapText = true;
-                workSheet[titleCells[0, i]].Style.HorizontalAlignment = IronXL.Styles.HorizontalAlignment.Center;
-                workSheet[titleCells[0, i]].Style.VerticalAlignment = IronXL.Styles.VerticalAlignment.Center;
+                var cell = workSheet.Cell(titleCells[0, i]);
+                cell.Value = titleCells[1, i];
+
+                cell.Style.Font.Bold = true;
+                cell.Style.Alignment.WrapText = true;
+                cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                cell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
             }
         }
     }

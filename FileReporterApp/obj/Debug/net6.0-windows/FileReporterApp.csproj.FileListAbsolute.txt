@@ -15,10 +15,12 @@ C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-window
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.pdb
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.genruntimeconfig.cache
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\ref\FileReporterApp.dll
-C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\BitMiracle.LibTiff.NET.dll
-C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\IronSoftware.Drawing.Common.dll
-C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\IronXL.dll
-C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\SixLabors.ImageSharp.dll
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.csproj.CopyComplete
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReportServiceLib.dll
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReportServiceLib.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\ClosedXML.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\DocumentFormat.OpenXml.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\ExcelNumberFormat.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\Irony.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\SixLabors.Fonts.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\XLParser.dll

@@ -2,7 +2,7 @@
 using FileReporterApp.ServiceApp.filter;
 using FileReporterApp.ServiceApp.options;
 using FileReporterApp.Util;
-using FileReportServiceLib.ServiceApp.FileWriter;
+
 
 namespace FileAccessProject.ServiceApp
 {
@@ -32,9 +32,9 @@ namespace FileAccessProject.ServiceApp
         }
 
 
-        public void ReportByFileFormat(FileType format, string path, string n)
+        public void ReportByFileFormat(FileType format, string path, List<FileInfo> fileList)
         {
-            ExceptionUtil.DoForAction<Exception>(() => NewFileWriter.WriteFile(n, format, path), "Somethings are wrong!");
+            ExceptionUtil.DoForAction<Exception>(() => Task.Run(() => FileWriter.WriteFile(fileList, format, path)), "Somethings are wrong!");
         }
 
         private IEnumerable<string> GetFullFolders(string path)

@@ -1,8 +1,9 @@
-﻿using BitMiracle.LibTiff.Classic;
+﻿
 using FileAccessProject.ServiceApp;
 using FileReporterApp.exception;
 using FileReporterApp.ServiceApp;
 using FileReporterApp.ServiceApp.options;
+using System.Collections;
 using System.Diagnostics;
 
 namespace FileReporterApp
@@ -14,7 +15,7 @@ namespace FileReporterApp
         private int scannedFileCounter;
         public FileSystemReporterForm() => InitializeComponent();
 
-        private void StartApp(Func<object, Task> action)
+        private void StartApp(Action<List<FileInfo>>? reportAction)
         {
             try
             {
@@ -33,11 +34,11 @@ namespace FileReporterApp
                 _fileReporterSystemService = FileReporterFactory.CreateReporterService(destinationPath, targetPath, DateTimePicker.Value, dateOpt.Name, threadCount,
                     fileOpt.Name, otherOpts.Select(fi => fi.Name).ToList());
 
-                CreateOperation(targetPath, action);
+                CreateOperation(targetPath, reportAction);
 
-                TargetPathTextBox.ResetText();
-                PathTextBox.ResetText();
-                OtherOptionsGroup.ResetText();
+                /* TargetPathTextBox.ResetText();
+                 PathTextBox.ResetText();
+                 OtherOptionsGroup.ResetText();*/
             }
             catch (RadioButtonNotSelectedException ex)
             {
@@ -60,9 +61,11 @@ namespace FileReporterApp
                 SaveDialog.RestoreDirectory = true;
 
                 if (SaveDialog.ShowDialog() == DialogResult.OK && (myStream = SaveDialog.OpenFile()) != null)
+                {
                     myStream.Close();
-
-                StartApp(async n => await Task.Run(() => _fileReporterSystemService.ReportByFileFormat(EnumConverter.ToFileType(SaveDialog.FilterIndex), SaveDialog.FileName, n.ToString())));
+                    StartApp(fileList => _fileReporterSystemService.ReportByFileFormat(EnumConverter.ToFileType(SaveDialog.FilterIndex), SaveDialog.FileName, fileList));
+                }
+               
             }
             catch (NullReferenceException ex)
             {
@@ -108,26 +111,26 @@ namespace FileReporterApp
             NtfsChoiceBox.Enabled = false;
         }
 
-        private void CreateOperation(string targetPath, Func<object, Task>? action)
+        private void CreateOperation(string targetPath, Action<List<FileInfo>>? reportAction)
         {
-            TimeLabel.ResetText();
+            /*TimeLabel.ResetText();
             ScannedSizeLabel.ResetText();
-            ScannigLabel.ResetText();
+            ScannigLabel.ResetText();*/
 
             if (ScanRadioButton.Checked)
                 ScanStartAsync(false, null);
 
-            if (action is not null)
-                ScanStartAsync(false, action);
+            if (reportAction is not null)
+                ScanStartAsync(false, reportAction);
 
             if (CopyRadioButton.Checked)
-                ScanStartAsync(false, (no_param) => Task.Run(() => ScanAndCopyAsync(targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked)));
+                ScanAndCopyAsync(targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked);
 
             if (MoveRadioButton.Checked)
-                ScanStartAsync(false, (no_param) => Task.Run(() => ScanAndMoveAsync(targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked)));
+                ScanAndMoveAsync(targetPath, OverwriteChoiceBox.Checked, EmptyFoldersChoiceBox.Checked, NtfsChoiceBox.Checked);
         }
 
-        private async void ScanStartAsync(bool isBefore, Func<object, Task>? reportAction)
+        private async void ScanStartAsync(bool isBefore, Action<List<FileInfo>>? reportAction)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -143,8 +146,10 @@ namespace FileReporterApp
 
             TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + stopWatch.Elapsed;
         }
-        private async Task Scan(DirectoryInfo directoryInfo, TimeEnum timeEnum, int counter, Func<object, Task> action)
+        private async Task Scan(DirectoryInfo directoryInfo, TimeEnum timeEnum, int counter, Action<List<FileInfo>> reportAction)
         {
+            var list = new List<FileInfo>();
+
             var directories = new Stack<string>();
             var totalFileCount = Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories).Length;
 
@@ -157,23 +162,25 @@ namespace FileReporterApp
 
                 foreach (var file in di.GetFiles())
                 {
-                    // Writing Excel Or File
                     if (_fileReporterSystemService.Filter(file, DateTimePicker.Value, timeEnum))
                     {
-                        action?.Invoke(file.FullName);
-
+                        if (reportAction != null)
+                            list.Add(file);
                         if (++counter % 1000 == 0)
                         {
                             ScannedSizeLabel.Text = counter + " items were scanned!";
                             ScannigLabel.Text = file.FullName;
-                            ScanProgressBar.Value = (int) Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
+                            ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
                             await Task.Delay(1);
                         }
                     }
                 }
 
+
                 foreach (var directory in di.GetDirectories())
                     directories.Push(directory.FullName);
+
+
             }
 
             if (counter < 1000)
@@ -182,6 +189,7 @@ namespace FileReporterApp
                 ScannigLabel.Text = directoryInfo.FullName;
             }
             ScanProgressBar.Value = ScanProgressBar.Maximum;
+            reportAction?.Invoke(list);
         }
 
         private void MoveNewFilesToTarget(string targetPath, bool overwrite, bool emptyFolders, bool ntfsPermission)
