@@ -12,17 +12,17 @@ namespace FileReportServiceLib.ServiceApp.filter
     {
         public bool FilterByAccessDate(DirectoryInfo filterObj, DateTime date, TimeEnum timeEnum)
         {
-            return timeEnum == TimeEnum.BEFORE ? filterObj.CreationTime.Date < date : filterObj.CreationTime.Date >= date;
+            return timeEnum == TimeEnum.BEFORE ? filterObj.CreationTime.Date < date.Date : filterObj.CreationTime.Date >= date.Date;
         }
 
         public bool FilterByCreationDate(DirectoryInfo filterObj, DateTime date, TimeEnum timeEnum)
         {
-            return timeEnum == TimeEnum.BEFORE ? filterObj.LastAccessTime.Date < date : filterObj.LastAccessTime.Date >= date;
+            return timeEnum == TimeEnum.BEFORE ? filterObj.LastAccessTime.Date < date.Date : filterObj.LastAccessTime.Date >= date.Date;
         }
 
         public bool FilterByModifiedDate(DirectoryInfo filterObj, DateTime date, TimeEnum timeEnum)
         {
-            return timeEnum == TimeEnum.BEFORE ? filterObj.LastAccessTime.Date < date: filterObj.LastAccessTime.Date >= date;
+            return timeEnum == TimeEnum.BEFORE ? filterObj.LastAccessTime.Date < date.Date : filterObj.LastAccessTime.Date >= date.Date;
         }
     }
 }

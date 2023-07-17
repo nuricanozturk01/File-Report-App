@@ -1,13 +1,8 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using FileAccessProject.ServiceApp;
+﻿using FileAccessProject.ServiceApp;
 using FileReporterApp.exception;
 using FileReporterApp.ServiceApp;
 using FileReporterApp.ServiceApp.options;
 using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.IO;
-using FileReportServiceLib.Util;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace FileReporterApp
@@ -125,12 +120,14 @@ namespace FileReporterApp
                 ScanStartAsync(reportAction, null, null);
 
             if (CopyRadioButton.Checked)
-                startCopy();
+                ScanStartAsync(null, async (map, totalFileCount, directoryInfo, targetPath, totalByte) =>
+                    await CopyFile(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte)), null);
 
-             if (MoveRadioButton.Checked)
-                StartMove();
+            if (MoveRadioButton.Checked)
+                ScanStartAsync(null, null, async (map, totalFileCount, directoryInfo, targetPath, totalByte, dirs) =>
+                    await MoveFile(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte), dirs));
         }
-
+/*
         private async void StartMove()
         {
             await Scan(new DirectoryInfo(PathTextBox.Text), TimeEnum.AFTER, 0, null, null,
@@ -144,7 +141,10 @@ namespace FileReporterApp
                 async (map, totalFileCount, directoryInfo, targetPath, totalByte) =>
                     await CopyFile(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte)), null);
         }
-        private async void ScanStartAsync(Action<List<FileInfo>, List<FileInfo>>? reportAction, Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double>? copyAction,
+*/
+        private async void ScanStartAsync(
+            Action<List<FileInfo>, List<FileInfo>>? reportAction, 
+            Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double>? copyAction,
             Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double, HashSet<string>>? moveAction)
         {
             var stopWatch = new Stopwatch();
@@ -159,11 +159,12 @@ namespace FileReporterApp
 
             TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + stopWatch.Elapsed;
         }
-        private async Task Scan(DirectoryInfo directoryInfo, TimeEnum timeEnum, int counter, 
+        private async Task Scan(DirectoryInfo directoryInfo, TimeEnum timeEnum, int counter,
             Action<List<FileInfo>, List<FileInfo>>? reportAction,
-            Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double>? copyAction, 
+            Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double>? copyAction,
             Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double, HashSet<string>>? moveAction)
         {
+            
             long totalByte = 0;
             Dictionary<string, FileInfo>? map = null;
 
@@ -193,10 +194,10 @@ namespace FileReporterApp
                 var currentDirectory = directories.Pop();
                 var di = new DirectoryInfo(currentDirectory);
 
-                //Empty File
                 if ((copyAction != null || moveAction != null) && di.GetFiles().Count() == 0 && _fileReporterSystemService.FilterDirectoryInfo(di, DateTimePicker.Value, timeEnum) && EmptyFoldersChoiceBox.Checked)
                 {
                     Directory.CreateDirectory(TargetPathTextBox.Text);
+
                     directoryInfos.Add(di.FullName);
                 }
 
@@ -205,8 +206,6 @@ namespace FileReporterApp
 
                     if (_fileReporterSystemService.FilterFileInfo(file, DateTimePicker.Value, timeEnum))
                     {
-
-         
                         if (reportAction is not null)
                             newFileList?.Add(file);
 
@@ -216,7 +215,6 @@ namespace FileReporterApp
                             map?.Add(file.FullName, file);
                             directoryInfos.Add(di.FullName);
                         }
-                       
 
                         if ((copyAction is null && moveAction is null) && ++counter % 1000 == 0)
                         {
@@ -228,7 +226,7 @@ namespace FileReporterApp
                     }
                     else
                         if (reportAction != null)
-                             oldFileList?.Add(file);
+                        oldFileList?.Add(file);
                 }
 
                 foreach (var directory in di.GetDirectories())
@@ -244,14 +242,10 @@ namespace FileReporterApp
                 ScanProgressBar.Value = ScanProgressBar.Maximum;
             }
             reportAction?.Invoke(newFileList, oldFileList);
-           // File.WriteAllLines("C:\\Users\\hp\\Desktop\\dirs2.txt", directoryInfos);
             copyAction?.Invoke(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte));
             moveAction?.Invoke(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte), directoryInfos);
-            
-            
         }
         double _toGB(double _byte) => (double)((_byte / 1024f) / 1024f / 1024f);
-        
 
         private async Task CopyFile(Dictionary<string, FileInfo> map, int totalFileCount, DirectoryInfo directoryInfo, string targetPath, double totalByte)
         {
@@ -266,7 +260,7 @@ namespace FileReporterApp
             await Task.Run(() => copyFileCallback(directoryInfo, map, totalByte, targetPath, totalFileCount));
 
             stopWatch.Stop();
-           
+
             TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + stopWatch.Elapsed;
         }
 
@@ -334,11 +328,11 @@ namespace FileReporterApp
             map.AsParallel().ForAll(async x =>
             {
                 totalLength += x.Value.Length;
-                
+
                 File.Move(x.Key, x.Value.FullName.Replace(directoryInfo.FullName, targetPath), OverwriteChoiceBox.Checked);
-               
+
                 list.Add(Regex.Match(new DirectoryInfo(x.Key).FullName, @"^(.*\\).*?$").Groups[1].Value);
-                
+
                 if (++counter % 15 == 0)
                 {
                     if (InvokeRequired)
@@ -363,16 +357,19 @@ namespace FileReporterApp
                     ScanProgressBar.Value = ScanProgressBar.Maximum;
                 });
             }
-            File.WriteAllLines("C:\\Users\\hp\\Desktop\\dirs.txt", list);
-            list.Skip(0).Select(d => new DirectoryInfo(d)).Where(d => d.GetFiles().Length == 0 && d.Exists && d.FullName != directoryInfo.FullName).ToList().ForEach(d =>
+            //File.WriteAllLines("C:\\Users\\hp\\Desktop\\dirs.txt", list);
+            list.Skip(0).Select(d => new DirectoryInfo(d)).Where(d => d.GetFiles().Length == 0 && 
+            d.Exists && 
+            d.FullName != directoryInfo.FullName + "\\").ToList().ForEach(d =>
             {
                 try
                 {
                     d.Delete(true);
-                } catch (Exception ex) { }
+                }
+                catch (Exception ex) { }
             });
             //File.WriteAllLines("C:\\Users\\hp\\Desktop\\dirs.txt", list);
-          
+
         }
     }
 
