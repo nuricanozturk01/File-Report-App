@@ -6,7 +6,7 @@
         {
             return option switch
             {
-                "CreatedDate" => DateOptions.CREATED,
+                "CreatedDateRadioButton" => DateOptions.CREATED,
                 "ModifiedDate" => DateOptions.MODIFIED,
                 _ => DateOptions.ACCESSED
             };
@@ -23,7 +23,7 @@
             };
         }
 
-        public static OtherOptions ToOtherOption(string option)
+        private static OtherOptions ToOtherOption(string option)
         {
             return option switch
             {

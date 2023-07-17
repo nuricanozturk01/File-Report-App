@@ -6,14 +6,17 @@ namespace FileReporterApp.ServiceApp.FileWriter
     {
         private readonly string DELIMITER = "|";
 
-        public async void Write(List<FileInfo> scannedMergedList, string targetPath) => await Task.Run(() => WriteTextFileCallback(scannedMergedList, targetPath));
+        public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath) => await Task.Run(() => WriteTextFileCallback(newFileList, oldFileList, targetPath));
 
-        private void WriteTextFileCallback(List<FileInfo> scannedMergedList, string targetPath)
+        private void WriteTextFileCallback(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath)
         {
             try
             {
-                if (scannedMergedList != null) 
-                    File.WriteAllLines(targetPath, scannedMergedList.AsParallel().Select(f => GetFormattedString(f)));
+                if (newFileList != null)
+                    File.WriteAllLines(targetPath, newFileList.AsParallel().Select(f => GetFormattedString(f)));
+
+                if (oldFileList != null)
+                    File.AppendAllLines(targetPath, oldFileList.AsParallel().Select(f => GetFormattedString(f)));
             }
             catch { }
         }

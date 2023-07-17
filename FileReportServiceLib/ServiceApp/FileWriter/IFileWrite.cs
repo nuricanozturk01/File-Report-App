@@ -2,6 +2,6 @@
 {
     public interface IFileWrite
     {
-        public void Write(List<FileInfo> scannedMergedList, string targetPath);
+        public void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath);
     }
 }

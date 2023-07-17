@@ -6,66 +6,61 @@ namespace FileReporterApp.ServiceApp.FileWriter
     {
         private XLWorkbook _workBook;
 
-        public async void Write(List<FileInfo> scannedMergedList, string targetPath) => await WriteExcelFileCallback(targetPath, scannedMergedList);
+        public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath) => await WriteExcelFileCallback(targetPath, newFileList, oldFileList);
 
-        private async Task WriteExcelFileCallback(string targetPath, List<FileInfo> scannedMergedList)
+        private async Task WriteExcelFileCallback(string targetPath, List<FileInfo> newFileList, List<FileInfo> oldFileList)
         {
             try
             {
                 _workBook = new XLWorkbook();
-                var workSheet = _workBook.AddWorksheet("file_rport");
+                var workSheet = _workBook.AddWorksheet("new_file_report");
+                var oldWorkSheet = _workBook.AddWorksheet("old_file_report");
 
                 PrepareTitles(workSheet);
+                PrepareTitles(oldWorkSheet);
 
-                if (scannedMergedList != null)
-                {
-                    for (int i = 0, j = 2; i < scannedMergedList.Count; ++i, j++)
-                    {
-                        var filePathCell = workSheet.Cell("A" + j);
-                        filePathCell.Value = scannedMergedList[i].FullName;
-                        filePathCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Justify;
-                        filePathCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-
-                        var creationDateCell = workSheet.Cell("B" + j);
-                        creationDateCell.Value = scannedMergedList[i].CreationTime.ToString("dd.MM.yyyy hh:mm:ss");
-                        creationDateCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                        creationDateCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-
-                        var lastModifiedDateCell = workSheet.Cell("C" + j);
-                        lastModifiedDateCell.Value = scannedMergedList[i].LastWriteTime.ToString("dd.MM.yyyy hh:mm:ss");
-                        lastModifiedDateCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                        lastModifiedDateCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-
-                        var lastAccessTimeCell = workSheet.Cell("D" + j);
-                        lastAccessTimeCell.Value = scannedMergedList[i].LastAccessTime.ToString("dd.MM.yyyy hh:mm:ss");
-                        lastAccessTimeCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                        lastAccessTimeCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-
-                        var lengthCell = workSheet.Cell("E" + j);
-                        lengthCell.Value = scannedMergedList[i].Length;
-                        lengthCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                        lengthCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                    }
-                    workSheet.Columns().AdjustToContents();
-                    _workBook.SaveAs(targetPath);
-
-
-                }
+                writeListToExcel(newFileList, workSheet, "New");
+                writeListToExcel(oldFileList, oldWorkSheet, "Old");
             }
             catch (FileNotFoundException ex) { }
             finally
             {
-
-
+                _workBook.SaveAs(targetPath);
             }
+        }
+
+        private void writeListToExcel(List<FileInfo> fileList, IXLWorksheet workSheet, string fileStatus)
+        {
+            if (fileList != null)
+            {
+                for (int i = 0, j = 2; i < fileList.Count; ++i, j++)
+                {
+                    CreateCell(workSheet.Cell("A" + j), fileList[i].FullName, XLAlignmentHorizontalValues.Justify, XLAlignmentVerticalValues.Center);
+                    CreateCell(workSheet.Cell("B" + j), fileList[i].CreationTime.ToString("dd.MM.yyyy hh:mm:ss"), XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center);
+                    CreateCell(workSheet.Cell("C" + j), fileList[i].LastWriteTime.ToString("dd.MM.yyyy hh:mm:ss"), XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center);
+                    CreateCell(workSheet.Cell("D" + j), fileList[i].LastAccessTime.ToString("dd.MM.yyyy hh:mm:ss"), XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center);
+                    CreateCell(workSheet.Cell("E" + j), fileList[i].Length.ToString(), XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center);
+                    CreateCell(workSheet.Cell("F" + j), fileStatus, XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center);
+                }
+
+                workSheet.Columns().AdjustToContents();
+            }
+        }
+
+        private void CreateCell(IXLCell cell, string cellValue, XLAlignmentHorizontalValues horizontalAlignment, XLAlignmentVerticalValues verticalAlignment)
+        {
+            var excelCell = cell;
+            excelCell.Value = cellValue;
+            excelCell.Style.Alignment.Horizontal = horizontalAlignment;
+            excelCell.Style.Alignment.Vertical = verticalAlignment;
         }
 
         private void PrepareTitles(IXLWorksheet workSheet)
         {
-            var titleCells = new string[2, 5] { { "A1", "B1", "C1", "D1", "E1" },
-                { "File Path","File Created Date", "File Modified Date", "File Accessed Date", "File Size (bytes)" } };
+            var titleCells = new string[2, 6] { { "A1", "B1", "C1", "D1", "E1", "F1" },
+                { "File Path","File Created Date", "File Modified Date", "File Accessed Date", "File Size (bytes)", "FileStatus" } };
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 var cell = workSheet.Cell(titleCells[0, i]);
                 cell.Value = titleCells[1, i];
