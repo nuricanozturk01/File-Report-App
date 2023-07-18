@@ -23,4 +23,4 @@ C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-window
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\Irony.dll
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\SixLabors.Fonts.dll
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\XLParser.dll
-C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.LOCK_COUNTER.resources
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.COUNTER_LOCK.resources

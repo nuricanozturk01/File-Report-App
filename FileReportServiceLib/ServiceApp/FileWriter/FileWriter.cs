@@ -1,4 +1,5 @@
 ﻿using FileReporterApp.ServiceApp.options;
+using System.Collections.ObjectModel;
 
 namespace FileReporterApp.ServiceApp.FileWriter
 {
