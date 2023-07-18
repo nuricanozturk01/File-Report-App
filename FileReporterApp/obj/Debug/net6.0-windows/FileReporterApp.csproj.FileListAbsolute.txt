@@ -4,7 +4,6 @@ C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-window
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.AssemblyInfoInputs.cache
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.AssemblyInfo.cs
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.csproj.CoreCompileInputs.cache
-C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.FileSystemReporterForm.resources
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReporterApp.exe
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReporterApp.deps.json
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\FileReporterApp.runtimeconfig.json
@@ -24,3 +23,4 @@ C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-window
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\Irony.dll
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\SixLabors.Fonts.dll
 C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\bin\Debug\net6.0-windows\XLParser.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterApp\obj\Debug\net6.0-windows\FileReporterApp.LOCK_COUNTER.resources
