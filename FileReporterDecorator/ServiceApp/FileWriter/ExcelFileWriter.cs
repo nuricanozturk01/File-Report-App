@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
-
+using FileReporterDecorator.Util;
+using static FileReporterDecorator.Util.ExceptionUtil;
 namespace FileReporterApp.ServiceApp.FileWriter
 {
     internal class ExcelFileWriter : IFileWrite
@@ -8,25 +9,22 @@ namespace FileReporterApp.ServiceApp.FileWriter
 
         public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath) => await WriteExcelFileCallback(targetPath, newFileList, oldFileList);
 
+
+        private void WriteExcel(List<FileInfo> newFileList, List<FileInfo> oldFileList)
+        {
+            _workBook = new XLWorkbook();
+            var workSheet = _workBook.AddWorksheet("new_file_report");
+            var oldWorkSheet = _workBook.AddWorksheet("old_file_report");
+
+            PrepareTitles(workSheet);
+            PrepareTitles(oldWorkSheet);
+
+            writeListToExcel(newFileList, workSheet, "New");
+            writeListToExcel(oldFileList, oldWorkSheet, "Old");
+        }
         private async Task WriteExcelFileCallback(string targetPath, List<FileInfo> newFileList, List<FileInfo> oldFileList)
         {
-            try
-            {
-                _workBook = new XLWorkbook();
-                var workSheet = _workBook.AddWorksheet("new_file_report");
-                var oldWorkSheet = _workBook.AddWorksheet("old_file_report");
-
-                PrepareTitles(workSheet);
-                PrepareTitles(oldWorkSheet);
-
-                writeListToExcel(newFileList, workSheet, "New");
-                writeListToExcel(oldFileList, oldWorkSheet, "Old");
-            }
-            catch (FileNotFoundException ex) { }
-            finally
-            {
-                _workBook.SaveAs(targetPath);
-            }
+            ThrowFileNotFoundException(() => WriteExcel(newFileList, oldFileList), () => _workBook.SaveAs(targetPath));
         }
 
         private void writeListToExcel(List<FileInfo> fileList, IXLWorksheet workSheet, string fileStatus)

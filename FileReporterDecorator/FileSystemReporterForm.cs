@@ -1,6 +1,7 @@
 ﻿using FileReporterDecorator.FileOperation;
 using FileReporterDecorator.FileOperation.operations;
 using FileReporterDecorator.ServiceApp.filter.DateFilter;
+using static FileReporterDecorator.Util.ExceptionUtil;
 using static FileReportServiceLib.Util.OptionCreator;
 
 namespace FileReporterApp
@@ -33,17 +34,12 @@ namespace FileReporterApp
         private void MinimumProgressBar() => ScanProgressBar.Value = ScanProgressBar.Minimum;
         private void SetTimeLabel(string str) => TimeLabel.Text = str;
 
+
         public FileOperation CreateScanProcess()
         {
             return new ScanDirectoryOperation(null, DateTimePicker.Value, _totalFileCount, _threadCount,
                  _destinationPath, _dateOption, _showOnScreenProgressCallback, _showMaximizeOnScreenCallback);
         }
-        public FileOperation CreateScanProcess(FileOperation fileOperation)
-        {
-            return new ScanDirectoryOperation(fileOperation, DateTimePicker.Value, _totalFileCount, _threadCount, _destinationPath,                               _dateOption,_showOnScreenProgressCallback,_showMaximizeOnScreenCallback);
-        }
-
-        // Return decorated process
         public FileOperation CreateTransportProcess(FileOperation process)
         {
             if (NtfsChoiceBox.Checked)
@@ -57,34 +53,35 @@ namespace FileReporterApp
 
             return process;
         }
-
         public FileOperation CreateOperationProcess(FileOperation scanProcess, bool moveOption, bool copyOption)
         {
 
             if (moveOption)
-                return new MoveFileOperation(scanProcess, _totalFileCount, 
+                return new MoveFileOperation(scanProcess, _totalFileCount,
                     _threadCount, _destinationPath, _targetPath,
                     _showOnScreenProgressCallback, _minimumProgressBarCallback,
                     _setTimeLabelCallback, _showMaximizeOnScreenCallback);
 
             else if (copyOption)
-                return new CopyFileOperation(scanProcess, _totalFileCount, 
-                    _threadCount, _destinationPath, _targetPath, 
+                return new CopyFileOperation(scanProcess, _totalFileCount,
+                    _threadCount, _destinationPath, _targetPath,
                     _showOnScreenProgressCallback, _minimumProgressBarCallback,
                     _showMaximizeOnScreenCallback, _setTimeLabelCallback);
 
             return new EmptyOperation();
         }
-
-        private async void RunButton_Click(object sender, EventArgs e)
+        private void InitMembers()
         {
             _threadCount = (int)ThreadCounter.Value;
             _destinationPath = PathTextBox.Text;
             _targetPath = TargetPathTextBox.Text;
             _totalFileCount = GetTotalFileCount();
             _dateOption = GetDateOption();
+        }
 
-
+        private async void RunButton_Click(object sender, EventArgs e)
+        {
+            InitMembers();
             FileOperation scanProcess = CreateScanProcess();
             await scanProcess.Run();
 
@@ -93,41 +90,35 @@ namespace FileReporterApp
 
             await operationProcess.Run();
         }
+        private async void ReportButtonCallback()
+        {
+            ThreadCounter.Value = 4;
+            Stream myStream;
 
+            SaveDialog.Filter = "txt files (*.txt)|*.txt|Excel Files (*.xlsx)|*.xlsx";
+            SaveDialog.FilterIndex = 2;
+            SaveDialog.RestoreDirectory = true;
 
+            if (SaveDialog.ShowDialog() == DialogResult.OK && (myStream = SaveDialog.OpenFile()) != null)
+            {
+                myStream.Close();
+
+                InitMembers();
+
+                FileOperation scanProcess = CreateScanProcess();
+                await scanProcess.Run();
+
+                var reportProcess = new ExportReportOperation(scanProcess, GetFileFormat(SaveDialog.FilterIndex), SaveDialog.FileName);
+
+                await reportProcess.Run();
+
+                ScanProgressBar.Value = ScanProgressBar.Maximum;
+                TimeLabel.Text = "Report is ready!";
+            }
+        }
         private async void ReportButton_ClickAsync(object sender, EventArgs e)
         {
-            try
-            {
-                ThreadCounter.Value = 4;
-                Stream myStream;
-
-                SaveDialog.Filter = "txt files (*.txt)|*.txt|Excel Files (*.xlsx)|*.xlsx";
-                SaveDialog.FilterIndex = 2;
-                SaveDialog.RestoreDirectory = true;
-
-                if (SaveDialog.ShowDialog() == DialogResult.OK && (myStream = SaveDialog.OpenFile()) != null)
-                {
-                    myStream.Close();
-
-                    var scanOperation = CreateScanProcess();
-                    await scanOperation.Run();
-
-                    var report = new ExportReportOperation(scanOperation, GetFileFormat(SaveDialog.FilterIndex), SaveDialog.FileName);
-                    await report.Run();
-
-                    ScanProgressBar.Value = ScanProgressBar.Maximum;
-                    TimeLabel.Text = "Report is ready!";
-                }
-            }
-            catch (NullReferenceException ex)
-            {
-                MessageBox.Show("Please select the file!");
-            }
-            catch
-            {
-                MessageBox.Show("Please run the scan!");
-            }
+            ThrowException(ReportButtonCallback, () => MessageBox.Show("Please select the file!"));           
         }
         private void MoveRadioButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -181,7 +172,6 @@ namespace FileReporterApp
                 });
             }
         }
-
         private void RequireInvoke(Action invoke)
         {
             if (InvokeRequired)

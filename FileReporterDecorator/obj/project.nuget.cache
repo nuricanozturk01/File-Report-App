@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zsA+Pzt4Zz9rCgQ0FYuIssAxjkvd8ckyBjGyyD9uLpZ3SAHckIk8PoWI8pmxOZB6sagPBu0VNkFDVq6cWB9nOw==",
+  "dgSpecHash": "TX4SpWCPZ/Mk1E3ySY+Xhrn4H1gqIUzGkqCgUZtVRKTX3SCop63MPkFOeZ/2Lq2Yze0iLIBARoh+5vFLqIbtqA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\hp\\source\\repos\\FileReporterDecorator\\FileReporterDecorator\\FileReporterDecorator.csproj",
+  "projectFilePath": "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterDecorator\\FileReporterDecorator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hp\\.nuget\\packages\\closedxml\\0.102.0\\closedxml.0.102.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\documentformat.openxml\\2.16.0\\documentformat.openxml.2.16.0.nupkg.sha512",

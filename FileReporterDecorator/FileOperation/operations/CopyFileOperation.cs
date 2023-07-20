@@ -2,7 +2,8 @@
 using FileReporterDecorator.Util;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-
+using static FileReporterDecorator.Util.ExceptionUtil;
+using static FileReporterDecorator.Util.ParallelWrapper;
 namespace FileReporterDecorator.FileOperation.operations
 {
     internal class CopyFileOperation : FileOperation
@@ -18,8 +19,10 @@ namespace FileReporterDecorator.FileOperation.operations
         private COUNTER_LOCK _newLocker = new COUNTER_LOCK();
         Action<int, TimeSpan> _showOnScreenCallbackMaximize;
 
-        public CopyFileOperation(FileOperation scanProcess, int totalFileCount, int threadCount, string destinationPath,
-            string targetPath, Action<int, int, string> showOnScreenCallback, Action minimumProgressBar,
+        public CopyFileOperation(FileOperation scanProcess, int totalFileCount, int threadCount,
+            string destinationPath, string targetPath,
+            Action<int, int, string> showOnScreenCallback,
+            Action minimumProgressBar,
             Action<int, TimeSpan> showMaxProgressBar,
             Action<string> setTimeLabelAction)
         {
@@ -38,41 +41,17 @@ namespace FileReporterDecorator.FileOperation.operations
         {
             var isConflict = false;
             var conflictFileList = new ConcurrentBag<string>();
-            
 
-            Parallel.ForEach(scanProcess.GetNewFileList(), new ParallelOptions { MaxDegreeOfParallelism = threadCount }, file =>
-            {
-                lock (_newLocker)
-                {
-                    _newLocker.COUNTER++;
-                }
-                showOnScreenCallback(_newLocker.COUNTER, totalFileCount, file);
 
-                var targetFile = file.Replace(destinationPath, targetPath);
-
-                try
-                {
-                    File.Copy(file, targetFile, IsOwerrite());
-
-                    if (IsCopyNtfsPermissions())
-                        _copyNtfsPermissions.Invoke(new FileInfo(file), new FileInfo(file.Replace(destinationPath, targetPath)));
-                }
-                catch (IOException ex)
-                {
+            ForEachParallel(scanProcess.GetNewFileList(), threadCount,
+                file => ThrowCopyAndMoveException(() => CopyFiles(file), () => {
                     isConflict = true;
                     conflictFileList.Add(file);
-                }
-            });
-          
+                }));
+
             if (IsEmptyFolder())
-                Parallel.ForEach(scanProcess.GetEmptyDirectoryList(), new ParallelOptions { MaxDegreeOfParallelism = threadCount }, dir =>
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(dir.Replace(destinationPath, targetPath));
-                    }
-                    catch (Exception ex) { }
-                });
+                ForEachParallel(scanProcess.GetEmptyDirectoryList(), threadCount, 
+                    dir => ThrowCopyAndMoveException(() => Directory.CreateDirectory(dir.Replace(destinationPath, targetPath)), () => { }));
 
             if (isConflict)
                 MessageBox.Show($"{conflictFileList.Count} files are conflicted!", "Conflicted Files",
@@ -80,6 +59,23 @@ namespace FileReporterDecorator.FileOperation.operations
                     MessageBoxIcon.Warning);
 
         }
+
+        private void CopyFiles(string file)
+        {
+            lock (_newLocker)
+            {
+                _newLocker.COUNTER++;
+            }
+            showOnScreenCallback(_newLocker.COUNTER, totalFileCount, file);
+
+            var targetFile = file.Replace(destinationPath, targetPath);
+
+            File.Copy(file, targetFile, IsOwerrite());
+
+            if (IsCopyNtfsPermissions())
+                _copyNtfsPermissions.Invoke(new FileInfo(file), new FileInfo(file.Replace(destinationPath, targetPath)));
+        }
+
         public override async Task Run()
         {
             scanProcess.GetDirectoryList().ToList().ForEach(d => Directory.CreateDirectory(d.Replace(destinationPath, targetPath)));

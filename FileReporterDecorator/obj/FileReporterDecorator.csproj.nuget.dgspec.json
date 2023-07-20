@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\hp\\source\\repos\\FileReporterDecorator\\FileReporterDecorator\\FileReporterDecorator.csproj": {}
+    "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterDecorator\\FileReporterDecorator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\hp\\source\\repos\\FileReporterDecorator\\FileReporterDecorator\\FileReporterDecorator.csproj": {
+    "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterDecorator\\FileReporterDecorator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\hp\\source\\repos\\FileReporterDecorator\\FileReporterDecorator\\FileReporterDecorator.csproj",
+        "projectUniqueName": "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterDecorator\\FileReporterDecorator.csproj",
         "projectName": "FileReporterDecorator",
-        "projectPath": "C:\\Users\\hp\\source\\repos\\FileReporterDecorator\\FileReporterDecorator\\FileReporterDecorator.csproj",
+        "projectPath": "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterDecorator\\FileReporterDecorator.csproj",
         "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\hp\\source\\repos\\FileReporterDecorator\\FileReporterDecorator\\obj\\",
+        "outputPath": "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterDecorator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config",
