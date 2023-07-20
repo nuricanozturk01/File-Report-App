@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileReporterDecorator", "FileReporterDecorator\FileReporterDecorator.csproj", "{5017B56C-942C-4A11-ADE7-031AE5DF85E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileReporterDecorator", "FileReporterDecorator\FileReporterDecorator.csproj", "{5017B56C-942C-4A11-ADE7-031AE5DF85E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileReporterAppTest", "FileReporterAppTest\FileReporterAppTest.csproj", "{A91D4DD4-201A-4629-916F-3A7141DAE70F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileReporterLib", "FileReporterLib\FileReporterLib.csproj", "{65D934CE-0320-47C2-AF7F-177E32F70017}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{5017B56C-942C-4A11-ADE7-031AE5DF85E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5017B56C-942C-4A11-ADE7-031AE5DF85E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5017B56C-942C-4A11-ADE7-031AE5DF85E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A91D4DD4-201A-4629-916F-3A7141DAE70F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A91D4DD4-201A-4629-916F-3A7141DAE70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A91D4DD4-201A-4629-916F-3A7141DAE70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A91D4DD4-201A-4629-916F-3A7141DAE70F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65D934CE-0320-47C2-AF7F-177E32F70017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65D934CE-0320-47C2-AF7F-177E32F70017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65D934CE-0320-47C2-AF7F-177E32F70017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65D934CE-0320-47C2-AF7F-177E32F70017}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

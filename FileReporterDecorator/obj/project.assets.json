@@ -1391,6 +1391,19 @@
         "runtime": {
           "lib/netstandard1.6/XLParser.dll": {}
         }
+      },
+      "FileReporterLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "ClosedXML": "0.102.0"
+        },
+        "compile": {
+          "bin/placeholder/FileReporterLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/FileReporterLib.dll": {}
+        }
       }
     }
   },
@@ -4748,11 +4761,16 @@
         "xlparser.1.5.2.nupkg.sha512",
         "xlparser.nuspec"
       ]
+    },
+    "FileReporterLib/1.0.0": {
+      "type": "project",
+      "path": "../FileReporterLib/FileReporterLib.csproj",
+      "msbuildProject": "../FileReporterLib/FileReporterLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
-      "ClosedXML >= 0.102.0"
+      "FileReporterLib >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4781,7 +4799,11 @@
       "frameworks": {
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterLib\\FileReporterLib.csproj": {
+              "projectPath": "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterLib\\FileReporterLib.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -4793,12 +4815,6 @@
     "frameworks": {
       "net6.0-windows7.0": {
         "targetAlias": "net6.0-windows",
-        "dependencies": {
-          "ClosedXML": {
-            "target": "Package",
-            "version": "[0.102.0, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",

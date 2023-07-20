@@ -1,0 +1,5 @@
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Debug\net6.0\FileReporterLib.csproj.AssemblyReference.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Debug\net6.0\FileReporterLib.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Debug\net6.0\FileReporterLib.AssemblyInfoInputs.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Debug\net6.0\FileReporterLib.AssemblyInfo.cs
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Debug\net6.0\FileReporterLib.csproj.CoreCompileInputs.cache
