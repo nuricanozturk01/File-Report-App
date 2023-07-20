@@ -305,9 +305,15 @@ namespace FileReporterApp
 
         private async Task MoveFile(Dictionary<string, FileInfo> map, int totalFileCount, DirectoryInfo directoryInfo, string targetPath, double totalByte, HashSet<string> dirs)
         {
+<<<<<<< Updated upstream
             totalByte = _toGB(totalByte);
 
             ScanProgressBar.Value = ScanProgressBar.Minimum;
+=======
+            _directoryList.ToList().ForEach(d => Directory.CreateDirectory(d.Replace(PathTextBox.Text, TargetPathTextBox.Text)));
+            
+            RequireInvoke(() => ScanProgressBar.Value = ScanProgressBar.Minimum);
+>>>>>>> Stashed changes
 
             var stopWatch = new Stopwatch();
 
@@ -370,6 +376,41 @@ namespace FileReporterApp
             });
             //File.WriteAllLines("C:\\Users\\hp\\Desktop\\dirs.txt", list);
 
+<<<<<<< Updated upstream
+=======
+
+            Parallel.ForEach(_directoryList.Select(d => new DirectoryInfo(d)), new ParallelOptions { MaxDegreeOfParallelism = (int)ThreadCounter.Value },
+                dir =>
+                    {
+                        try
+                        {
+                            if (dir.GetFiles().Length == 0)
+                                dir.Delete(true);
+                        }
+                        catch (Exception ex) { }
+                    });
+        }
+
+        private void ShowOnScreenProgress(string file, int totalFileCount, int counter)
+        {
+            if (counter % 100 == 0)
+            {
+                RequireInvoke(() =>
+                {
+                    ScannedSizeLabel.Text = _locker.COUNTER + " items were scanned!";
+                    ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)_locker.COUNTER / (double)totalFileCount) * 100.0);
+                    ScannigLabel.Text = file;
+                });
+            }
+        }
+        private void RequireInvoke(Action invoke)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(invoke);
+                return;
+            }
+>>>>>>> Stashed changes
         }
     }
 
