@@ -151,7 +151,7 @@ namespace FileReporterApp
             ReportButton.TabIndex = 16;
             ReportButton.Text = "Report";
             ReportButton.UseVisualStyleBackColor = true;
-            ReportButton.Click += ReportButton_Click;
+            ReportButton.Click += ReportButton_ClickAsync;
             // 
             // RunButton
             // 

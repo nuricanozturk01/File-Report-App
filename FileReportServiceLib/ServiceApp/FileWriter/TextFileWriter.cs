@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
 
 namespace FileReporterApp.ServiceApp.FileWriter
 {

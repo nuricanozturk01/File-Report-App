@@ -1,59 +1,151 @@
-﻿using FileAccessProject.ServiceApp;
-using FileReporterApp.exception;
-using FileReporterApp.ServiceApp;
+﻿using DocumentFormat.OpenXml.Drawing;
+using FileReporterApp.ServiceApp.FileWriter;
 using FileReporterApp.ServiceApp.options;
+using FileReportServiceLib.ServiceApp.filter;
+using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
+using static FileReportServiceLib.Util.OptionCreator;
 
 namespace FileReporterApp
 {
+    internal class COUNTER_LOCK
+    {
+        public int COUNTER = 0;
+        public COUNTER_LOCK() { }
+    }
+
     public partial class FileSystemReporterForm : Form
     {
-        private FileReporterSystemApp _fileReporterSystemService;
-        private int scannedFileCounter;
+        private ConcurrentBag<string> _newFileList;
+        private ConcurrentBag<string> _oldFileList;
+        private ConcurrentBag<string> _directoryList;
+        private static COUNTER_LOCK _locker = new();
+
         public FileSystemReporterForm()
         {
             InitializeComponent();
+            _newFileList = new();
+            _oldFileList = new();
+            _directoryList = new();
         }
-        private void StartApp(Action<List<FileInfo>, List<FileInfo>>? reportAction)
+
+        private async Task Scan(Action<List<FileInfo>, List<FileInfo>, FileType, string>? reportAction, Action<int, string>? copyAction, Action<int, string>? moveAction)
         {
             try
             {
-                var destinationPath = PathTextBox.Text;
-                var targetPath = TargetPathTextBox.Text;
-                var dateOpt = DateOptionGroup.Controls.OfType<RadioButton>().FirstOrDefault(rb => rb.Checked);
-                var threadCount = Decimal.ToInt32(ThreadCounter.Value);
-                var fileOpt = OptionsGroup.Controls.OfType<RadioButton>().FirstOrDefault(rb => rb.Checked);
-                var otherOpts = OtherOptionsGroup.Controls.OfType<CheckBox>().Where(rb => rb.Checked).ToList();
+                _newFileList = new();
+                _oldFileList = new();
+                _directoryList = new();
 
-                if (dateOpt is null)
-                    throw new RadioButtonNotSelectedException("Please Select the Date option!");
-                if (fileOpt is null)
-                    throw new RadioButtonNotSelectedException("Please Select the File option!");
+                _locker.COUNTER = 0;
 
-                _fileReporterSystemService = FileReporterFactory.CreateReporterService(destinationPath, targetPath, DateTimePicker.Value, dateOpt.Name, threadCount,
-                    fileOpt.Name, otherOpts.Select(fi => fi.Name).ToList());
-                ReportButton.Text = dateOpt.Name;
-                CreateOperation(targetPath, reportAction);
+                var dateOption = GetSelectedDateOption(CreatedDateRadioButton.Checked, ModifiedDateRadioButton.Checked);
 
-                /* TargetPathTextBox.ResetText();
-                 PathTextBox.ResetText();
-                 OtherOptionsGroup.ResetText();*/
+                var totalFileCount = new DirectoryInfo(PathTextBox.Text).GetFiles("*.*", SearchOption.AllDirectories).Length;
+
+                var stopWatch = new Stopwatch();
+
+                stopWatch.Start();
+
+                await Task.Run(() => ScanFileSystemAndClassifyFiles(PathTextBox.Text, dateOption, totalFileCount));
+
+                stopWatch.Stop();
+
+                RequireInvoke(() =>
+                {
+                    ScanProgressBar.Value = ScanProgressBar.Maximum;
+                    ScannedSizeLabel.Text = _locker.COUNTER + " items were scanned!";
+                    TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + stopWatch.Elapsed;
+                });
+
+                await CreateOperation(totalFileCount, copyAction, reportAction, moveAction);
             }
-            catch (RadioButtonNotSelectedException ex)
+            catch (UnauthorizedAccessException ex)
             {
-                ex.CreateMessage();
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show("Please select the path before run");
+                MessageBox.Show("You do not have access to Directory!");
             }
         }
-        private void RunButton_Click(object sender, EventArgs e) => StartApp(null);
-        private void ReportButton_Click(object sender, EventArgs e)
+        private async Task CreateOperation(int totalFileCount, Action<int, string>? copyAction, Action<List<FileInfo>, List<FileInfo>, FileType, string>? reportAction, Action<int, string>? moveAction)
+        {
+            if (copyAction != null)
+                await Task.Run(() => copyAction.Invoke(totalFileCount, TargetPathTextBox.Text));
+
+            if (reportAction != null)
+            {
+                var newFiles = _newFileList.Select(nf => new FileInfo(nf)).ToList();
+                var oldFiles = _oldFileList.Select(of => new FileInfo(of)).ToList();
+
+                await Task.Run(() => reportAction.Invoke(newFiles, oldFiles, GetFileFormat(SaveDialog.FilterIndex), SaveDialog.FileName));
+            }
+            if (moveAction != null)
+                await Task.Run(() => moveAction.Invoke(totalFileCount, TargetPathTextBox.Text));
+        }
+        public void ScanFileSystemAndClassifyFiles(string path, IDateOption dateOption, int totalFileCount)
+        {
+
+            if (EmptyFoldersChoiceBox.Checked && dateOption.setDate(new DirectoryInfo(path), DateTimePicker.Value))
+                _directoryList.Add(path);
+
+            foreach (string file in Directory.GetFiles(path))
+            {
+                ClassifyBySelectedDate(file, dateOption, totalFileCount);
+
+                lock (_locker)
+                {
+                    _locker.COUNTER++;
+                }
+            }
+
+            Parallel.ForEach(Directory.GetDirectories(path), new ParallelOptions { MaxDegreeOfParallelism = (int)ThreadCounter.Value }, subDir =>
+            {
+                var name = new DirectoryInfo(subDir);
+
+                if (name.GetFiles().Length != 0 && dateOption.setDate(new DirectoryInfo(path), DateTimePicker.Value))
+                    _directoryList.Add(name.FullName);
+
+                if (String.IsNullOrWhiteSpace(name.Name) || name.Name is null)
+                    return;
+
+                ScanFileSystemAndClassifyFiles(subDir, dateOption, totalFileCount);
+            });
+        }
+        private void ClassifyBySelectedDate(string file, IDateOption dateOption, int totalFileCount)
+        {
+            if (_locker.COUNTER % 100 == 0)
+            {
+                RequireInvoke(() =>
+                {
+                    ScannedSizeLabel.Text = _locker.COUNTER + " items were scanned!";
+                    ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)_locker.COUNTER / (double)totalFileCount) * 100.0);
+                    ScannigLabel.Text = file;
+                });
+            }
+            if (file == "C:\\Users\\hp\\Desktop\\New folder\\ARM-Assembly.pdf")
+                RequireInvoke(() => ReportButton.Text = new FileInfo(file).CreationTime.Date.ToString());
+
+            if (dateOption.setDate(new FileInfo(file), DateTimePicker.Value))
+                _newFileList.Add(file);
+
+            else _oldFileList.Add(file);
+        }
+
+        private async void RunButton_Click(object sender, EventArgs e)
+        {
+            _locker.COUNTER = 0;
+
+            if (CopyRadioButton.Checked)
+                await Scan(null, async (totalFile, targetPath) => await CopyFile(totalFile, targetPath), null);
+
+            if (MoveRadioButton.Checked)
+                await Scan(null, null, async (totalFile, targetPath) => await MoveFile(totalFile, targetPath));
+
+            else await Task.Run(() => Scan(null, null, null));
+        }
+        private async void ReportButton_ClickAsync(object sender, EventArgs e)
         {
             try
             {
+                ThreadCounter.Value = 4;
                 Stream myStream;
 
                 SaveDialog.Filter = "txt files (*.txt)|*.txt|Excel Files (*.xlsx)|*.xlsx";
@@ -63,9 +155,10 @@ namespace FileReporterApp
                 if (SaveDialog.ShowDialog() == DialogResult.OK && (myStream = SaveDialog.OpenFile()) != null)
                 {
                     myStream.Close();
-                    StartApp((newFileList, oldFileList) => _fileReporterSystemService.ReportByFileFormat(EnumConverter.ToFileType(SaveDialog.FilterIndex), SaveDialog.FileName, newFileList, oldFileList));
+                    await Scan((newFiles, oldFiles, fileFormat, targetPath) => FileWriter.WriteFile(newFiles, oldFiles, fileFormat, targetPath), null, null);
+                    ScanProgressBar.Value = ScanProgressBar.Maximum;
+                    TimeLabel.Text = "Report is ready!";
                 }
-
             }
             catch (NullReferenceException ex)
             {
@@ -111,267 +204,142 @@ namespace FileReporterApp
             NtfsChoiceBox.Enabled = false;
         }
 
-        private void CreateOperation(string targetPath, Action<List<FileInfo>, List<FileInfo>>? reportAction)
+        private async Task CopyFile(int totalFileCount, string targetPath)
         {
-            if (ScanRadioButton.Checked)
-                ScanStartAsync(null, null, null);
+            _directoryList.ToList().ForEach(d => Directory.CreateDirectory(d.Replace(PathTextBox.Text, TargetPathTextBox.Text)));
 
-            if (reportAction is not null)
-                ScanStartAsync(reportAction, null, null);
+            RequireInvoke(() => ScanProgressBar.Value = ScanProgressBar.Minimum);
 
-            if (CopyRadioButton.Checked)
-                ScanStartAsync(null, async (map, totalFileCount, directoryInfo, targetPath, totalByte) =>
-                    await CopyFile(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte)), null);
-
-            if (MoveRadioButton.Checked)
-                ScanStartAsync(null, null, async (map, totalFileCount, directoryInfo, targetPath, totalByte, dirs) =>
-                    await MoveFile(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte), dirs));
-        }
-/*
-        private async void StartMove()
-        {
-            await Scan(new DirectoryInfo(PathTextBox.Text), TimeEnum.AFTER, 0, null, null,
-                async (map, totalFileCount, directoryInfo, targetPath, totalByte, dirs) =>
-                    await MoveFile(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte), dirs));
-        }
-
-        private async void startCopy()
-        {
-            await Scan(new DirectoryInfo(PathTextBox.Text), TimeEnum.AFTER, 0, null,
-                async (map, totalFileCount, directoryInfo, targetPath, totalByte) =>
-                    await CopyFile(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte)), null);
-        }
-*/
-        private async void ScanStartAsync(
-            Action<List<FileInfo>, List<FileInfo>>? reportAction, 
-            Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double>? copyAction,
-            Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double, HashSet<string>>? moveAction)
-        {
             var stopWatch = new Stopwatch();
 
             stopWatch.Start();
 
-            var dirInfo = new DirectoryInfo(PathTextBox.Text);
-
-            await Scan(dirInfo, TimeEnum.AFTER, scannedFileCounter, reportAction, copyAction, moveAction);
+            await Task.Run(() => CopyFileCallback(totalFileCount));
 
             stopWatch.Stop();
 
-            TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + stopWatch.Elapsed;
+            RequireInvoke(() => TimeLabel.Text = "Copy Operation was completed! Total Elapsed Time: " + stopWatch.Elapsed);
         }
-        private async Task Scan(DirectoryInfo directoryInfo, TimeEnum timeEnum, int counter,
-            Action<List<FileInfo>, List<FileInfo>>? reportAction,
-            Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double>? copyAction,
-            Action<Dictionary<string, FileInfo>, int, DirectoryInfo, string, double, HashSet<string>>? moveAction)
+        private void CopyFileCallback(int totalFileCount)
+        {
+            var isConflict = false;
+            var conflictFileList = new ConcurrentBag<string>();
+            var _newLocker = new COUNTER_LOCK();
+
+            Parallel.ForEach(_newFileList, new ParallelOptions { MaxDegreeOfParallelism = (int)ThreadCounter.Value }, file =>
+            {
+                lock (_newLocker)
+                {
+                    _newLocker.COUNTER++;
+                }
+                ShowOnScreenProgress(file, totalFileCount, _newLocker.COUNTER);
+
+                var targetFile = file.Replace(PathTextBox.Text, TargetPathTextBox.Text);
+                try
+                {
+                    File.Copy(file, targetFile, OverwriteChoiceBox.Checked);
+
+                    if (NtfsChoiceBox.Checked)
+                        CopyNtfsPermissions(new FileInfo(file), new FileInfo(file.Replace(PathTextBox.Text, TargetPathTextBox.Text)));
+
+                }
+                catch (IOException ex)
+                {
+                    isConflict = true;
+                    conflictFileList.Add(file);
+                }
+            });
+
+            if (isConflict)
+                MessageBox.Show($"{conflictFileList.Count} files are conflicted!", "Conflicted Files", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+
+        }
+        private void CopyNtfsPermissions(FileInfo sourceFile, FileInfo targetFile)
+        {
+            var security = sourceFile.GetAccessControl();
+            security.SetAccessRuleProtection(true, true);
+            targetFile.SetAccessControl(security);
+        }
+
+        private async Task MoveFile(int totalFileCount, string targetPath)
+        {
+            _directoryList.ToList().ForEach(d => Directory.CreateDirectory(d.Replace(PathTextBox.Text, TargetPathTextBox.Text)));
+            File.WriteAllLines("C:\\Users\\hp\\Desktop\\Deneme.txt", _newFileList);
+            RequireInvoke(() => ScanProgressBar.Value = ScanProgressBar.Minimum);
+
+            var stopWatch = new Stopwatch();
+
+            stopWatch.Start();
+
+            await Task.Run(() => MoveFileCallback(totalFileCount));
+
+            stopWatch.Stop();
+
+            RequireInvoke(() => TimeLabel.Text = "Copy Operation was completed! Total Elapsed Time: " + stopWatch.Elapsed);
+        }
+        private void MoveFileCallback(int totalFileCount)
         {
             
-            long totalByte = 0;
-            Dictionary<string, FileInfo>? map = null;
-
-            HashSet<string> directoryInfos = null;
-            var directories = new Stack<string>();
-            var totalFileCount = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories).Length;
-
-            if (copyAction != null || moveAction != null)
-            {
-                totalByte = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories).Sum(fi => fi.Length);
-                map = new Dictionary<string, FileInfo>();
-                directoryInfos = new HashSet<string>();
-            }
-            directories.Push(directoryInfo.FullName);
-
-            List<FileInfo>? newFileList = null;
-            List<FileInfo>? oldFileList = null;
-
-            if (reportAction != null)
-            {
-                newFileList = new List<FileInfo>();
-                oldFileList = new List<FileInfo>();
-            }
-
-            while (directories.Count > 0)
-            {
-                var currentDirectory = directories.Pop();
-                var di = new DirectoryInfo(currentDirectory);
-
-                if ((copyAction != null || moveAction != null) && di.GetFiles().Count() == 0 && _fileReporterSystemService.FilterDirectoryInfo(di, DateTimePicker.Value, timeEnum) && EmptyFoldersChoiceBox.Checked)
-                {
-                    Directory.CreateDirectory(TargetPathTextBox.Text);
-
-                    directoryInfos.Add(di.FullName);
-                }
-
-                foreach (var file in di.GetFiles())
-                {
-
-                    if (_fileReporterSystemService.FilterFileInfo(file, DateTimePicker.Value, timeEnum))
-                    {
-                        if (reportAction is not null)
-                            newFileList?.Add(file);
-
-                        if (copyAction != null || moveAction != null)
-                        {
-                            Directory.CreateDirectory(di.FullName.Replace(directoryInfo.FullName, TargetPathTextBox.Text));
-                            map?.Add(file.FullName, file);
-                            directoryInfos.Add(di.FullName);
-                        }
-
-                        if ((copyAction is null && moveAction is null) && ++counter % 1000 == 0)
-                        {
-                            ScannedSizeLabel.Text = counter + " items were scanned!";
-                            ScannigLabel.Text = file.FullName;
-                            ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
-                            await Task.Delay(1);
-                        }
-                    }
-                    else
-                        if (reportAction != null)
-                        oldFileList?.Add(file);
-                }
-
-                foreach (var directory in di.GetDirectories())
-                    directories.Push(directory.FullName);
-            }
-
-            if (copyAction is null && moveAction is null)
-            {
-                if (counter < 1000)
-                    ScannigLabel.Text = directoryInfo.FullName;
-
-                ScannedSizeLabel.Text = counter + " items were scanned!";
-                ScanProgressBar.Value = ScanProgressBar.Maximum;
-            }
-            reportAction?.Invoke(newFileList, oldFileList);
-            copyAction?.Invoke(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte));
-            moveAction?.Invoke(map, totalFileCount, directoryInfo, TargetPathTextBox.Text, Convert.ToDouble(totalByte), directoryInfos);
-        }
-        double _toGB(double _byte) => (double)((_byte / 1024f) / 1024f / 1024f);
-
-        private async Task CopyFile(Dictionary<string, FileInfo> map, int totalFileCount, DirectoryInfo directoryInfo, string targetPath, double totalByte)
-        {
-            totalByte = _toGB(totalByte);
-
-            ScanProgressBar.Value = ScanProgressBar.Minimum;
-
-            var stopWatch = new Stopwatch();
-
-            stopWatch.Start();
-
-            await Task.Run(() => copyFileCallback(directoryInfo, map, totalByte, targetPath, totalFileCount));
-
-            stopWatch.Stop();
-
-            TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + stopWatch.Elapsed;
-        }
-
-        private async void copyFileCallback(DirectoryInfo directoryInfo, Dictionary<string, FileInfo> map, double totalByte, string targetPath, int totalFileCount)
-        {
-            int counter = 0;
-            long totalLength = 0;
-            map.AsParallel().ForAll(async x =>
-            {
-                totalLength += x.Value.Length;
-                File.Copy(x.Key, x.Value.FullName.Replace(directoryInfo.FullName, targetPath), OverwriteChoiceBox.Checked);
-
-                if (++counter % 15 == 0)
-                {
-                    if (InvokeRequired)
-                    {
-                        Invoke(() =>
-                        {
-                            ScannedSizeLabel.Text = counter + " items were copied! [" + $"{Convert.ToDouble(totalLength >> 30):0.##}" + "/" + $"{totalByte:0.##}" + "] GB";
-                            ScannigLabel.Text = x.Value.FullName;
-                            ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
-                        });
-                        return;
-                    }
-                    await Task.Delay(1);
-                }
-            });
-
-            if (InvokeRequired)
-            {
-                Invoke(() =>
-                {
-                    ScannedSizeLabel.Text = counter + " items were copied! [" + $"{Convert.ToDouble(totalLength >> 30):0.##}" + "/" + $"{totalByte:0.##}" + "] GB";
-                    ScanProgressBar.Value = ScanProgressBar.Maximum;
-                });
-            }
-        }
-
-
-
-
-
-        private async Task MoveFile(Dictionary<string, FileInfo> map, int totalFileCount, DirectoryInfo directoryInfo, string targetPath, double totalByte, HashSet<string> dirs)
-        {
-            totalByte = _toGB(totalByte);
-
-            ScanProgressBar.Value = ScanProgressBar.Minimum;
-
-            var stopWatch = new Stopwatch();
-
-            stopWatch.Start();
-            await Task.Run(() => MoveFileCallback(directoryInfo, map, totalByte, targetPath, totalFileCount, dirs));
-
-
-            stopWatch.Stop();
-
-            TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + stopWatch.Elapsed;
-        }
-
-        private async void MoveFileCallback(DirectoryInfo directoryInfo, Dictionary<string, FileInfo> map, double totalByte, string targetPath, int totalFileCount, HashSet<string> dirs)
-        {
-            int counter = 0;
-            long totalLength = 0;
-            HashSet<string> list = new HashSet<string>();
-            map.AsParallel().ForAll(async x =>
-            {
-                totalLength += x.Value.Length;
-
-                File.Move(x.Key, x.Value.FullName.Replace(directoryInfo.FullName, targetPath), OverwriteChoiceBox.Checked);
-
-                list.Add(Regex.Match(new DirectoryInfo(x.Key).FullName, @"^(.*\\).*?$").Groups[1].Value);
-
-                if (++counter % 15 == 0)
-                {
-                    if (InvokeRequired)
-                    {
-                        Invoke(() =>
-                        {
-                            ScannedSizeLabel.Text = counter + " items were moved! [" + $"{Convert.ToDouble(totalLength >> 30):0.##}" + "/" + $"{totalByte:0.##}" + "] GB";
-                            ScannigLabel.Text = x.Value.FullName;
-                            ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
-                        });
-                        return;
-                    }
-                    await Task.Delay(1);
-                }
-            });
-
-            if (InvokeRequired)
-            {
-                Invoke(() =>
-                {
-                    ScannedSizeLabel.Text = counter + " items were moved! [" + $"{Convert.ToDouble(totalLength >> 30):0.##}" + "/" + $"{totalByte:0.##}" + "] GB";
-                    ScanProgressBar.Value = ScanProgressBar.Maximum;
-                });
-            }
-            //File.WriteAllLines("C:\\Users\\hp\\Desktop\\dirs.txt", list);
-            list.Skip(0).Select(d => new DirectoryInfo(d)).Where(d => d.GetFiles().Length == 0 && 
-            d.Exists && 
-            d.FullName != directoryInfo.FullName + "\\").ToList().ForEach(d =>
+            var _moveCounter = new COUNTER_LOCK();
+            Parallel.ForEach(_newFileList, new ParallelOptions { MaxDegreeOfParallelism = (int)ThreadCounter.Value}, file =>
             {
                 try
                 {
-                    d.Delete(true);
+                    ShowOnScreenProgress(file, totalFileCount, _moveCounter.COUNTER);
+                    File.Move(file, file.Replace(PathTextBox.Text, TargetPathTextBox.Text), OverwriteChoiceBox.Checked);
+                    lock (_moveCounter)
+                    {
+                        _moveCounter.COUNTER++;
+                    }
                 }
                 catch (Exception ex) { }
             });
-            //File.WriteAllLines("C:\\Users\\hp\\Desktop\\dirs.txt", list);
 
+
+            Parallel.ForEach(_directoryList.Select(d => new DirectoryInfo(d)), new ParallelOptions { MaxDegreeOfParallelism = (int)ThreadCounter.Value },
+                dir =>
+                    {
+                        try
+                        {
+                            if (dir.GetFiles().Length == 0)
+                                dir.Delete(true);
+                        }
+                        catch (Exception ex) { }
+                    });
+        }
+        private void ShowOnScreenProgress(string file, int totalFileCount)
+        {
+            if (_locker.COUNTER % 100 == 0)
+            {
+                RequireInvoke(() =>
+                {
+                    ScannedSizeLabel.Text = _locker.COUNTER + " items were scanned!";
+                    ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)_locker.COUNTER / (double)totalFileCount) * 100.0);
+                    ScannigLabel.Text = file;
+                });
+            }
+        }
+        private void ShowOnScreenProgress(string file, int totalFileCount, int counter)
+        {
+            if (counter % 100 == 0)
+            {
+                RequireInvoke(() =>
+                {
+                    ScannedSizeLabel.Text = _locker.COUNTER + " items were scanned!";
+                    ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)_locker.COUNTER / (double)totalFileCount) * 100.0);
+                    ScannigLabel.Text = file;
+                });
+            }
+        }
+        private void RequireInvoke(Action invoke)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(invoke);
+                return;
+            }
         }
     }
-
 }
-

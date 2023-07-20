@@ -1,4 +1,6 @@
-﻿namespace FileReporterApp.ServiceApp.FileWriter
+﻿using System.Collections.ObjectModel;
+
+namespace FileReporterApp.ServiceApp.FileWriter
 {
     public interface IFileWrite
     {
