@@ -1,6 +1,5 @@
 ﻿using FileReporterDecorator.ServiceApp.filter.DateFilter;
 using System.Diagnostics;
-
 namespace FileReporterDecorator.FileOperation.operations
 {
     internal class ScanDirectoryOperation : FileOperation
@@ -18,7 +17,7 @@ namespace FileReporterDecorator.FileOperation.operations
 
         public ScanDirectoryOperation(
             FileOperation fileOperation, DateTime dateTime,
-            int totalFileCount,int threadCount,
+            int totalFileCount, int threadCount,
             string targetPath, IDateOption dateOption,
             Action<int, int, string> showOnScreenCallback, Action<int, TimeSpan> showOnScreenCallbackMaximize)
         {
@@ -35,7 +34,6 @@ namespace FileReporterDecorator.FileOperation.operations
 
         public void ScanFileSystemAndClassifyFiles(IDateOption dateOption, string path)
         {
-
             foreach (string file in Directory.GetFiles(path))
             {
                 ClassifyBySelectedDate(dateOption, file);
@@ -61,6 +59,7 @@ namespace FileReporterDecorator.FileOperation.operations
                 ScanFileSystemAndClassifyFiles(dateOption, subDir);
             });
         }
+
         private void ClassifyBySelectedDate(IDateOption dateOption, string file)
         {
             if (_locker.COUNTER % 100 == 0)
@@ -96,7 +95,7 @@ namespace FileReporterDecorator.FileOperation.operations
                 stopWatch.Stop();
 
                 _showOnScreenCallbackMaximize(_locker.COUNTER, stopWatch.Elapsed);
-                
+
                 if (_fileOperation != null && _fileOperation.GetType().Name != "EmptyOperation")
                     await _fileOperation.Run();
             }

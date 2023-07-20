@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using FileReporterDecorator.Util;
+﻿using FileReporterDecorator.Util;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using static FileReporterDecorator.Util.ExceptionUtil;
@@ -44,13 +43,10 @@ namespace FileReporterDecorator.FileOperation.operations
 
 
             ForEachParallel(scanProcess.GetNewFileList(), threadCount,
-                file => ThrowCopyAndMoveException(() => CopyFiles(file), () => {
-                    isConflict = true;
-                    conflictFileList.Add(file);
-                }));
+                file => ThrowCopyAndMoveException(() => CopyFiles(file), () => { isConflict = true; conflictFileList.Add(file); }));
 
             if (IsEmptyFolder())
-                ForEachParallel(scanProcess.GetEmptyDirectoryList(), threadCount, 
+                ForEachParallel(scanProcess.GetEmptyDirectoryList(), threadCount,
                     dir => ThrowCopyAndMoveException(() => Directory.CreateDirectory(dir.Replace(destinationPath, targetPath)), () => { }));
 
             if (isConflict)

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileReporterDecorator.Util
+﻿namespace FileReporterDecorator.Util
 {
     internal class ExceptionUtil
     {
-        public static void  ThrowException(Action action, Action nullReferenceExceptionAction)
+        public static void ThrowException(Action action, Action nullReferenceExceptionAction)
         {
             try
             {
@@ -36,18 +30,18 @@ namespace FileReporterDecorator.Util
 
 
         public static void ThrowFileNotFoundException(Action action, Action finallyAction)
-        {   
+        {
             try
             {
                 action.Invoke();
             }
             catch (FileNotFoundException ex)
             {
-                
+
             }
             finally
             {
-               finallyAction.Invoke();
+                finallyAction.Invoke();
             }
         }
 
