@@ -46,3 +46,9 @@ C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Debug\net6.0-
 C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Debug\net6.0-windows\FileReporterDecorator.pdb
 C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Debug\net6.0-windows\FileReporterDecorator.genruntimeconfig.cache
 C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Debug\net6.0-windows\ref\FileReporterDecorator.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Debug\net6.0-windows\FileReporterLib.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Debug\net6.0-windows\FileReporterLib.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Debug\net6.0-windows\xunit.abstractions.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Debug\net6.0-windows\xunit.assert.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Debug\net6.0-windows\xunit.core.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Debug\net6.0-windows\xunit.execution.dotnet.dll

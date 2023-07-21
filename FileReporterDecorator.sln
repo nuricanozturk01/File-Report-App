@@ -5,9 +5,9 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileReporterDecorator", "FileReporterDecorator\FileReporterDecorator.csproj", "{5017B56C-942C-4A11-ADE7-031AE5DF85E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileReporterAppTest", "FileReporterAppTest\FileReporterAppTest.csproj", "{A91D4DD4-201A-4629-916F-3A7141DAE70F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileReporterAppTest", "FileReporterAppTest\FileReporterAppTest.csproj", "{A91D4DD4-201A-4629-916F-3A7141DAE70F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileReporterLib", "FileReporterLib\FileReporterLib.csproj", "{65D934CE-0320-47C2-AF7F-177E32F70017}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileReporterLib", "FileReporterLib\FileReporterLib.csproj", "{65D934CE-0320-47C2-AF7F-177E32F70017}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

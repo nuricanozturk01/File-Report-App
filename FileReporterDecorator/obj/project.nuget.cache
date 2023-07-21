@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "o3Twyik/YZQg3FIlv1wNJoaRvqWBS673i12NO7Hk32nUFXl3hNUruUXQUICj9HwkyvFMSLo01PM7jUAYSJMobg==",
+  "dgSpecHash": "R93QYApJ3Y3j1K5zQVQRv76FWc2ODseD9NP5A+EMnwyY4Nd1jUrRRtKi6v/IrVzm9L1B7uEhqHWupWuSeSREvw==",
   "success": true,
   "projectFilePath": "C:\\Users\\hp\\source\\repos\\FileReporterApp\\FileReporterDecorator\\FileReporterDecorator.csproj",
   "expectedPackageFiles": [
@@ -83,7 +83,14 @@
     "C:\\Users\\hp\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\hp\\.nuget\\packages\\xlparser\\1.5.2\\xlparser.1.5.2.nupkg.sha512"
+    "C:\\Users\\hp\\.nuget\\packages\\xlparser\\1.5.2\\xlparser.1.5.2.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\xunit\\2.5.0\\xunit.2.5.0.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\xunit.abstractions\\2.0.3\\xunit.abstractions.2.0.3.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\xunit.analyzers\\1.2.0\\xunit.analyzers.1.2.0.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\xunit.assert\\2.5.0\\xunit.assert.2.5.0.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\xunit.core\\2.5.0\\xunit.core.2.5.0.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\xunit.extensibility.core\\2.5.0\\xunit.extensibility.core.2.5.0.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\xunit.extensibility.execution\\2.5.0\\xunit.extensibility.execution.2.5.0.nupkg.sha512"
   ],
   "logs": []
 }

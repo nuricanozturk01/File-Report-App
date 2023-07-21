@@ -15,6 +15,8 @@ namespace FileReporterDecorator.FileOperation.operations
         private readonly Action<int, int, string> showOnScreenCallback;
         private readonly Action minimumProgressBar;
         private readonly Action<string> setTimeLabelAction;
+        private readonly Action<string, string> conflictFileMessageAction;
+
         private COUNTER_LOCK _newLocker = new COUNTER_LOCK();
         Action<int, TimeSpan> _showOnScreenCallbackMaximize;
 
@@ -23,7 +25,8 @@ namespace FileReporterDecorator.FileOperation.operations
             Action<int, int, string> showOnScreenCallback,
             Action minimumProgressBar,
             Action<int, TimeSpan> showMaxProgressBar,
-            Action<string> setTimeLabelAction)
+            Action<string> setTimeLabelAction,
+            Action<string, string> conflictFileMessageAction)
         {
             _showOnScreenCallbackMaximize = showMaxProgressBar;
             this.scanProcess = scanProcess;
@@ -34,39 +37,38 @@ namespace FileReporterDecorator.FileOperation.operations
             this.showOnScreenCallback = showOnScreenCallback;
             this.minimumProgressBar = minimumProgressBar;
             this.setTimeLabelAction = setTimeLabelAction;
+            this.conflictFileMessageAction = conflictFileMessageAction;
         }
 
         private void CopyFileCallback()
         {
-            var isConflict = false;
-            var conflictFileList = new ConcurrentBag<string>();
-
-
-            ForEachParallel(scanProcess.GetNewFileList(), threadCount,
-                file => ThrowCopyAndMoveException(() => CopyFiles(file), () => { isConflict = true; conflictFileList.Add(file); }));
+            ForEachParallel(scanProcess.GetNewFileList(), threadCount, file => CopyFiles(file));
 
             if (IsEmptyFolder())
                 ForEachParallel(scanProcess.GetEmptyDirectoryList(), threadCount,
-                    dir => ThrowCopyAndMoveException(() => Directory.CreateDirectory(dir.Replace(destinationPath, targetPath)), () => { }));
-
-            /*if (isConflict)
-                MessageBox.Show($"{conflictFileList.Count} files are conflicted!", "Conflicted Files",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);*/
-
+                    dir => Directory.CreateDirectory(dir.Replace(destinationPath, targetPath)));
         }
 
         private void CopyFiles(string file)
         {
+            var isConflict = false;
+
+            var conflictFileList = new ConcurrentBag<string>();
+
             lock (_newLocker)
             {
                 _newLocker.COUNTER++;
             }
+
             showOnScreenCallback(_newLocker.COUNTER, totalFileCount, file);
 
             var targetFile = file.Replace(destinationPath, targetPath);
 
-            File.Copy(file, targetFile, IsOwerrite());
+            ThrowCopyConflictException(() => File.Copy(file, targetFile, IsOwerrite()),
+                () => { isConflict = true; conflictFileList.Add(file); }, IsOwerrite());
+
+            if (isConflict)
+                conflictFileMessageAction.Invoke($"{conflictFileList.Count} files are conflicted!", "Conflicted Files");
 
             if (IsCopyNtfsPermissions())
                 _copyNtfsPermissions.Invoke(new FileInfo(file), new FileInfo(file.Replace(destinationPath, targetPath)));
@@ -87,6 +89,7 @@ namespace FileReporterDecorator.FileOperation.operations
             stopWatch.Stop();
 
             _showOnScreenCallbackMaximize(_locker.COUNTER, stopWatch.Elapsed);
+
             setTimeLabelAction.Invoke("Copy Operation was completed! Total Elapsed Time: " + stopWatch.Elapsed);
         }
     }

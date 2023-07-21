@@ -5,6 +5,9 @@
 
         public NtfsSecurityOptionDecorator(FileOperation fileOperation) : base(fileOperation)
         {
+            SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
+            SetNtfsPermissions(true);
+
             fileOperation.SetNtfsPermissions(true);
             fileOperation.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
         }

@@ -1,4 +1,6 @@
-﻿namespace FileReporterDecorator.Util
+﻿using FileReporterLib;
+
+namespace FileReporterDecorator.Util
 {
     public class ExceptionUtil
     {
@@ -27,7 +29,19 @@
             }
         }
 
-
+        public static void ThrowCopyConflictException(Action action, Action nullReferenceExceptionAction, bool isConflict)
+        {
+            try
+            {
+                action.Invoke();
+            }
+            catch (Exception ex)
+            {
+                nullReferenceExceptionAction.Invoke();
+                if (!isConflict)
+                    throw new FileConflictException("Files are conflict!");
+            }
+        }
 
         public static void ThrowFileNotFoundException(Action action, Action finallyAction)
         {

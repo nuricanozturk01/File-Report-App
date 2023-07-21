@@ -101,7 +101,7 @@ namespace FileReporterDecorator.FileOperation.operations
             }
             catch (UnauthorizedAccessException ex)
             {
-                MessageBox.Show("You do not have access to Directory! Please run the root mode");
+                //MessageBox.Show("You do not have access to Directory! Please run the root mode");
             }
         }
     }

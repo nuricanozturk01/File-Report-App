@@ -6,6 +6,7 @@
         public OverwriteOptionDecorator(FileOperation fileOperation) : base(fileOperation)
         {
             fileOperation.SetOverwrite(true);
+            SetOverwrite(true);
         }
 
         public override async Task Run()

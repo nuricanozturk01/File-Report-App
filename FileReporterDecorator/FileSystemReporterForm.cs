@@ -12,6 +12,7 @@ namespace FileReporterApp
         private readonly Action<int, TimeSpan> _showMaximizeOnScreenCallback;
         private readonly Action _minimumProgressBarCallback;
         private readonly Action<string> _setTimeLabelCallback;
+        private readonly Action<string, string> _conflictMessageBoxCallback;
 
         private int _threadCount;
         private int _totalFileCount;
@@ -27,6 +28,7 @@ namespace FileReporterApp
             _showMaximizeOnScreenCallback = (counter, elapsedTime) => ShowMaximizeOnScreen(counter, elapsedTime);
             _minimumProgressBarCallback = () => MinimumProgressBar();
             _setTimeLabelCallback = (text) => SetTimeLabel(text);
+            _conflictMessageBoxCallback = (body, title) => ShowMessageForConflictFiles(body, title);
         }
 
         private IDateOption GetDateOption() => GetSelectedDateOption(CreatedDateRadioButton.Checked, ModifiedDateRadioButton.Checked);
@@ -66,7 +68,7 @@ namespace FileReporterApp
                 return new CopyFileOperation(scanProcess, _totalFileCount,
                     _threadCount, _destinationPath, _targetPath,
                     _showOnScreenProgressCallback, _minimumProgressBarCallback,
-                    _showMaximizeOnScreenCallback, _setTimeLabelCallback);
+                    _showMaximizeOnScreenCallback, _setTimeLabelCallback, _conflictMessageBoxCallback);
 
             return new EmptyOperation();
         }
@@ -82,10 +84,12 @@ namespace FileReporterApp
         private async void RunButton_Click(object sender, EventArgs e)
         {
             InitMembers();
+
             FileOperation scanProcess = CreateScanProcess();
             await scanProcess.Run();
 
             FileOperation operationProcess = CreateOperationProcess(scanProcess, MoveRadioButton.Checked, CopyRadioButton.Checked);
+
             operationProcess = CreateTransportProcess(operationProcess);
 
             await operationProcess.Run();
@@ -118,7 +122,7 @@ namespace FileReporterApp
         }
         private async void ReportButton_ClickAsync(object sender, EventArgs e)
         {
-            ThrowException(ReportButtonCallback, () => MessageBox.Show("Please select the file!"));           
+            ThrowException(ReportButtonCallback, () => MessageBox.Show("Please select the file!"));
         }
         private void MoveRadioButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -159,6 +163,11 @@ namespace FileReporterApp
             ScanProgressBar.Value = ScanProgressBar.Maximum;
             ScannedSizeLabel.Text = counter + " items were scanned!";
             TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + elapsedTime;
+        }
+
+        private void ShowMessageForConflictFiles(string body, string title)
+        {
+            MessageBox.Show(body, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         private void ShowOnScreenProgress(int counter, int totalFileCount, string file)
         {

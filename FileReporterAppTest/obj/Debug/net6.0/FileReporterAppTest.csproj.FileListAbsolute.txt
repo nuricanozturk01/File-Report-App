@@ -97,3 +97,13 @@ C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\obj\Debug\net6.0\re
 C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\obj\Debug\net6.0\FileReporterAppTest.pdb
 C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\obj\Debug\net6.0\FileReporterAppTest.genruntimeconfig.cache
 C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\obj\Debug\net6.0\ref\FileReporterAppTest.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\CoverletSourceRootsMapping
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\ClosedXML.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\ExcelNumberFormat.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\Irony.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\SixLabors.Fonts.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\System.IO.Packaging.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\XLParser.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\FileReporterLib.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterAppTest\bin\Debug\net6.0\FileReporterLib.pdb
