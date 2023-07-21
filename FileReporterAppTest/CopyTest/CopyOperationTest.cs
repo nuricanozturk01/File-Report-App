@@ -33,7 +33,7 @@ namespace FileReporterAppTest.CopyTest
         [Fact(DisplayName = "[3] - Are Total Bytes Are Equal")]
         internal void RunIsTotalByte()
         {
-            var totalByteBefore = GetTotalByteOnDirectory();
+            var totalByteBefore = GetTotalByteOnTestDirectory();
 
             var totalByteAfter = _scannerOperation.GetNewFileList()
                 .Select(fileName => new FileInfo(fileName))

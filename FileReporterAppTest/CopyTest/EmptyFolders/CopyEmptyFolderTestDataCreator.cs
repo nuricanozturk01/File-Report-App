@@ -18,10 +18,6 @@ namespace FileReporterAppTest.CopyTest
             _copyOperation = CopyBuilder.Create_Copy_EmptyFolder_Operation(_scanOperation);
         }
 
-
-        public void Dispose()
-        {
-            Directory.Delete(TEST_DIRECTORY_PATH_EMPTY, true);
-        }
+        public void Dispose() => Directory.Delete(TEST_DIRECTORY_PATH_EMPTY, true);
     }
 }

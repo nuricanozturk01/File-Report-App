@@ -22,9 +22,9 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
         }
 
         [Fact(DisplayName = "[1] - Copy Normal Files")]
-        internal async void Copy_Normal_Files()
+        internal void Copy_Normal_Files()
         {
-            await Task.Run(_normalFileCopyOperation.Run);
+            _normalFileCopyOperation.Run();
         }
 
         [Fact(DisplayName = "[2] - Check Assertion for Overwrite")]
@@ -39,16 +39,23 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
             await Task.Run(_copyOperation.Run);
         }
 
-        [Fact(DisplayName = "[4] - Are TotalBytes Are Equal After Copy Overwrite")]
+        [Fact(DisplayName = "[4] - Are TotalBytes Equal After Copy Overwrite")]
         internal void Are_TotalBytes_Equals_After_Copy()
         {
-            Assert.Equal(_copyOperation.GetNewFileList().Count(), _normalFileCopyOperation.GetNewFileList().Count())
+            WaitSecond(5, () => {
+                var afterCopyTotalByte = GetTotalByteOnDirectory(TEST_DIRECTORY_OVERWRITE_PATH);
+
+                var beforeCopyTotalByte = GetTotalByteOnTestDirectory();
+
+                Assert.Equal(beforeCopyTotalByte, afterCopyTotalByte);
+            });
+            
         }
 
-        [Fact(DisplayName = "[5] - Are TotalBytes Are Equal After Copy Overwrite")]
+        [Fact(DisplayName = "[5] - Are Total Filr Count  Equal After Copy Overwrite")]
         internal void Are_Total_File_Count_Equals_After_Copy()
         {
-            Assert.Equal(_copyOperation.GetNewFileList().Count(), _normalFileCopyOperation.GetNewFileList().Count())
+            Assert.Equal(_copyOperation.GetNewFileList().Count(), _normalFileCopyOperation.GetNewFileList().Count());
         }
     }
 }

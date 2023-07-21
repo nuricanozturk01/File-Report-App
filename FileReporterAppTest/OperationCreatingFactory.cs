@@ -60,22 +60,19 @@ namespace FileReporterAppTest
         // MOVE PROCESSES
         public static class MoveBuilder
         {
-            public static FileOperation Create_Move_Operation(FileOperation scanProcess, int totalFileCount,
-                                                                       string destinationPath, string targetPath)
+            public static FileOperation Create_Move_Operation(FileOperation scanProcess, string targetPath)
             {
-                return CreateOperationProcess(scanProcess, Operation.MOVE, totalFileCount, destinationPath, targetPath);
+                return CreateOperationProcess(scanProcess, Operation.MOVE, GetTotalFileCountOnTestDirectory(), TEST_DIRECTORY_PATH, targetPath);
             }
-            public static FileOperation Create_Move_EmptyFolder_Operation(FileOperation scanProcess, int totalFileCount,
-                                                                          string destinationPath, string targetPath)
+            public static FileOperation Create_Move_EmptyFolder_Operation(FileOperation scanProcess)
             {
-                var moveProcess = CreateOperationProcess(scanProcess, Operation.MOVE, totalFileCount, destinationPath, targetPath);
+                var moveProcess = CreateOperationProcess(scanProcess, Operation.MOVE, GetTotalFileCountOnTestDirectory(), TEST_DIRECTORY_PATH, MOVE_TEST_DIRECTORY_PATH_EMPTY);
                 return CreateTransportProcess(moveProcess, TransactionOperationEnum.EMPTY_FOLDER);
             }
 
-            public static FileOperation Create_Move_Overwrite_Operation(FileOperation scanProcess, int totalFileCount,
-                                                                          string destinationPath, string targetPath)
+            public static FileOperation Create_Move_Overwrite_Operation(FileOperation scanProcess, string targetPath)
             {
-                var moveProcess = CreateOperationProcess(scanProcess, Operation.MOVE, totalFileCount, destinationPath, targetPath);
+                var moveProcess = CreateOperationProcess(scanProcess, Operation.MOVE, GetTotalFileCountOnTestDirectory(), TEST_DIRECTORY_PATH, targetPath);
                 return CreateTransportProcess(moveProcess, TransactionOperationEnum.OVERWRITE);
             }
 
@@ -94,24 +91,27 @@ namespace FileReporterAppTest
             {
                 return CreateOperationProcess(scanProcess, Operation.COPY, GetTotalFileCountOnTestDirectory(), TEST_DIRECTORY_PATH, targetPath);
             }
+
+            public static FileOperation Create_Copy_Operation(FileOperation scanProcess, string destinationPath, string targetPath)
+            {
+                return CreateOperationProcess(scanProcess, Operation.COPY, GetTotalFileCountOnTestDirectory(), destinationPath, targetPath);
+            }
             public static FileOperation Create_Copy_EmptyFolder_Operation(FileOperation scanProcess)
             {
                 var process = CreateOperationProcess(scanProcess, Operation.COPY, GetTotalFileCountOnTestDirectory(), TEST_DIRECTORY_PATH, TEST_DIRECTORY_PATH_EMPTY);
                 return CreateTransportProcess(process, TransactionOperationEnum.EMPTY_FOLDER);
             }
 
-            public static FileOperation Create_Copy_Overwrite_Operation(FileOperation scanProcess, int totalFileCount,
-                                                                          string destinationPath, string targetPath)
+            public static FileOperation Create_Copy_Overwrite_Operation(FileOperation scanProcess, string targetPath)
             {
-                var process = CreateOperationProcess(scanProcess, Operation.COPY, totalFileCount, destinationPath, targetPath);
+                var process = CreateOperationProcess(scanProcess, Operation.COPY, GetTotalFileCountOnTestDirectory(), TEST_DIRECTORY_PATH, targetPath);
                 return CreateTransportProcess(process, TransactionOperationEnum.OVERWRITE);
             }
 
 
-            public static FileOperation Create_Copy_Ntfs_Permission_Operation(FileOperation scanProcess, int totalFileCount,
-                                                                          string destinationPath, string targetPath)
+            public static FileOperation Create_Copy_Ntfs_Permission_Operation(FileOperation scanProcess, string targetPath)
             {
-                var process = CreateOperationProcess(scanProcess, Operation.COPY, totalFileCount, destinationPath, targetPath);
+                var process = CreateOperationProcess(scanProcess, Operation.COPY, GetTotalFileCountOnTestDirectory(), TEST_DIRECTORY_PATH, targetPath);
                 return CreateTransportProcess(process, TransactionOperationEnum.NTFS_PERMISSIONS);
             }
 

@@ -2,28 +2,22 @@
 
 namespace FileReporterAppTest.CopyTest
 {
-    public class CopyNtfsTestDataCreator : IDisposable
+    public class MoveEmptyFolderTestDataCreator : IDisposable
     {
         public FileOperation _copyOperation;
         public FileOperation _scanOperation;
 
-        public CopyNtfsTestDataCreator()
+        public MoveEmptyFolderTestDataCreator()
         {
-
-            var totalFileCount = GetTotalFileCountOnTestDirectory();
             var dateTime = GetXDayBeforeFromToday(2);
 
             _scanOperation = ScanBuilder.CreateScanProcess(dateTime, GetCreatedDate());
 
             _scanOperation.Run();
 
-            _copyOperation = CopyBuilder.Create_Copy_Ntfs_Permission_Operation(_scanOperation, TEST_DIRECTORY_NTFS_PATH);
+            _copyOperation = MoveBuilder.Create_Move_EmptyFolder_Operation(_scanOperation);
         }
 
-
-        public void Dispose()
-        {
-
-        }
+        public void Dispose() => Directory.Delete(MOVE_TEST_DIRECTORY_PATH_EMPTY, true);
     }
 }

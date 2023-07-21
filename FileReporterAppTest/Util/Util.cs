@@ -6,7 +6,7 @@ namespace FileReporterAppTest.Util
     {
 
         //DEFAULT THREAD COUNT
-        public readonly static int DEFAULT_THREAD_COUNT = 4;
+        public readonly static int DEFAULT_THREAD_COUNT = 1;
 
         //EMPTY ACTIONS
         public readonly static Action<string, string> EMPTY_SHOW_CONFLICT_MESSAGE_CALLBACK = (str1, st2) => { };
@@ -16,11 +16,22 @@ namespace FileReporterAppTest.Util
         public readonly static Action<string> EMPTY_SHOW_TIME_CALLBACK = str => { };
 
 
+        private static string PATH_PREFIX = "C:\\Users\\hp\\Desktop\\";
+
         // DIRECTORY PATH
-        public static readonly string TEST_DIRECTORY_PATH = "C:\\Users\\hp\\Desktop\\test_dir";
-        public static readonly string TEST_DIRECTORY_PATH_EMPTY = "C:\\Users\\hp\\Desktop\\test_dir_empty";
-        public static readonly string TEST_DIRECTORY_COPY_PATH = "C:\\Users\\hp\\Desktop\\test_dir_copy";
-        public static readonly string TEST_DIRECTORY_OVERWRITE_PATH = "C:\\Users\\hp\\Desktop\\test_dir_overwrite";
+        // [COPY]
+        public static readonly string TEST_DIRECTORY_NTFS_PATH = PATH_PREFIX + "test_ntfs";
+        public static readonly string TEST_DIRECTORY_PATH = PATH_PREFIX + "test_dir";
+        public static readonly string TEST_DIRECTORY_PATH_EMPTY = PATH_PREFIX + "test_dir_copy_empty";
+        public static readonly string TEST_DIRECTORY_COPY_PATH = PATH_PREFIX + "test_dir_copy";
+        public static readonly string TEST_DIRECTORY_OVERWRITE_PATH = PATH_PREFIX + "test_dir_copy_overwrite";
+        
+        
+        // [MOVE]
+        public static readonly string BACKUP_MAIN_FILE = PATH_PREFIX + "test_dir_backup";
+        public static readonly string MOVE_TEST_DIRECTORY_PATH_EMPTY = PATH_PREFIX + "test_dir_move_empty";
+        public static readonly string MOVE_TEST_DIRECTORY_PATH = PATH_PREFIX + "test_dir_move";
+        public static readonly string MOVE_TEST_DIRECTORY_OVERWRITE_PATH = PATH_PREFIX + "test_dir_move_overwrite";
 
         //WAIT N SECOND
         private static readonly ManualResetEvent resetEvent = new ManualResetEvent(false);
@@ -78,10 +89,18 @@ namespace FileReporterAppTest.Util
         {
             return new DirectoryInfo(TEST_DIRECTORY_PATH).GetFiles("*.*", SearchOption.AllDirectories);
         }
-
-        public static long GetTotalByteOnDirectory()
+        public static FileInfo[] getDirectoryFileInfoArray(string path)
+        {
+            return new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories);
+        }
+        public static long GetTotalByteOnTestDirectory()
         {
             return getTestDirectoryFileInfoArray().Select(f => f.Length).Sum();
+        }
+
+        public static long GetTotalByteOnDirectory(string path)
+        {
+            return new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Select(f => f.Length).Sum();
         }
 
         public static string[] GetDirectoriesOnPath(string path)
@@ -114,5 +133,7 @@ namespace FileReporterAppTest.Util
 
             return emptyDirectories;
         }
+
+        
     }
 }

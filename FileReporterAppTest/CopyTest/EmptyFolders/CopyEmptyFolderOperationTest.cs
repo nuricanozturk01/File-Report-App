@@ -1,10 +1,11 @@
 ﻿using FileReporterDecorator.FileOperation;
+using System.Text.RegularExpressions;
+
 namespace FileReporterAppTest.CopyTest
 {
     
     public class CopyEmptyFolderOperationTest : IClassFixture<CopyEmptyFolderTestDataCreator>
     {
-        private readonly int WAIT_MINUTE_COPY_SECOND = 8;
         private readonly FileOperation _scannerOperation;
         private readonly FileOperation _copyOperation;
         public CopyEmptyFolderOperationTest(CopyEmptyFolderTestDataCreator copyTestDataCreator)
@@ -32,12 +33,14 @@ namespace FileReporterAppTest.CopyTest
         [Fact(DisplayName = "[3] Are Equal Empty Folder Names")]
         public void Are_Equal_Empty_Folder_Names()
         {
-            var distinctListCount = _scannerOperation.GetEmptyDirectoryList()
-                .Concat(FindEmptyDirectories(TEST_DIRECTORY_PATH_EMPTY))
-                .Distinct()
-                .Count();
+            
+            
+            var list = _scannerOperation.GetEmptyDirectoryList().Select(i => Regex.Match(i, @"[^\\]+$").Value).ToList();
+            var emptyDirectories = FindEmptyDirectories(TEST_DIRECTORY_PATH_EMPTY)
+                .Select(i => Regex.Match(i, @"[^\\]+$").Value).Reverse().ToList();
 
-            Assert.Equal(distinctListCount - 1, _scannerOperation.GetEmptyDirectoryList().ToList().Count());    
+            Assert.Equal(list, emptyDirectories);
+
         }
     }
 }

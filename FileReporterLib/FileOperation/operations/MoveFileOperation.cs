@@ -1,4 +1,5 @@
 ﻿using FileReporterDecorator.Util;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using static FileReporterDecorator.Util.ExceptionUtil;
 using static FileReporterDecorator.Util.ParallelWrapper;
@@ -37,8 +38,13 @@ namespace FileReporterDecorator.FileOperation.operations
 
         private void MoveFile(string file)
         {
+
+            var isConflict = false;
+
+            var conflictFileList = new ConcurrentBag<string>();
             showOnScreenCallback(_moveCounter.COUNTER, totalFileCount, file);
-            File.Move(file, file.Replace(destinationPath, targetPath), IsOwerrite());
+            ThrowCopyConflictException(() => File.Move(file, file.Replace(destinationPath, targetPath), IsOwerrite()),
+                () => { isConflict = true; conflictFileList.Add(file); }, isConflict);
             lock (_moveCounter)
             {
                 _moveCounter.COUNTER++;

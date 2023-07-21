@@ -1111,6 +1111,63 @@
             "fileVersion": "1.5.2.0"
           }
         }
+      },
+      "xunit/2.5.0": {
+        "dependencies": {
+          "xunit.analyzers": "1.2.0",
+          "xunit.assert": "2.5.0",
+          "xunit.core": "2.5.0"
+        }
+      },
+      "xunit.abstractions/2.0.3": {
+        "runtime": {
+          "lib/netstandard2.0/xunit.abstractions.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
+        }
+      },
+      "xunit.analyzers/1.2.0": {},
+      "xunit.assert/2.5.0": {
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.assert.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.0.0"
+          }
+        }
+      },
+      "xunit.core/2.5.0": {
+        "dependencies": {
+          "xunit.extensibility.core": "2.5.0",
+          "xunit.extensibility.execution": "2.5.0"
+        }
+      },
+      "xunit.extensibility.core/2.5.0": {
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "xunit.abstractions": "2.0.3"
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.core.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.0.0"
+          }
+        }
+      },
+      "xunit.extensibility.execution/2.5.0": {
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "xunit.extensibility.core": "2.5.0"
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.execution.dotnet.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.0.0"
+          }
+        }
       }
     }
   },
@@ -1674,6 +1731,55 @@
       "sha512": "sha512-8tnUCmMbn6c/HGuHFyq1sulHym8YReTKDNXFFQk0U8nldNx6RGrwRvLh0+aQjEc7YoC3Q1ztH1npLt7dClKqjw==",
       "path": "xlparser/1.5.2",
       "hashPath": "xlparser.1.5.2.nupkg.sha512"
+    },
+    "xunit/2.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-f2V5wuAdoaq0mRTt9UBmPbVex9HcwFYn+y7WaKUz5Xpakcrv7lhtQWBJUWNY4N3Z+o+atDBLyAALM1QWx04C6Q==",
+      "path": "xunit/2.5.0",
+      "hashPath": "xunit.2.5.0.nupkg.sha512"
+    },
+    "xunit.abstractions/2.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pot1I4YOxlWjIb5jmwvvQNbTrZ3lJQ+jUGkGjWE3hEFM0l5gOnBWS+H3qsex68s5cO52g+44vpGzhAt+42vwKg==",
+      "path": "xunit.abstractions/2.0.3",
+      "hashPath": "xunit.abstractions.2.0.3.nupkg.sha512"
+    },
+    "xunit.analyzers/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-d3dehV/DASLRlR8stWQmbPPjfYC2tct50Evav+OlsJMkfFqkhYvzO1k0s81lk0px8O0knZU/FqC8SqbXOtn+hw==",
+      "path": "xunit.analyzers/1.2.0",
+      "hashPath": "xunit.analyzers.1.2.0.nupkg.sha512"
+    },
+    "xunit.assert/2.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wN84pKX5jzfpgJ0bB6arrCA/oelBeYLCpnQ9Wj5xGEVPydKzVSDY5tEatFLHE/rO0+0RC+I4H5igGE118jRh1w==",
+      "path": "xunit.assert/2.5.0",
+      "hashPath": "xunit.assert.2.5.0.nupkg.sha512"
+    },
+    "xunit.core/2.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dnV0Mn2s1C0y2m33AylQyMkEyhBQsL4R0302kwSGiEGuY3JwzEmhTa9pnghyMRPliYSs4fXfkEAP+5bKXryGFg==",
+      "path": "xunit.core/2.5.0",
+      "hashPath": "xunit.core.2.5.0.nupkg.sha512"
+    },
+    "xunit.extensibility.core/2.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xRm6NIV3i7I+LkjsAJ91Xz2fxJm/oMEi2CYq1G5HlGTgcK1Zo2wNbLO6nKX1VG5FZzXibSdoLwr/MofVvh3mFA==",
+      "path": "xunit.extensibility.core/2.5.0",
+      "hashPath": "xunit.extensibility.core.2.5.0.nupkg.sha512"
+    },
+    "xunit.extensibility.execution/2.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7+v2Bvp+1ew1iMGQVb1glICi8jcNdHbRUX6Ru0dmJBViGdjiS7kyqcX2VxleQhFbKNi+WF0an7/TeTXD283RlQ==",
+      "path": "xunit.extensibility.execution/2.5.0",
+      "hashPath": "xunit.extensibility.execution.2.5.0.nupkg.sha512"
     }
   }
 }

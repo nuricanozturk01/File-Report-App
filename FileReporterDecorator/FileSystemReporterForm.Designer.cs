@@ -35,6 +35,7 @@ namespace FileReporterApp
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileSystemReporterForm));
             panel1 = new Panel();
             TimeLabel = new Label();
             ScannigLabel = new Label();
@@ -433,11 +434,14 @@ namespace FileReporterApp
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(931, 625);
             Controls.Add(panel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
+            MaximizeBox = false;
             Name = "FileSystemReporterForm";
-            Text = "FileSystemReporterForm";
+            Text = "File Reporter App";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             OtherOptionsGroup.ResumeLayout(false);
@@ -449,6 +453,8 @@ namespace FileReporterApp
             DateOptionGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
             ResumeLayout(false);
+
+            DateTimePicker.Value = DateTime.Now;
         }
 
         #endregion
