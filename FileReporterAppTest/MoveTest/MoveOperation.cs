@@ -1,7 +1,7 @@
 ﻿using FileReporterDecorator.FileOperation;
 namespace FileReporterAppTest.CopyTest
 {
-    
+
     public class MoveOperation : IClassFixture<MoveOperationDataCreator>
     {
         private readonly FileOperation _scannerOperation;
@@ -18,21 +18,21 @@ namespace FileReporterAppTest.CopyTest
 
 
         [Fact(DisplayName = "[1] - Move Files")]
-        public async void MoveFilesToTarget() => await Task.Run(_moveOperation.Run);
+        public async void Move_Files_To_Target() => await Task.Run(_moveOperation.Run);
 
 
         [Fact(DisplayName = "[2] - Move Is File Counts Are Equal")]
-        internal void RunIsFileCountsAreEqual()
+        internal void Run_FileCounts_Are_Equal()
         {
             var afterCopyFileCount = GetTotalFileCountOnDirectory(TEST_DIRECTORY_PATH);
 
             Assert.Equal(0, afterCopyFileCount);
-            Assert.True(_beforeFileCount!= afterCopyFileCount);
+            Assert.True(_beforeFileCount != afterCopyFileCount);
         }
 
 
         [Fact(DisplayName = "[3] - Move Are Total Bytes Are Equal")]
-        internal void RunIsTotalByte()
+        internal void Run_Check_Total_Byte()
         {
             var totalByteBefore = GetTotalByteOnTestDirectory();
 

@@ -1,5 +1,5 @@
-﻿using FileReporterApp.ServiceApp.FileWriter;
-using FileReporterApp.ServiceApp.options;
+﻿using FileReporterLib.FileWriter;
+using FileReporterLib.Options;
 
 namespace FileReporterDecorator.FileOperation.operations
 {

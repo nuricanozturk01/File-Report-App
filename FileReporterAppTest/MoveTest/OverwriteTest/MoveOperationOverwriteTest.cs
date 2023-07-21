@@ -1,5 +1,5 @@
 ﻿using FileReporterDecorator.FileOperation;
-using FileReporterLib;
+using FileReporterLib.Exceptions;
 
 namespace FileReporterAppTest.CopyTest.OverwriteFile
 {
@@ -34,7 +34,7 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
         }
 
         [Fact(DisplayName = "[3] - Copy With Overwrite")]
-        internal void Move_Normal_Files_Copy_Overwrite() 
+        internal void Move_Normal_Files_Copy_Overwrite()
         {
             WaitSecond(5, () => _moveOperation.Run());
         }
@@ -45,7 +45,7 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
             var afterCopyTotalByteOnMoveDirectory = GetTotalByteOnDirectory(MOVE_TEST_DIRECTORY_OVERWRITE_PATH);
             var afterCopyTotalByte = GetTotalByteOnDirectory(TEST_DIRECTORY_PATH);
 
-            Assert.True(afterCopyTotalByteOnMoveDirectory != 0  && afterCopyTotalByte == 0);
+            Assert.True(afterCopyTotalByteOnMoveDirectory != 0 && afterCopyTotalByte == 0);
         }
 
         [Fact(DisplayName = "[5] - Are Total File Count  Equal After Move Overwrite")]

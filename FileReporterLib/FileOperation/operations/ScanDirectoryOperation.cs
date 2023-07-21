@@ -1,4 +1,4 @@
-﻿using FileReporterDecorator.ServiceApp.filter.DateFilter;
+﻿using FileReporterLib.Filter.DateFilter;
 using System.Diagnostics;
 namespace FileReporterDecorator.FileOperation.operations
 {
@@ -48,7 +48,7 @@ namespace FileReporterDecorator.FileOperation.operations
             {
                 var name = new DirectoryInfo(subDir);
 
-                if (Directory.EnumerateFileSystemEntries(name.FullName).Any() && dateOption.setDate(new DirectoryInfo(path), _dateTime))
+                if (Directory.EnumerateFileSystemEntries(name.FullName).Any() && dateOption.SetDate(new DirectoryInfo(path), _dateTime))
                     AddDirectoryList(name.FullName);
 
                 else AddEmptyDirectoryList(name.FullName);
@@ -67,7 +67,7 @@ namespace FileReporterDecorator.FileOperation.operations
                 _showOnScreenCallback(_locker.COUNTER, _totalFileCount, file);
             }
 
-            if (dateOption.setDate(new FileInfo(file), _dateTime))
+            if (dateOption.SetDate(new FileInfo(file), _dateTime))
                 AddNewFileList(file);
 
             else AddOldFileList(file);

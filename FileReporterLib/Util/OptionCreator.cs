@@ -1,6 +1,5 @@
-﻿using FileReporterApp.ServiceApp.options;
-using FileReporterDecorator.ServiceApp.filter.DateFilter;
-
+﻿using FileReporterLib.Filter.DateFilter;
+using FileReporterLib.Options;
 
 namespace FileReportServiceLib.Util
 {

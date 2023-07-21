@@ -1,9 +1,8 @@
 ﻿using FileReporterDecorator.FileOperation;
-using System.Text.RegularExpressions;
 
 namespace FileReporterAppTest.CopyTest
 {
-    
+
     public class MoveEmptyFolderOperationTest : IClassFixture<MoveEmptyFolderTestDataCreator>
     {
         private readonly FileOperation _scannerOperation;
@@ -15,13 +14,13 @@ namespace FileReporterAppTest.CopyTest
             _scannerOperation = moveTestDataCreator._scanOperation;
             _moveOperation = moveTestDataCreator._copyOperation;
         }
-        
+
         [Fact(DisplayName = "[1] - Copy Files with Empty Directories")]
-        public async void MoveEmptyFolder() => await Task.Run(_moveOperation.Run);
+        public async void Move_Empty_Folder() => await Task.Run(_moveOperation.Run);
 
 
-        
-        
+
+
         [Fact(DisplayName = "[2] - Are Equal Empty Folder Count")]
         public void Are_Equal_Empty_Folder_Count()
         {

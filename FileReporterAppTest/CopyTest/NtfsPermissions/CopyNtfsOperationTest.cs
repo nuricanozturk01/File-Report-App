@@ -30,12 +30,13 @@ namespace FileReporterAppTest.CopyTest
         {
             var beforeCopyFile = _scannerOperation.GetNewFileList().Select(d => new FileInfo(d)).ToList();
 
-            var afterCopyFile = getDirectoryFileInfoArray(TEST_DIRECTORY_NTFS_PATH);
+            var afterCopyFile = GetDirectoryFileInfoArray(TEST_DIRECTORY_NTFS_PATH);
 
             var classifySameFiles = ClassifySameFiles(beforeCopyFile, afterCopyFile);
 
             Assert.True(VerifyNtfsPermissions(classifySameFiles));
         }
+
 
         private bool VerifyNtfsPermissions(Dictionary<FileInfo, FileInfo> classifySameFiles)
         {
@@ -79,7 +80,7 @@ namespace FileReporterAppTest.CopyTest
 
         private Dictionary<FileInfo, FileInfo> ClassifySameFiles(List<FileInfo> beforeCopyFile, FileInfo[] afterCopyFile)
         {
-            return beforeCopyFile.Join(afterCopyFile,before => before.FullName, after => after.FullName, (before, after) => new { Before = before, After = after })
+            return beforeCopyFile.Join(afterCopyFile, before => before.FullName, after => after.FullName, (before, after) => new { Before = before, After = after })
                                   .Where(x => x.Before.FullName == x.After.FullName)
                                   .ToDictionary(x => x.Before, x => x.After);
         }

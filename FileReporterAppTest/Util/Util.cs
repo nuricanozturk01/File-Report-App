@@ -1,4 +1,4 @@
-﻿using FileReporterDecorator.ServiceApp.filter.DateFilter;
+﻿using FileReporterLib.Filter.DateFilter;
 using static FileReportServiceLib.Util.OptionCreator;
 namespace FileReporterAppTest.Util
 {
@@ -25,8 +25,8 @@ namespace FileReporterAppTest.Util
         public static readonly string TEST_DIRECTORY_PATH_EMPTY = PATH_PREFIX + "test_dir_copy_empty";
         public static readonly string TEST_DIRECTORY_COPY_PATH = PATH_PREFIX + "test_dir_copy";
         public static readonly string TEST_DIRECTORY_OVERWRITE_PATH = PATH_PREFIX + "test_dir_copy_overwrite";
-        
-        
+
+
         // [MOVE]
         public static readonly string BACKUP_MAIN_FILE = PATH_PREFIX + "test_dir_backup";
         public static readonly string MOVE_TEST_DIRECTORY_PATH_EMPTY = PATH_PREFIX + "test_dir_move_empty";
@@ -57,7 +57,7 @@ namespace FileReporterAppTest.Util
         }
         public static int GetTotalFileCountOnTestDirectory()
         {
-            return getTestDirectoryFileInfoArray().Length;
+            return GetTestDirectoryFileInfoArray().Length;
         }
 
         public static int GetTotalDirectoryCount(string path)
@@ -85,17 +85,17 @@ namespace FileReporterAppTest.Util
             return GetDateOption(false, false);
         }
 
-        public static FileInfo[] getTestDirectoryFileInfoArray()
+        public static FileInfo[] GetTestDirectoryFileInfoArray()
         {
             return new DirectoryInfo(TEST_DIRECTORY_PATH).GetFiles("*.*", SearchOption.AllDirectories);
         }
-        public static FileInfo[] getDirectoryFileInfoArray(string path)
+        public static FileInfo[] GetDirectoryFileInfoArray(string path)
         {
             return new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories);
         }
         public static long GetTotalByteOnTestDirectory()
         {
-            return getTestDirectoryFileInfoArray().Select(f => f.Length).Sum();
+            return GetTestDirectoryFileInfoArray().Select(f => f.Length).Sum();
         }
 
         public static long GetTotalByteOnDirectory(string path)
@@ -134,6 +134,6 @@ namespace FileReporterAppTest.Util
             return emptyDirectories;
         }
 
-        
+
     }
 }

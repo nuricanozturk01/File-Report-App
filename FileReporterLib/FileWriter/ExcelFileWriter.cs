@@ -1,6 +1,6 @@
 ﻿using ClosedXML.Excel;
 using static FileReporterDecorator.Util.ExceptionUtil;
-namespace FileReporterApp.ServiceApp.FileWriter
+namespace FileReporterLib.FileWriter
 {
     internal class ExcelFileWriter : IFileWrite
     {

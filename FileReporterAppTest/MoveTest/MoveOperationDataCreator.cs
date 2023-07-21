@@ -21,12 +21,6 @@ namespace FileReporterAppTest.CopyTest
         }
 
 
-        public void Dispose()
-        {
-            Directory.Delete(MOVE_TEST_DIRECTORY_PATH, true);
-
-            // After Move, Copy files in the backup to TEST_DIRECTORY_PATH
-           
-        }
+        public void Dispose() => Directory.Delete(MOVE_TEST_DIRECTORY_PATH, true);
     }
 }

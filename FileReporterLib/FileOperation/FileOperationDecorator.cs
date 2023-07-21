@@ -7,7 +7,6 @@
         public FileOperationDecorator(FileOperation fileOperation)
         {
             _fileOperation = fileOperation;
-
         }
 
         public override async Task Run()

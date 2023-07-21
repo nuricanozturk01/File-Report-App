@@ -1,4 +1,4 @@
-﻿namespace FileReporterApp.ServiceApp.FileWriter
+﻿namespace FileReporterLib.FileWriter
 {
     public interface IFileWrite
     {

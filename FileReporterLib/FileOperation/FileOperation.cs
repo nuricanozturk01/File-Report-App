@@ -28,7 +28,7 @@ namespace FileReporterDecorator.FileOperation
         protected bool IsEmptyFolder() => _emptyFolder;
         protected bool IsCopyNtfsPermissions() => _copyNtfsPermissions != null;
 
-        public int getTotalFileCount() => _newFileList.Count + _oldFileList.Count;
+        public int GetTotalFileCount() => _newFileList.Count + _oldFileList.Count;
         public void SetNtfsPermissionAction(Action<FileInfo, FileInfo> action) => _copyNtfsPermissions = action;
         public void SetNtfsPermissions(bool ntfs) => _allowNtfsPermissions = ntfs;
         public void SetEmptyFolder(bool emptyFolder) => _emptyFolder = emptyFolder;

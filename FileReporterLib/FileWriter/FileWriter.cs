@@ -1,6 +1,6 @@
-﻿using FileReporterApp.ServiceApp.options;
+﻿using FileReporterLib.Options;
 
-namespace FileReporterApp.ServiceApp.FileWriter
+namespace FileReporterLib.FileWriter
 {
     public partial class FileWriter
     {

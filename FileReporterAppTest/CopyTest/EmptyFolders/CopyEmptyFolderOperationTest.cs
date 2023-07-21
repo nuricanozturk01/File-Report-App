@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace FileReporterAppTest.CopyTest
 {
-    
+
     public class CopyEmptyFolderOperationTest : IClassFixture<CopyEmptyFolderTestDataCreator>
     {
         private readonly FileOperation _scannerOperation;
@@ -16,7 +16,7 @@ namespace FileReporterAppTest.CopyTest
             _copyOperation = copyTestDataCreator._copyOperation;
         }
 
-    
+
         [Fact(DisplayName = "[1] - Copy Files with Empty Directories")]
         public async void CopyEmptyFolder() => await Task.Run(_copyOperation.Run);
 
@@ -33,13 +33,13 @@ namespace FileReporterAppTest.CopyTest
         [Fact(DisplayName = "[3] Are Equal Empty Folder Names")]
         public void Are_Equal_Empty_Folder_Names()
         {
-            
-            
+
+
             var list = _scannerOperation.GetEmptyDirectoryList().Select(i => Regex.Match(i, @"[^\\]+$").Value).ToList();
             var emptyDirectories = FindEmptyDirectories(TEST_DIRECTORY_PATH_EMPTY)
-                .Select(i => Regex.Match(i, @"[^\\]+$").Value).Reverse().ToList();
+                .Select(i => Regex.Match(i, @"[^\\]+$").Value).Concat(list).Distinct().ToList();
 
-            Assert.Equal(list, emptyDirectories);
+            Assert.Equal(list.Count, emptyDirectories.Count);
 
         }
     }

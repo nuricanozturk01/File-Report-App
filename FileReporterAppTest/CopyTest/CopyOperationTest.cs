@@ -16,11 +16,11 @@ namespace FileReporterAppTest.CopyTest
         }
 
         [Fact(DisplayName = "[1] - Copy Files")]
-        public async void CopyFilesToTarget() => await Task.Run(_copyOperation.Run);
+        public async void Copy_Files_To_Target() => await Task.Run(_copyOperation.Run);
 
 
         [Fact(DisplayName = "[2] - Is File Counts Are Equal")]
-        internal void RunIsFileCountsAreEqual()
+        internal void Run_FileCounts_Are_Equal()
         {
             var beforeFileCount = GetTotalFileCountOnTestDirectory();
 
@@ -31,7 +31,7 @@ namespace FileReporterAppTest.CopyTest
         
 
         [Fact(DisplayName = "[3] - Are Total Bytes Are Equal")]
-        internal void RunIsTotalByte()
+        internal void Run_Check_Total_Byte()
         {
             var totalByteBefore = GetTotalByteOnTestDirectory();
 

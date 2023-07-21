@@ -1,5 +1,4 @@
 ﻿using FileReporterDecorator.FileOperation;
-using FileReporterDecorator.FileOperation.operations;
 
 namespace FileReporterAppTest.CopyTest.OverwriteFile
 {
@@ -16,7 +15,7 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
                .CreateScanProcess(dateTime, GetCreatedDate());
 
             _scanOperation.Run();
-        
+
             _copyOperation = CopyBuilder.Create_Copy_Overwrite_Operation(_scanOperation, TEST_DIRECTORY_OVERWRITE_PATH);
         }
         public void Dispose()

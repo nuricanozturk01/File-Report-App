@@ -1,4 +1,4 @@
-﻿using FileReporterLib;
+﻿using FileReporterLib.Exceptions;
 
 namespace FileReporterDecorator.Util
 {

@@ -1,6 +1,6 @@
 ﻿using FileReporterDecorator.FileOperation;
 using FileReporterDecorator.FileOperation.operations;
-using FileReporterDecorator.ServiceApp.filter.DateFilter;
+using FileReporterLib.Filter.DateFilter;
 
 namespace FileReporterAppTest
 {
@@ -39,7 +39,7 @@ namespace FileReporterAppTest
                 return new CopyFileOperation(scanProcess, totalFileCount,
                     DEFAULT_THREAD_COUNT, destinationPath, targetPath,
                     EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_SHOW_MIN_PROGRESSBAR_CALLBACK,
-                    EMPTY_SHOW_MAXIMIZE_PROGRESSBAR_CALLBACK, EMPTY_SHOW_TIME_CALLBACK,EMPTY_SHOW_CONFLICT_MESSAGE_CALLBACK);
+                    EMPTY_SHOW_MAXIMIZE_PROGRESSBAR_CALLBACK, EMPTY_SHOW_TIME_CALLBACK, EMPTY_SHOW_CONFLICT_MESSAGE_CALLBACK);
 
             return new EmptyOperation();
         }
@@ -52,8 +52,8 @@ namespace FileReporterAppTest
             {
                 var totalFileCount = GetTotalFileCountOnTestDirectory();
 
-                return new ScanDirectoryOperation(new EmptyOperation(), dateTime, totalFileCount, 
-                    DEFAULT_THREAD_COUNT, TEST_DIRECTORY_PATH, dateOpt, 
+                return new ScanDirectoryOperation(new EmptyOperation(), dateTime, totalFileCount,
+                    DEFAULT_THREAD_COUNT, TEST_DIRECTORY_PATH, dateOpt,
                     EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_SHOW_MAXIMIZE_PROGRESSBAR_CALLBACK);
             }
         }
