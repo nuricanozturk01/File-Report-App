@@ -2,15 +2,20 @@
 {
     public class EmptyOptionDecorator : FileOperationDecorator
     {
-        public EmptyOptionDecorator(FileOperation fileOperation) : base(fileOperation)
+        private readonly FileOperation _fileOperation;
+        private readonly FileOperation _scanProcess;
+        public EmptyOptionDecorator(FileOperation fileOperation, FileOperation scanProcess)
         {
-            fileOperation.SetEmptyFolder(true);
-            SetEmptyFolder(true);
+            _scanProcess = scanProcess;
+            _scanProcess.SetEmptyFolder(true);
+            _fileOperation = fileOperation;
+            _fileOperation.SetEmptyFolder(true);
         }
 
         public override async Task Run()
         {
-            await base.Run();
+            await _fileOperation.Run();
+
         }
     }
 }

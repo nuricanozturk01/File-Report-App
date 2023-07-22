@@ -24,12 +24,13 @@ namespace FileReporterDecorator.FileOperation
             _emptyDirectoryList = new();
         }
 
-        protected bool IsOwerrite() => _isOverwrite;
-        protected bool IsEmptyFolder() => _emptyFolder;
-        protected bool IsCopyNtfsPermissions() => _copyNtfsPermissions != null;
+        public bool IsOwerrite() => _isOverwrite;
+        public bool IsEmptyFolder() => _emptyFolder;
+        public bool IsCopyNtfsPermissions() => _copyNtfsPermissions != null;
 
         public int GetTotalFileCount() => _newFileList.Count + _oldFileList.Count;
         public void SetNtfsPermissionAction(Action<FileInfo, FileInfo> action) => _copyNtfsPermissions = action;
+        public Action<FileInfo, FileInfo> GetNtfsPermissionAction() => _copyNtfsPermissions;
         public void SetNtfsPermissions(bool ntfs) => _allowNtfsPermissions = ntfs;
         public void SetEmptyFolder(bool emptyFolder) => _emptyFolder = emptyFolder;
         public void SetOverwrite(bool overwrite) => _isOverwrite = overwrite;

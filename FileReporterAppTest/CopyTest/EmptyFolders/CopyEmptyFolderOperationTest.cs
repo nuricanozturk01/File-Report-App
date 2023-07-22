@@ -33,14 +33,15 @@ namespace FileReporterAppTest.CopyTest
         [Fact(DisplayName = "[3] Are Equal Empty Folder Names")]
         public void Are_Equal_Empty_Folder_Names()
         {
-
-
             var list = _scannerOperation.GetEmptyDirectoryList().Select(i => Regex.Match(i, @"[^\\]+$").Value).ToList();
+
             var emptyDirectories = FindEmptyDirectories(TEST_DIRECTORY_PATH_EMPTY)
-                .Select(i => Regex.Match(i, @"[^\\]+$").Value).Concat(list).Distinct().ToList();
+                                   .Select(i => Regex.Match(i, @"[^\\]+$").Value)
+                                   .Concat(list)
+                                   .Distinct()
+                                   .ToList();
 
-            Assert.Equal(list.Count, emptyDirectories.Count);
-
+            Assert.Equal(list.Count(), emptyDirectories.Count());
         }
     }
 }

@@ -18,14 +18,15 @@ namespace FileReporterDecorator.FileOperation.operations
         private readonly Action<string> setTimeLabelAction;
 
         private Action<int, TimeSpan> _showOnScreenCallbackMaximize;
-
+        private readonly Action<string> errorLabelTextCallback;
         private COUNTER_LOCK _moveCounter = new COUNTER_LOCK();
 
         public MoveFileOperation(FileOperation scanProcess, int totalFileCount, int threadCount, string destinationPath,
             string targetPath, Action<int, int, string> showOnScreenCallback, Action minimumProgressBar,
-            Action<string> setTimeLabelAction, Action<int, TimeSpan> showMaxProgressBar)
+            Action<string> setTimeLabelAction, Action<int, TimeSpan> showMaxProgressBar, Action<string> _errorLabelTextCallback)
         {
             _showOnScreenCallbackMaximize = showMaxProgressBar;
+            errorLabelTextCallback = _errorLabelTextCallback;
             _scanProcess = scanProcess;
             this.totalFileCount = totalFileCount;
             this.threadCount = threadCount;
@@ -37,30 +38,27 @@ namespace FileReporterDecorator.FileOperation.operations
         }
 
         private void MoveFile(string file)
-        {
-
-            var isConflict = false;
-
-            var conflictFileList = new ConcurrentBag<string>();
+        {   
             showOnScreenCallback(_moveCounter.COUNTER, totalFileCount, file);
-            ThrowCopyConflictException(() => File.Move(file, file.Replace(destinationPath, targetPath), IsOwerrite()),
-                () => { isConflict = true; conflictFileList.Add(file); }, isConflict);
+
+            ThrowCopyConflictException(
+                () => File.Move(file, file.Replace(destinationPath, targetPath), _scanProcess.IsOwerrite()),
+                () => errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Moved!"));
+            
             lock (_moveCounter)
-            {
                 _moveCounter.COUNTER++;
-            }
         }
         private void MoveFileCallback()
         {
             ForEachParallel(_scanProcess.GetNewFileList(), threadCount, file => ThrowCopyAndMoveException(() => MoveFile(file), () => { }));
 
-            if (IsEmptyFolder())
+            if (_scanProcess.IsEmptyFolder())
                 ForEachParallel(_scanProcess.GetEmptyDirectoryList(), threadCount,
                     dir => ThrowCopyAndMoveException(() => Directory.Move(dir, dir.Replace(destinationPath, targetPath)), () => { }));
 
             var dirList = _scanProcess.GetDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
-
-            ForEachParallel(dirList, threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
+            var emptyList = _scanProcess.GetEmptyDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
+            ForEachParallel(dirList.Concat(emptyList).ToList(), threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
         }
 
 
@@ -81,7 +79,7 @@ namespace FileReporterDecorator.FileOperation.operations
 
             stopWatch.Start();
 
-            await Task.Run(() => MoveFileCallback());
+            await Task.Run(MoveFileCallback);
 
             stopWatch.Stop();
 

@@ -17,7 +17,7 @@ namespace FileReporterAppTest.CopyTest
             _copyOperation = copyTestDataCreator._copyOperation;
         }
 
-        [Fact(DisplayName = "Copy File to Target")]
+        [Fact(DisplayName = "[1] - Copy File to Target")]
         internal async Task Copy_File_To_Target()
         {
             await Task.Run(_copyOperation.Run);
@@ -25,7 +25,7 @@ namespace FileReporterAppTest.CopyTest
 
 
 
-        [Fact(DisplayName = "Check NTFS Permissions")]
+        [Fact(DisplayName = "[2] - Check NTFS Permissions")]
         internal void Check_Ntfs_Permissions_Copied()
         {
             var beforeCopyFile = _scannerOperation.GetNewFileList().Select(d => new FileInfo(d)).ToList();

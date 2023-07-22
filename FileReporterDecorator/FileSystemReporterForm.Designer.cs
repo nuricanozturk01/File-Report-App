@@ -37,6 +37,7 @@ namespace FileReporterApp
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileSystemReporterForm));
             panel1 = new Panel();
+            CleanButton = new Button();
             TimeLabel = new Label();
             ScannigLabel = new Label();
             ScannedSizeLabel = new Label();
@@ -68,6 +69,7 @@ namespace FileReporterApp
             PathTextBox = new TextBox();
             fileSystemWatcher1 = new FileSystemWatcher();
             SaveDialog = new SaveFileDialog();
+            ErrorLabel = new Label();
             panel1.SuspendLayout();
             OtherOptionsGroup.SuspendLayout();
             OptionsGroup.SuspendLayout();
@@ -78,6 +80,8 @@ namespace FileReporterApp
             // 
             // panel1
             // 
+            panel1.Controls.Add(ErrorLabel);
+            panel1.Controls.Add(CleanButton);
             panel1.Controls.Add(TimeLabel);
             panel1.Controls.Add(ScannigLabel);
             panel1.Controls.Add(ScannedSizeLabel);
@@ -104,6 +108,16 @@ namespace FileReporterApp
             panel1.Name = "panel1";
             panel1.Size = new Size(931, 625);
             panel1.TabIndex = 0;
+            // 
+            // CleanButton
+            // 
+            CleanButton.Location = new Point(639, 372);
+            CleanButton.Name = "CleanButton";
+            CleanButton.Size = new Size(277, 31);
+            CleanButton.TabIndex = 3;
+            CleanButton.Text = "Clean";
+            CleanButton.UseVisualStyleBackColor = true;
+            CleanButton.Click += CleanButton_Click;
             // 
             // TimeLabel
             // 
@@ -145,10 +159,10 @@ namespace FileReporterApp
             // 
             // ReportButton
             // 
-            ReportButton.Location = new Point(486, 371);
+            ReportButton.Location = new Point(315, 372);
             ReportButton.Margin = new Padding(4);
             ReportButton.Name = "ReportButton";
-            ReportButton.Size = new Size(424, 31);
+            ReportButton.Size = new Size(280, 31);
             ReportButton.TabIndex = 16;
             ReportButton.Text = "Report";
             ReportButton.UseVisualStyleBackColor = true;
@@ -159,7 +173,7 @@ namespace FileReporterApp
             RunButton.Location = new Point(24, 373);
             RunButton.Margin = new Padding(4);
             RunButton.Name = "RunButton";
-            RunButton.Size = new Size(440, 30);
+            RunButton.Size = new Size(249, 30);
             RunButton.TabIndex = 15;
             RunButton.Text = "Run";
             RunButton.UseVisualStyleBackColor = true;
@@ -177,20 +191,24 @@ namespace FileReporterApp
             // 
             // ExceptionTextBox
             // 
+            ExceptionTextBox.Enabled = false;
             ExceptionTextBox.Location = new Point(214, 324);
             ExceptionTextBox.Margin = new Padding(4);
             ExceptionTextBox.Name = "ExceptionTextBox";
             ExceptionTextBox.Size = new Size(693, 23);
             ExceptionTextBox.TabIndex = 13;
+            ExceptionTextBox.Text = "NOT SUPPORTED YET!";
             // 
             // ExceptionBox
             // 
+            ExceptionBox.Enabled = false;
             ExceptionBox.FormattingEnabled = true;
             ExceptionBox.Location = new Point(24, 323);
             ExceptionBox.Margin = new Padding(4);
             ExceptionBox.Name = "ExceptionBox";
             ExceptionBox.Size = new Size(182, 23);
             ExceptionBox.TabIndex = 12;
+            ExceptionBox.Text = "NOT SUPPORTED YET!";
             // 
             // label2
             // 
@@ -221,6 +239,8 @@ namespace FileReporterApp
             TargetPathTextBox.Location = new Point(24, 271);
             TargetPathTextBox.Margin = new Padding(4);
             TargetPathTextBox.Name = "TargetPathTextBox";
+            TargetPathTextBox.PlaceholderText = "Please Select the Target Path (Copy or Move)";
+            TargetPathTextBox.ReadOnly = true;
             TargetPathTextBox.Size = new Size(787, 23);
             TargetPathTextBox.TabIndex = 9;
             // 
@@ -242,7 +262,7 @@ namespace FileReporterApp
             // 
             OverwriteChoiceBox.AutoSize = true;
             OverwriteChoiceBox.Enabled = false;
-            OverwriteChoiceBox.Location = new Point(293, 23);
+            OverwriteChoiceBox.Location = new Point(317, 22);
             OverwriteChoiceBox.Margin = new Padding(4);
             OverwriteChoiceBox.Name = "OverwriteChoiceBox";
             OverwriteChoiceBox.Size = new Size(77, 19);
@@ -254,7 +274,7 @@ namespace FileReporterApp
             // 
             NtfsChoiceBox.AutoSize = true;
             NtfsChoiceBox.Enabled = false;
-            NtfsChoiceBox.Location = new Point(147, 23);
+            NtfsChoiceBox.Location = new Point(153, 22);
             NtfsChoiceBox.Margin = new Padding(4);
             NtfsChoiceBox.Name = "NtfsChoiceBox";
             NtfsChoiceBox.Size = new Size(119, 19);
@@ -343,7 +363,7 @@ namespace FileReporterApp
             DateTimePicker.Name = "DateTimePicker";
             DateTimePicker.Size = new Size(278, 23);
             DateTimePicker.TabIndex = 5;
-            DateTimePicker.Value = new DateTime(2023, 7, 10, 11, 2, 11, 0);
+            DateTimePicker.Value = new DateTime(2023, 7, 22, 10, 4, 1, 668);
             // 
             // label1
             // 
@@ -422,6 +442,8 @@ namespace FileReporterApp
             PathTextBox.Location = new Point(24, 32);
             PathTextBox.Margin = new Padding(4);
             PathTextBox.Name = "PathTextBox";
+            PathTextBox.PlaceholderText = "Please Select the Destination Path";
+            PathTextBox.ReadOnly = true;
             PathTextBox.Size = new Size(787, 23);
             PathTextBox.TabIndex = 0;
             // 
@@ -429,6 +451,15 @@ namespace FileReporterApp
             // 
             fileSystemWatcher1.EnableRaisingEvents = true;
             fileSystemWatcher1.SynchronizingObject = this;
+            // 
+            // ErrorLabel
+            // 
+            ErrorLabel.AutoSize = true;
+            ErrorLabel.Location = new Point(24, 592);
+            ErrorLabel.MinimumSize = new Size(438, 0);
+            ErrorLabel.Name = "ErrorLabel";
+            ErrorLabel.Size = new Size(438, 15);
+            ErrorLabel.TabIndex = 21;
             // 
             // FileSystemReporterForm
             // 
@@ -453,8 +484,6 @@ namespace FileReporterApp
             DateOptionGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
             ResumeLayout(false);
-
-            DateTimePicker.Value = DateTime.Now;
         }
 
         #endregion
@@ -491,6 +520,8 @@ namespace FileReporterApp
         private Label ScannigLabel;
         private Label ScannedSizeLabel;
         private SaveFileDialog SaveDialog;
+        private Button CleanButton;
+        private Label ErrorLabel;
     }
 }
 

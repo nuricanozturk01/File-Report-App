@@ -2,14 +2,20 @@
 {
     public class NtfsSecurityOptionDecorator : FileOperationDecorator
     {
+        private readonly FileOperation _fileOperation;
+        private readonly FileOperation scanProcess;
 
-        public NtfsSecurityOptionDecorator(FileOperation fileOperation) : base(fileOperation)
+        public NtfsSecurityOptionDecorator(FileOperation fileOperation, FileOperation scanProcess)
         {
+           
+            _fileOperation = fileOperation;
+            this.scanProcess = scanProcess;
             SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
             SetNtfsPermissions(true);
-
-            fileOperation.SetNtfsPermissions(true);
-            fileOperation.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
+            _fileOperation.SetNtfsPermissions(true);
+            _fileOperation.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
+            scanProcess.SetNtfsPermissions(true);
+            scanProcess.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
         }
         private void CopyNtfsPermissions(FileInfo sourceFile, FileInfo targetFile)
         {
@@ -19,7 +25,11 @@
         }
         public override async Task Run()
         {
-            await base.Run();
+            _fileOperation.SetNtfsPermissions(true);
+            _fileOperation.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
+            scanProcess.SetNtfsPermissions(true);
+            scanProcess.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
+            await _fileOperation.Run();
         }
     }
 }

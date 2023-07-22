@@ -33,14 +33,14 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
             Assert.ThrowsAnyAsync<FileConflictException>(() => _normalFileCopyOperation.Run());
         }
 
-        [Fact(DisplayName = "[3] - Copy With Overwrite")]
+        [Fact(DisplayName = "[3] - Move With Overwrite")]
         internal void Move_Normal_Files_Copy_Overwrite()
         {
             WaitSecond(5, () => _moveOperation.Run());
         }
 
         [Fact(DisplayName = "[4] - Are TotalBytes Equal After Move Overwrite")]
-        internal void Are_TotalBytes_Equals_After_Copy()
+        internal void Are_TotalBytes_Equals_After_Move()
         {
             var afterCopyTotalByteOnMoveDirectory = GetTotalByteOnDirectory(MOVE_TEST_DIRECTORY_OVERWRITE_PATH);
             var afterCopyTotalByte = GetTotalByteOnDirectory(TEST_DIRECTORY_PATH);
@@ -48,8 +48,8 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
             Assert.True(afterCopyTotalByteOnMoveDirectory != 0 && afterCopyTotalByte == 0);
         }
 
-        [Fact(DisplayName = "[5] - Are Total File Count  Equal After Move Overwrite")]
-        internal void Are_Total_File_Count_Equals_After_Copy()
+        [Fact(DisplayName = "[5] - Are Total File Count Equal After Move Overwrite")]
+        internal void Are_Total_File_Count_Equals_After_Move()
         {
             Assert.Equal(_moveOperation.GetNewFileList().Count(), _normalFileCopyOperation.GetNewFileList().Count());
         }

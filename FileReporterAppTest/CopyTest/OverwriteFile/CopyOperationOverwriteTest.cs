@@ -42,15 +42,11 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
         [Fact(DisplayName = "[4] - Are TotalBytes Equal After Copy Overwrite")]
         internal void Are_TotalBytes_Equals_After_Copy()
         {
-            WaitSecond(5, () =>
-            {
-                var afterCopyTotalByte = GetTotalByteOnDirectory(TEST_DIRECTORY_OVERWRITE_PATH);
+            var afterCopyTotalByte = GetTotalByteOnDirectory(TEST_DIRECTORY_OVERWRITE_PATH);
 
-                var beforeCopyTotalByte = GetTotalByteOnTestDirectory();
+            var beforeCopyTotalByte = GetTotalByteOnTestDirectory();
 
-                Assert.Equal(beforeCopyTotalByte, afterCopyTotalByte);
-            });
-
+            Assert.Equal(beforeCopyTotalByte, afterCopyTotalByte);
         }
 
         [Fact(DisplayName = "[5] - Are Total Filr Count  Equal After Copy Overwrite")]

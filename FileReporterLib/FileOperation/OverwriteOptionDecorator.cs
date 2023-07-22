@@ -2,16 +2,22 @@
 {
     public class OverwriteOptionDecorator : FileOperationDecorator
     {
+        private readonly FileOperation _fileOperation;
+        private readonly FileOperation scanProcess;
 
-        public OverwriteOptionDecorator(FileOperation fileOperation) : base(fileOperation)
+        public OverwriteOptionDecorator(FileOperation fileOperation, FileOperation scanProcess)
         {
-            fileOperation.SetOverwrite(true);
-            SetOverwrite(true);
+            _fileOperation = fileOperation;
+            this.scanProcess = scanProcess;
         }
 
         public override async Task Run()
         {
-            await base.Run();
+            _fileOperation.SetOverwrite(true);
+            SetOverwrite(true);
+            scanProcess.SetOverwrite(true);
+            await _fileOperation.Run();
+            
         }
     }
 }

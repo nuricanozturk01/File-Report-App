@@ -11,7 +11,6 @@ namespace FileReporterAppTest.ScanTest
             _scanOperation.Run();
         }
 
-
         [Fact(DisplayName = "Is File Count Are Equal")]
         public void Is_File_Counts_Are_Equal()
         {
