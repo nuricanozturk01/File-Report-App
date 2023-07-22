@@ -21,6 +21,9 @@ namespace FileReporterAppTest.CopyTest
         }
 
 
-        public void Dispose() => Directory.Delete(TEST_DIRECTORY_COPY_PATH, true);
+        public void Dispose()
+        {
+            //Directory.Delete(TEST_DIRECTORY_COPY_PATH, true);
+        }
     }
 }

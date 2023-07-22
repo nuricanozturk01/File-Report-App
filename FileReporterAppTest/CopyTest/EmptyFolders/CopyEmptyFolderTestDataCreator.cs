@@ -20,7 +20,7 @@ namespace FileReporterAppTest.CopyTest
 
         public void Dispose()
         {
-            Directory.Delete(TEST_DIRECTORY_PATH_EMPTY);
+            //Directory.Delete(TEST_DIRECTORY_PATH_EMPTY);
         }
     }
 }

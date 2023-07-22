@@ -6,7 +6,7 @@ namespace FileReporterAppTest.Util
     {
 
         //DEFAULT THREAD COUNT
-        public readonly static int DEFAULT_THREAD_COUNT = 1;
+        public readonly static int DEFAULT_THREAD_COUNT = 4;
 
         //EMPTY ACTIONS
         public readonly static Action<string, string> EMPTY_SHOW_CONFLICT_MESSAGE_CALLBACK = (str1, st2) => { };
@@ -14,9 +14,11 @@ namespace FileReporterAppTest.Util
         public readonly static Action<int, TimeSpan> EMPTY_SHOW_MAXIMIZE_PROGRESSBAR_CALLBACK = (num, timeSpan) => { };
         public readonly static Action EMPTY_SHOW_MIN_PROGRESSBAR_CALLBACK = () => { };
         public readonly static Action<string> EMPTY_SHOW_TIME_CALLBACK = str => { };
+        public readonly static Action<int, TimeSpan> EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK = (num, timeSpan) => { };
+        public readonly static Action<string> EMPTY_ERROR_LABEL_CALLBACK = str => { };
 
 
-        private static string PATH_PREFIX = "C:\\Users\\hp\\Desktop\\";
+        private static string PATH_PREFIX = @"C:\Users\hp\Desktop\";
 
         // DIRECTORY PATH
         // [COPY]

@@ -1,4 +1,5 @@
 ﻿using FileReporterDecorator.FileOperation;
+using FileReporterDecorator.FileOperation.operations;
 using FileReporterLib.Exceptions;
 
 namespace FileReporterAppTest.CopyTest.OverwriteFile
@@ -16,13 +17,15 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
 
             _ScannerOperation = moveTestDataCreator._scanOperation;
 
-            _moveOperation = moveTestDataCreator._copyOperation;
+            _moveOperation = moveTestDataCreator._moveOperation;
 
-            _normalFileCopyOperation = CopyBuilder.Create_Copy_Operation(_ScannerOperation, MOVE_TEST_DIRECTORY_OVERWRITE_PATH);
+            _normalFileCopyOperation = new CopyFileOperation(_ScannerOperation, GetTotalFileCountOnTestDirectory(), DEFAULT_THREAD_COUNT, TEST_DIRECTORY_PATH, MOVE_TEST_DIRECTORY_OVERWRITE_PATH, EMPTY_SHOW_ON_SCREEN_CALLBACK,
+                 EMPTY_SHOW_MIN_PROGRESSBAR_CALLBACK, EMPTY_SHOW_MAXIMIZE_PROGRESSBAR_CALLBACK, EMPTY_SHOW_TIME_CALLBACK, EMPTY_ERROR_LABEL_CALLBACK);
+           // _normalFileCopyOperation = new OverwriteOptionDecorator(_normalFileCopyOperation, _ScannerOperation);
         }
 
-        [Fact(DisplayName = "[1] - Move Normal Files")]
-        internal void Move_Normal_Files()
+        [Fact(DisplayName = "[1] - Copy Normal Files")]
+        internal void Copy_Normal_Files()
         {
             _normalFileCopyOperation.Run();
         }
@@ -30,11 +33,11 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
         [Fact(DisplayName = "[2] - Check Assertion for Overwrite")]
         internal void Move_Normal_Files_Catch_Exception()
         {
-            Assert.ThrowsAnyAsync<FileConflictException>(() => _normalFileCopyOperation.Run());
+            Assert.ThrowsAnyAsync<FileConflictException>(_moveOperation.Run);
         }
 
         [Fact(DisplayName = "[3] - Move With Overwrite")]
-        internal void Move_Normal_Files_Copy_Overwrite()
+        internal void Move_Normal_Files_Overwrite()
         {
             WaitSecond(5, () => _moveOperation.Run());
         }

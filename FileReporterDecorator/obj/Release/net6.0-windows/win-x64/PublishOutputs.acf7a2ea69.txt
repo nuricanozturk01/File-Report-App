@@ -1,0 +1,17 @@
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\FileReporterDecorator.exe
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\FileReporterDecorator.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\FileReporterDecorator.deps.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\FileReporterDecorator.runtimeconfig.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\FileReporterDecorator.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\ClosedXML.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\DocumentFormat.OpenXml.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\ExcelNumberFormat.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\Irony.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\SixLabors.Fonts.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\XLParser.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\xunit.abstractions.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\xunit.assert.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\xunit.core.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\xunit.execution.dotnet.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\FileReporterLib.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\win-x64\app.publish\FileReporterLib.pdb

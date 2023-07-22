@@ -1,0 +1,12 @@
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\bin\Release\net6.0\FileReporterLib.deps.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\bin\Release\net6.0\FileReporterLib.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\bin\Release\net6.0\FileReporterLib.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\FileReporterLib.csproj.AssemblyReference.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\FileReporterLib.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\FileReporterLib.AssemblyInfoInputs.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\FileReporterLib.AssemblyInfo.cs
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\FileReporterLib.csproj.CoreCompileInputs.cache
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\FileReporterLib.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\refint\FileReporterLib.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\FileReporterLib.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterLib\obj\Release\net6.0\ref\FileReporterLib.dll

@@ -1,6 +1,6 @@
 ﻿namespace FileReporterAppTest
 {
-    internal enum Operation
+    internal enum OperationEnum
     {
         SCAN, COPY, MOVE
     }

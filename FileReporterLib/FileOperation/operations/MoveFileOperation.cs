@@ -54,11 +54,14 @@ namespace FileReporterDecorator.FileOperation.operations
 
             if (_scanProcess.IsEmptyFolder())
                 ForEachParallel(_scanProcess.GetEmptyDirectoryList(), threadCount,
-                    dir => ThrowCopyAndMoveException(() => Directory.Move(dir, dir.Replace(destinationPath, targetPath)), () => { }));
+                    dir => ThrowCopyAndMoveException(() =>
+                    {
+                        Directory.Move(dir, dir.Replace(destinationPath, targetPath));
+                        Directory.Delete(dir, true);  
+                    }, () => { }));
 
             var dirList = _scanProcess.GetDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
-            var emptyList = _scanProcess.GetEmptyDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
-            ForEachParallel(dirList.Concat(emptyList).ToList(), threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
+            ForEachParallel(dirList, threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
         }
 
 
