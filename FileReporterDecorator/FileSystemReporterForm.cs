@@ -41,7 +41,7 @@ namespace FileReporterApp
             var fileCount = 0;
             try
             {
-                if (AccessControl.HasAccessAllow(_destinationPath, FileSystemRights.FullControl, FileSystemRights.ReadAttributes, FileSystemRights.ListDirectory))
+                if (AccessControl.HasAccessAllow(_destinationPath, FileSystemRights.FullControl, FileSystemRights.ReadAttributes, FileSystemRights.ListDirectory, FileSystemRights.ReadAndExecute | FileSystemRights.Synchronize))
                     fileCount = new DirectoryInfo(PathTextBox.Text).GetFiles("*.*", SearchOption.AllDirectories).Length;
 
                 else throw new UnauthorizedAccessException("You cannot access this directory!");
@@ -51,7 +51,6 @@ namespace FileReporterApp
                 ErrorLabel.Text = ex.Message;
             }
             return fileCount;
-
         }
         private void MinimumProgressBar() => ScanProgressBar.Value = ScanProgressBar.Minimum;
         private void SetTimeLabel(string str) => TimeLabel.Text = str;
@@ -219,12 +218,9 @@ namespace FileReporterApp
             {
                 RequireInvoke(() =>
                 {
-                    ThrowGeneralException(() =>
-                    {
-                        ScannedSizeLabel.Text = counter + " items were scanned";
-                        ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
-                        ScannigLabel.Text = file;
-                    }, () => { });
+                    ScannedSizeLabel.Text = counter + " items were scanned";
+                    ScanProgressBar.Value = (int) Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
+                    ScannigLabel.Text = file;
 
                 });
             }

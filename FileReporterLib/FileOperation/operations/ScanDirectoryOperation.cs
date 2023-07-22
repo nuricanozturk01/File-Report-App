@@ -70,7 +70,7 @@ namespace FileReporterDecorator.FileOperation.operations
 
         private void ClassifyBySelectedDate(IDateOption dateOption, string file)
         {
-            if (_locker.COUNTER % 100 == 0)
+            if (_locker.COUNTER % 1000 == 0)
                 _showOnScreenCallback(_locker.COUNTER, _totalFileCount, file);
 
             if (dateOption.SetDate(new FileInfo(file), _dateTime))

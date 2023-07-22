@@ -6,7 +6,6 @@ namespace FileReporterDecorator.FileOperation.operations
 {
     public class CopyFileOperation : FileOperation
     {
-        private readonly FileOperation scanProcess;
         private readonly int totalFileCount;
         private readonly int threadCount;
         private readonly string destinationPath;
@@ -15,9 +14,11 @@ namespace FileReporterDecorator.FileOperation.operations
         private readonly Action minimumProgressBar;
         private readonly Action<string> setTimeLabelAction;
         private readonly Action<string> errorLabelTextCallback;
-        private COUNTER_LOCK _newLocker = new COUNTER_LOCK();
-        Action<int, TimeSpan> _showOnScreenCallbackMaximize;
+        private readonly Action<int, TimeSpan> _showOnScreenCallbackMaximize;
 
+        private readonly FileOperation scanProcess;
+        private COUNTER_LOCK _newLocker = new COUNTER_LOCK();
+        
         public CopyFileOperation(FileOperation scanProcess, int totalFileCount, int threadCount,
             string destinationPath, string targetPath,
             Action<int, int, string> showOnScreenCallback,

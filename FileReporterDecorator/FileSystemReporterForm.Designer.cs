@@ -37,6 +37,7 @@ namespace FileReporterApp
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileSystemReporterForm));
             panel1 = new Panel();
+            ErrorLabel = new Label();
             CleanButton = new Button();
             TimeLabel = new Label();
             ScannigLabel = new Label();
@@ -69,7 +70,7 @@ namespace FileReporterApp
             PathTextBox = new TextBox();
             fileSystemWatcher1 = new FileSystemWatcher();
             SaveDialog = new SaveFileDialog();
-            ErrorLabel = new Label();
+            label4 = new Label();
             panel1.SuspendLayout();
             OtherOptionsGroup.SuspendLayout();
             OptionsGroup.SuspendLayout();
@@ -80,6 +81,7 @@ namespace FileReporterApp
             // 
             // panel1
             // 
+            panel1.Controls.Add(label4);
             panel1.Controls.Add(ErrorLabel);
             panel1.Controls.Add(CleanButton);
             panel1.Controls.Add(TimeLabel);
@@ -108,6 +110,15 @@ namespace FileReporterApp
             panel1.Name = "panel1";
             panel1.Size = new Size(931, 625);
             panel1.TabIndex = 0;
+            // 
+            // ErrorLabel
+            // 
+            ErrorLabel.AutoSize = true;
+            ErrorLabel.Location = new Point(24, 592);
+            ErrorLabel.MinimumSize = new Size(438, 0);
+            ErrorLabel.Name = "ErrorLabel";
+            ErrorLabel.Size = new Size(438, 15);
+            ErrorLabel.TabIndex = 21;
             // 
             // CleanButton
             // 
@@ -348,11 +359,11 @@ namespace FileReporterApp
             // 
             // ThreadCounter
             // 
-            ThreadCounter.Location = new Point(780, 110);
+            ThreadCounter.Location = new Point(807, 110);
             ThreadCounter.Margin = new Padding(4);
             ThreadCounter.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             ThreadCounter.Name = "ThreadCounter";
-            ThreadCounter.Size = new Size(140, 23);
+            ThreadCounter.Size = new Size(100, 23);
             ThreadCounter.TabIndex = 6;
             ThreadCounter.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
@@ -361,7 +372,7 @@ namespace FileReporterApp
             DateTimePicker.Location = new Point(486, 110);
             DateTimePicker.Margin = new Padding(4);
             DateTimePicker.Name = "DateTimePicker";
-            DateTimePicker.Size = new Size(278, 23);
+            DateTimePicker.Size = new Size(208, 23);
             DateTimePicker.TabIndex = 5;
             DateTimePicker.Value = new DateTime(2023, 7, 22, 10, 4, 1, 668);
             // 
@@ -452,14 +463,14 @@ namespace FileReporterApp
             fileSystemWatcher1.EnableRaisingEvents = true;
             fileSystemWatcher1.SynchronizingObject = this;
             // 
-            // ErrorLabel
+            // label4
             // 
-            ErrorLabel.AutoSize = true;
-            ErrorLabel.Location = new Point(24, 592);
-            ErrorLabel.MinimumSize = new Size(438, 0);
-            ErrorLabel.Name = "ErrorLabel";
-            ErrorLabel.Size = new Size(438, 15);
-            ErrorLabel.TabIndex = 21;
+            label4.AutoSize = true;
+            label4.Location = new Point(710, 114);
+            label4.Name = "label4";
+            label4.Size = new Size(79, 15);
+            label4.TabIndex = 22;
+            label4.Text = "Thread Count";
             // 
             // FileSystemReporterForm
             // 
@@ -522,6 +533,7 @@ namespace FileReporterApp
         private SaveFileDialog SaveDialog;
         private Button CleanButton;
         private Label ErrorLabel;
+        private Label label4;
     }
 }
 
