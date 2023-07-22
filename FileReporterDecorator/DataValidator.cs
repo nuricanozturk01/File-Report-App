@@ -36,6 +36,8 @@ namespace FileReporterDecorator
 
                 if (!AccessControl.HasAccessAllow(destinationPath,
                     FileSystemRights.ReadPermissions,
+                    FileSystemRights.ListDirectory,
+                    FileSystemRights.ReadAndExecute | FileSystemRights.Synchronize,
                     FileSystemRights.FullControl
                     ))
                     throw new UnauthorizedAccessException("you cannot access this directory!");
