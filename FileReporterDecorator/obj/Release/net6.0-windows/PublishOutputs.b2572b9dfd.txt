@@ -1,0 +1,17 @@
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\FileReporterDecorator.exe
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\FileReporterDecorator.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\FileReporterDecorator.deps.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\FileReporterDecorator.runtimeconfig.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\FileReporterDecorator.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\ClosedXML.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\DocumentFormat.OpenXml.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\ExcelNumberFormat.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\Irony.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\SixLabors.Fonts.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\XLParser.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\xunit.abstractions.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\xunit.assert.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\xunit.core.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\xunit.execution.dotnet.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\FileReporterLib.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\publish\FileReporterLib.pdb

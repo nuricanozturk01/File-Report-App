@@ -28,7 +28,3 @@ C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Release\net6.
 C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Release\net6.0-windows\FileReporterDecorator.pdb
 C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Release\net6.0-windows\FileReporterDecorator.genruntimeconfig.cache
 C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Release\net6.0-windows\ref\FileReporterDecorator.dll
-C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\FileReporterDecorator.dll.manifest
-C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\FileReporterDecorator.application
-C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Release\net6.0-windows\FileReporterDecorator.dll.manifest
-C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\obj\Release\net6.0-windows\FileReporterDecorator.application

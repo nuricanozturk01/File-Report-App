@@ -219,7 +219,7 @@ namespace FileReporterApp
                 RequireInvoke(() =>
                 {
                     ScannedSizeLabel.Text = counter + " items were scanned";
-                    ScanProgressBar.Value = (int) Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
+                    ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
                     ScannigLabel.Text = file;
 
                 });

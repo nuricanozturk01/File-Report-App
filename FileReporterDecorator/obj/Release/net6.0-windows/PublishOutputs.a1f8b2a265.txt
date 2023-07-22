@@ -1,0 +1,17 @@
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\FileReporterDecorator.exe
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\FileReporterDecorator.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\FileReporterDecorator.deps.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\FileReporterDecorator.runtimeconfig.json
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\FileReporterDecorator.pdb
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\ClosedXML.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\DocumentFormat.OpenXml.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\ExcelNumberFormat.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\Irony.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\SixLabors.Fonts.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\XLParser.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\xunit.abstractions.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\xunit.assert.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\xunit.core.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\xunit.execution.dotnet.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\FileReporterLib.dll
+C:\Users\hp\source\repos\FileReporterApp\FileReporterDecorator\bin\Release\net6.0-windows\publish\FileReporterLib.pdb

@@ -1,0 +1,17 @@
+C:\Users\hp\Desktop\File Reporter App\FileReporterDecorator.exe
+C:\Users\hp\Desktop\File Reporter App\FileReporterDecorator.dll
+C:\Users\hp\Desktop\File Reporter App\FileReporterDecorator.deps.json
+C:\Users\hp\Desktop\File Reporter App\FileReporterDecorator.runtimeconfig.json
+C:\Users\hp\Desktop\File Reporter App\FileReporterDecorator.pdb
+C:\Users\hp\Desktop\File Reporter App\ClosedXML.dll
+C:\Users\hp\Desktop\File Reporter App\DocumentFormat.OpenXml.dll
+C:\Users\hp\Desktop\File Reporter App\ExcelNumberFormat.dll
+C:\Users\hp\Desktop\File Reporter App\Irony.dll
+C:\Users\hp\Desktop\File Reporter App\SixLabors.Fonts.dll
+C:\Users\hp\Desktop\File Reporter App\XLParser.dll
+C:\Users\hp\Desktop\File Reporter App\xunit.abstractions.dll
+C:\Users\hp\Desktop\File Reporter App\xunit.assert.dll
+C:\Users\hp\Desktop\File Reporter App\xunit.core.dll
+C:\Users\hp\Desktop\File Reporter App\xunit.execution.dotnet.dll
+C:\Users\hp\Desktop\File Reporter App\FileReporterLib.dll
+C:\Users\hp\Desktop\File Reporter App\FileReporterLib.pdb

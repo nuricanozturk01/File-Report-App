@@ -37,6 +37,7 @@ namespace FileReporterApp
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileSystemReporterForm));
             panel1 = new Panel();
+            label4 = new Label();
             ErrorLabel = new Label();
             CleanButton = new Button();
             TimeLabel = new Label();
@@ -70,7 +71,6 @@ namespace FileReporterApp
             PathTextBox = new TextBox();
             fileSystemWatcher1 = new FileSystemWatcher();
             SaveDialog = new SaveFileDialog();
-            label4 = new Label();
             panel1.SuspendLayout();
             OtherOptionsGroup.SuspendLayout();
             OptionsGroup.SuspendLayout();
@@ -110,6 +110,15 @@ namespace FileReporterApp
             panel1.Name = "panel1";
             panel1.Size = new Size(931, 625);
             panel1.TabIndex = 0;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(710, 114);
+            label4.Name = "label4";
+            label4.Size = new Size(79, 15);
+            label4.TabIndex = 22;
+            label4.Text = "Thread Count";
             // 
             // ErrorLabel
             // 
@@ -462,15 +471,6 @@ namespace FileReporterApp
             // 
             fileSystemWatcher1.EnableRaisingEvents = true;
             fileSystemWatcher1.SynchronizingObject = this;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(710, 114);
-            label4.Name = "label4";
-            label4.Size = new Size(79, 15);
-            label4.TabIndex = 22;
-            label4.Text = "Thread Count";
             // 
             // FileSystemReporterForm
             // 
