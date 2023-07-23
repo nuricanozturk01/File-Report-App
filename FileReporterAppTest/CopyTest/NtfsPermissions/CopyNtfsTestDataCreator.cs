@@ -11,7 +11,7 @@ namespace FileReporterAppTest.CopyTest
         {
 
             var totalFileCount = GetTotalFileCountOnTestDirectory();
-            var dateTime = GetXDayBeforeFromToday(2);
+            var dateTime = GetXDayBeforeFromToday(20);
 
             _scanOperation = ScanBuilder.CreateScanProcess(dateTime, GetCreatedDate());
 

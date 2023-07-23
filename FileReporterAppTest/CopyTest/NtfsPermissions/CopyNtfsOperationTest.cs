@@ -18,9 +18,9 @@ namespace FileReporterAppTest.CopyTest
         }
 
         [Fact(DisplayName = "[1] - Copy File to Target")]
-        internal async Task Copy_File_To_Target()
+        internal void Copy_File_To_Target()
         {
-            await Task.Run(_copyOperation.Run);
+            _copyOperation.Run();
         }
 
 

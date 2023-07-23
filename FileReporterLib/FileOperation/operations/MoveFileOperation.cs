@@ -56,7 +56,8 @@ namespace FileReporterDecorator.FileOperation.operations
                 ForEachParallel(_scanProcess.GetEmptyDirectoryList(), threadCount,
                     dir => ThrowCopyAndMoveException(() =>
                     {
-                        Directory.Move(dir, dir.Replace(destinationPath, targetPath));
+                        if (!Directory.Exists(dir.Replace(destinationPath, targetPath)))
+                            Directory.Move(dir, dir.Replace(destinationPath, targetPath));
                         Directory.Delete(dir, true);  
                     }, () => { }));
 
