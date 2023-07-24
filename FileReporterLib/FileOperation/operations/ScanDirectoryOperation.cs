@@ -1,6 +1,5 @@
 ﻿using FileReporterLib.Filter.DateFilter;
 using System.Diagnostics;
-using static FileReporterDecorator.Util.ExceptionUtil;
 
 namespace FileReporterDecorator.FileOperation.operations
 {
@@ -33,8 +32,12 @@ namespace FileReporterDecorator.FileOperation.operations
             _fileOperation = fileOperation;
         }
 
-      
-        
+
+        /*
+         * 
+         * Scan files (include subfolders) and classify it recursively.
+         * 
+         */
         public void ScanFileSystemAndClassifyFiles(IDateOption dateOption, string path)
         {
             try
@@ -68,6 +71,11 @@ namespace FileReporterDecorator.FileOperation.operations
             }
         }
 
+        /*
+         * 
+         * Classify the files (date) and add files to list.
+         * 
+         */
         private void ClassifyBySelectedDate(IDateOption dateOption, string file)
         {
             if (_locker.COUNTER % 1000 == 0)
@@ -79,7 +87,12 @@ namespace FileReporterDecorator.FileOperation.operations
             else AddOldFileList(file);
         }
 
-
+        /*
+         * 
+         * 
+         * Trigger method for Scan Operation 
+         * 
+         */
         public async override Task Run()
         {
             _locker.COUNTER = 0;

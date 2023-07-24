@@ -9,15 +9,13 @@ namespace FileReporterAppTest.CopyTest
 
         public CopyTestDataCreator()
         {
+            var dateTime = GetXDayBeforeFromToday(2); // Get 2 days ago DateTime Object
 
-            var totalFileCount = GetTotalFileCountOnTestDirectory();
-            var dateTime = GetXDayBeforeFromToday(2);
-
-            _scanOperation = ScanBuilder.CreateScanProcess(dateTime, GetCreatedDate());
+            _scanOperation = ScanBuilder.CreateScanProcess(dateTime, GetCreatedDate()); // Create Scan Process
 
             _scanOperation.Run();
 
-            _copyOperation = CopyBuilder.Create_Copy_Operation(_scanOperation, TEST_DIRECTORY_COPY_PATH);
+            _copyOperation = CopyBuilder.Create_Copy_Operation(_scanOperation, TEST_DIRECTORY_COPY_PATH); // Create Copy Operation
         }
 
 

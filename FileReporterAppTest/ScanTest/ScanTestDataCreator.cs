@@ -8,13 +8,9 @@ namespace FileReporterAppTest.ScanTest
         public DateTime _dateTime;
         public ScanTestDataCreator()
         {
-            _dateTime = GetTestDateTimeNew();
+            _dateTime = GetTestDateTimeNew(); // Get DateTime (now)
 
-            //CreatedDate
-            _fileOperation = ScanBuilder.CreateScanProcess(_dateTime, GetCreatedDate());
-
-            //Last Access Date
-            //_fileOperation = OperationCreatingFactory.ScanBuilder.CreateScanProcess(dateTime, totalFileCount, TEST_DIRECTORY_PATH, GetLastAccessDate());
+            _fileOperation = ScanBuilder.CreateScanProcess(_dateTime, GetCreatedDate()); // CXreate Scan Process with created Date Option
         }
         public void Dispose()
         {

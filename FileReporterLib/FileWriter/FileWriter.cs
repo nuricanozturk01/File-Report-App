@@ -2,6 +2,11 @@
 
 namespace FileReporterLib.FileWriter
 {
+    /*
+     * 
+     * FileWriter is a singleton class for report action. 
+     * 
+     */
     public partial class FileWriter
     {
         private IFileWrite _textFileWriter;
@@ -15,6 +20,11 @@ namespace FileReporterLib.FileWriter
 
         public static FileWriter GetInstance() => _fileWriter is null ? new FileWriter() : _fileWriter;
 
+        /*
+         * 
+         * Decide the report format is excel or text. 
+         * 
+         */
         public static void WriteFile(List<FileInfo> newFileList, List<FileInfo> oldFileList, FileType format, string targetPath)
         {
             switch (format)

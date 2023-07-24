@@ -12,31 +12,33 @@ namespace FileReporterAppTest.ScanTest
             _scanOperation.Run();
         }
 
-        [Fact(DisplayName = "[1] - Created Dates Are Checked [After]")]
-        public void Are_Modified_Dates_Checked_After()
+        [Fact(DisplayName = "[1] - Check All Dates Creation Time [After]")]
+        public void Valid_AllDates_CreationTime_After()
         {
             List<string> newFileList = _scanOperation.GetNewFileList().ToList();
 
-            if (newFileList is not null && newFileList.Count() != 0)
+            if (newFileList.Count() != 0) // list cannot be null
             {
-                Assert.True(newFileList.Select(fi => new FileInfo(fi)).ToList().All(fi => fi.CreationTime >= dateTime));
-                //Assert.Equal(4, newFileList.Count);
+                var expectedAllDatesAreValid = newFileList.Select(fi => new FileInfo(fi)).ToList().All(fi => fi.CreationTime >= dateTime);
+                Assert.True(expectedAllDatesAreValid);
             }
 
+            // If list empty
             else Assert.Empty(newFileList);
         }
 
-        [Fact(DisplayName = "[2] - Created Dates Are Checked [Before]")]
-        public void Are_Modified_Dates_Checked_Before()
+        [Fact(DisplayName = "[2] - Check All Dates Creation Time [Before]")]
+        public void Valid_AllDates_CreationTime_Before()
         {
             List<string> oldFileList = _scanOperation.GetOldFileList().ToList();
 
-            if (oldFileList is not null && oldFileList.Count() != 0)
+            if (oldFileList.Count() != 0) // list cannot be null
             {
-                Assert.True(oldFileList.Select(fi => new FileInfo(fi)).ToList().All(fi => fi.CreationTime < dateTime));
-                //Assert.Equal(1, oldFileList.Count());
+                var expectedAllDatesAreValid = oldFileList.Select(fi => new FileInfo(fi)).ToList().All(fi => fi.CreationTime < dateTime);
+                Assert.True(expectedAllDatesAreValid);
             }
 
+            // If list empty
             else Assert.Empty(oldFileList);
         }
     }

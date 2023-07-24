@@ -15,6 +15,11 @@ namespace FileReporterDecorator.FileOperation.operations
             _scanProcess = scanProcess;
         }
 
+        /*
+         * 
+         *  Trigger method for export report opearation. This method call the WriteFile method on FileWRiter singleton class.
+         * 
+         */
         public override async Task Run()
         {
             var _newFiles = _scanProcess.GetNewFileList().Select(newFile => new FileInfo(newFile)).ToList();

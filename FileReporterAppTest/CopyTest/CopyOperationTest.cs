@@ -2,7 +2,7 @@
 
 namespace FileReporterAppTest.CopyTest
 {
-    
+
     public class CopyOperationTest : IClassFixture<CopyTestDataCreator>
     {
         private readonly FileOperation _scannerOperation;
@@ -14,36 +14,38 @@ namespace FileReporterAppTest.CopyTest
             _scannerOperation = copyTestDataCreator._scanOperation;
             _copyOperation = copyTestDataCreator._copyOperation;
 
-            copy();
-            
+            _copyOperation.Run();
+
+            WaitSecond(3, () => { });
         }
 
-        private async Task copy()
-        {
-            await Task.Run(_copyOperation.Run);
-        }
+        
 
-        [Fact(DisplayName = "[2] - Are Total Bytes Are Equal")]
-        internal void Run_Check_Total_Byte()
+        [Fact(DisplayName = "[2] - Are Total Bytes Are Equal After Copy")]
+        internal void Equal_TotalByte_AfterCopy()
         {
-            var totalByteBefore = GetTotalByteOnTestDirectory();
+            var expectedTotalByteBeforeCopy = GetTotalByteOnTestDirectory();
 
-            var totalByteAfter = _scannerOperation.GetNewFileList()
+            var actualTotalByteAfterCopy = _scannerOperation.GetNewFileList()
                 .Select(fileName => new FileInfo(fileName))
                 .Select(fi => fi.Length)
                 .Sum();
-
-            Assert.Equal(totalByteBefore, totalByteAfter);
+            
+            Assert.Equal(expectedTotalByteBeforeCopy, actualTotalByteAfterCopy);
         }
 
-        [Fact(DisplayName = "[1] - Is File Counts Are Equal")]
-        internal void Run_FileCounts_Are_Equal()
+        
+        [Fact(DisplayName = "[1] - Equal File Count After Copy")]
+        internal async void Equal_FileCount_AfterCopy()
         {
-            var beforeFileCount = GetTotalFileCountOnTestDirectory();
+            var task1 = Task.Run(() => GetTotalFileCountOnTestDirectory());
 
-            var afterCopyFileCount = GetTotalFileCountOnDirectory(TEST_DIRECTORY_COPY_PATH);
+            var task2 = Task.Run(() => GetTotalFileCountOnDirectory(TEST_DIRECTORY_COPY_PATH));
 
-            Assert.Equal(beforeFileCount, afterCopyFileCount);
+            var expectedFileCountBeforeCopy = await task1;
+            var actualFileCountAfterCopy = await task2;
+            
+            Assert.Equal(expectedFileCountBeforeCopy, actualFileCountAfterCopy);
         }
     }
 }

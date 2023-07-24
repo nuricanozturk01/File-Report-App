@@ -41,16 +41,29 @@ namespace FileReporterDecorator.FileOperation.operations
             this.errorLabelTextCallback = errorLabelTextCallback;
         }
 
+        /*
+         *
+         * Copy files to destination path. Also this method decide the copy empty folders
+         * 
+         */
         private void CopyFileCallback()
         {
-            ForEachParallel(scanProcess.GetNewFileList(), threadCount, file => ThrowUnAuthorizedException(() => CopyFiles(file), 
-                () => errorLabelTextCallback.Invoke("Copied files if necessary permissions valid!")));
-
             if (scanProcess.IsEmptyFolder())
                 ForEachParallel(scanProcess.GetEmptyDirectoryList(), threadCount,
                     dir => Directory.CreateDirectory(dir.Replace(destinationPath, targetPath)));
+
+         
+            ForEachParallel(scanProcess.GetNewFileList(), threadCount, 
+                file => ThrowUnAuthorizedException(
+                () => CopyFiles(file), 
+                () => errorLabelTextCallback.Invoke("Copied files if necessary permissions valid!")));
         }
 
+        /*
+         *
+         * Callback for CopyFileCallback metod. In here ntfs permissions copied.
+         * 
+         */
         private void CopyFiles(string file)
         {
             lock (_newLocker)
@@ -60,7 +73,8 @@ namespace FileReporterDecorator.FileOperation.operations
 
             var targetFile = file.Replace(destinationPath, targetPath);
 
-            ThrowCopyConflictException(() => File.Copy(file, targetFile, scanProcess.IsOwerrite()),
+            ThrowCopyConflictException(
+                () => File.Copy(file, targetFile, scanProcess.IsOwerrite()),
                 () => errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Copied!"));
 
 
@@ -69,6 +83,11 @@ namespace FileReporterDecorator.FileOperation.operations
         }
 
 
+        /*
+         *
+         * Trigger method for CopyFileOperation.
+         * 
+         */
         public override async Task Run()
         {
             scanProcess.GetDirectoryList().ToList().ForEach(d => Directory.CreateDirectory(d.Replace(destinationPath, targetPath)));

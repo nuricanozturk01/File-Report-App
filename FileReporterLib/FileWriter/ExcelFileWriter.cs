@@ -6,9 +6,27 @@ namespace FileReporterLib.FileWriter
     {
         private XLWorkbook _workBook;
 
-        public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath) => await WriteExcelFileCallback(targetPath, newFileList, oldFileList);
+
+        public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath)
+            => await WriteExcelFileCallback(targetPath, newFileList, oldFileList);
+
+        /*
+         * 
+         * Callback for Write Method. 
+         * 
+         */
+        private async Task WriteExcelFileCallback(string targetPath, List<FileInfo> newFileList, List<FileInfo> oldFileList)
+        {
+            ThrowFileNotFoundException(() => WriteExcel(newFileList, oldFileList), () => _workBook.SaveAs(targetPath));
+        }
 
 
+
+        /*
+         * 
+         * Trigger method for writing titles and files
+         * 
+         */
         private void WriteExcel(List<FileInfo> newFileList, List<FileInfo> oldFileList)
         {
             _workBook = new XLWorkbook();
@@ -21,11 +39,12 @@ namespace FileReporterLib.FileWriter
             writeListToExcel(newFileList, workSheet, "New");
             writeListToExcel(oldFileList, oldWorkSheet, "Old");
         }
-        private async Task WriteExcelFileCallback(string targetPath, List<FileInfo> newFileList, List<FileInfo> oldFileList)
-        {
-            ThrowFileNotFoundException(() => WriteExcel(newFileList, oldFileList), () => _workBook.SaveAs(targetPath));
-        }
-
+        
+        /*
+        * 
+        * Write the fileList lists to excel
+        * 
+        */
         private void writeListToExcel(List<FileInfo> fileList, IXLWorksheet workSheet, string fileStatus)
         {
             if (fileList != null)
@@ -44,7 +63,12 @@ namespace FileReporterLib.FileWriter
             }
         }
 
-        private void CreateCell(IXLCell cell, string cellValue, XLAlignmentHorizontalValues horizontalAlignment, XLAlignmentVerticalValues verticalAlignment)
+        /*
+         * 
+         * Creating and modifying excel cells.
+         * 
+         */
+        private void CreateCell(IXLCell cell, string cellValue, XLAlignmentHorizontalValues horizontalAlignment,                                   XLAlignmentVerticalValues verticalAlignment)
         {
             var excelCell = cell;
             excelCell.Value = cellValue;
@@ -52,6 +76,11 @@ namespace FileReporterLib.FileWriter
             excelCell.Style.Alignment.Vertical = verticalAlignment;
         }
 
+        /*
+         * 
+         * prepare titles for excel. 
+         * 
+         */
         private void PrepareTitles(IXLWorksheet workSheet)
         {
             var titleCells = new string[2, 6] { { "A1", "B1", "C1", "D1", "E1", "F1" },

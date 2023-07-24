@@ -12,31 +12,33 @@ namespace FileReporterAppTest.ScanTest
             _scanOperation.Run();
         }
 
-        [Fact(DisplayName = "[1] - Modified Dates Are Checked [After]")]
-        public void Are_Modified_Dates_Checked_After()
+        [Fact(DisplayName = "[1] - Check All Dates Last Write Time [After]")]
+        public void Valid_AllDates_LastWriteTime_After()
         {
-            List<string> newFileList = _scanOperation.GetNewFileList().ToList();
+            var newFileList = _scanOperation.GetNewFileList().ToList();
 
-            if (newFileList is not null && newFileList.Count() != 0)
+            if (newFileList.Count() != 0) // list cannot be empty
             {
-                Assert.True(newFileList.Select(fi => new FileInfo(fi)).ToList().All(fi => fi.LastWriteTime >= dateTime));
-                //Assert.Equal(1, newFileList.Count);
+                var expectedAllDatesAreValid = newFileList.Select(fi => new FileInfo(fi)).ToList().All(fi => fi.LastWriteTime >= dateTime);
+                Assert.True(expectedAllDatesAreValid);
             }
 
+            // If list is empty
             else Assert.Empty(newFileList);
         }
 
-        [Fact(DisplayName = "[2] - Modified Dates Are Checked [Before]")]
-        public void Are_Modified_Dates_Checked_Before()
+        [Fact(DisplayName = "[2] - Check All Dates Last Write Time [Before]")]
+        public void Valid_AllDates_LastWriteTime_Before()
         {
-            List<string> oldFileList = _scanOperation.GetOldFileList().ToList();
+            var oldFileList = _scanOperation.GetOldFileList().ToList();
 
-            if (oldFileList is not null && oldFileList.Count() != 0)
+            if (oldFileList.Count() != 0) // list cannot be null
             {
-                Assert.True(oldFileList.Select(fi => new FileInfo(fi)).ToList().All(fi => fi.LastWriteTime < dateTime));
-                //Assert.Equal(3, oldFileList.Count());
+                var expectedAllDatesAreValid = oldFileList.Select(fi => new FileInfo(fi)).ToList().All(fi => fi.LastWriteTime < dateTime);
+                Assert.True(expectedAllDatesAreValid);
             }
 
+            // if list is empty
             else Assert.Empty(oldFileList);
         }
     }

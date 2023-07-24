@@ -6,18 +6,23 @@ namespace FileReporterAppTest.CopyTest
     {
         public FileOperation _moveOperation;
         public FileOperation _scanOperation;
-        
-        public int _beforeFileCount;
+
+        public readonly string MOVE_OPERATION_BACKUP = PATH_PREFIX + "test_dir_backup_2";
+        public long _expectedTotalByte;
         public MoveOperationDataCreator()
         {
-            var dateTime = GetXDayBeforeFromToday(2);
+            Directory.CreateDirectory(MOVE_OPERATION_BACKUP);
 
-            _beforeFileCount = GetTotalFileCountOnTestDirectory();
-            _scanOperation = ScanBuilder.CreateScanProcess(dateTime, GetCreatedDate());
+            var dateTime = GetXDayBeforeFromToday(50);
+
+            _expectedTotalByte = GetTotalByteOnTestDirectory(); // file count before move operation
+
+            _scanOperation = ScanBuilder.CreateScanProcess(dateTime, MOVE_OPERATION_BACKUP,GetCreatedDate()); // Create Scan process
 
             _scanOperation.Run();
 
-            _moveOperation = MoveBuilder.Create_Move_Operation(_scanOperation, MOVE_TEST_DIRECTORY_PATH);
+            // Create Move Operation
+            _moveOperation = MoveBuilder.Create_Move_Operation(_scanOperation, MOVE_OPERATION_BACKUP, MOVE_TEST_DIRECTORY_PATH);
         }
 
 

@@ -1,14 +1,13 @@
 ﻿using FileReporterDecorator.FileOperation;
-using FileReporterLib.Exceptions;
 
 namespace FileReporterAppTest.CopyTest.OverwriteFile
 {
     public class CopyOperationOverwriteTest : IClassFixture<OverwriteFileDataCreator>
     {
         private readonly FileOperation _ScannerOperation;
-        private readonly FileOperation _copyOperation;
+        private readonly FileOperation _overwriteCopyOperation;
 
-        private FileOperation _normalFileCopyOperation;
+        private FileOperation _copyOperation;
 
         public CopyOperationOverwriteTest(OverwriteFileDataCreator copyTestDataCreator)
         {
@@ -16,43 +15,36 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
 
             _ScannerOperation = copyTestDataCreator._scanOperation;
 
-            _copyOperation = copyTestDataCreator._copyOperation;
+            _overwriteCopyOperation = copyTestDataCreator._overwriteCopyOperation;
 
-            _normalFileCopyOperation = CopyBuilder.Create_Copy_Operation(_ScannerOperation, TEST_DIRECTORY_OVERWRITE_PATH);
+            // Defined other copy operation (Without any decorator) for test overwrite
+            _copyOperation = CopyBuilder.Create_Copy_Operation(_ScannerOperation, TEST_DIRECTORY_OVERWRITE_PATH);
+            _copyOperation.Run(); // copy operation run (first copy)
         }
 
-        [Fact(DisplayName = "[1] - Copy Normal Files")]
-        internal void Copy_Normal_Files()
+        
+
+        [Fact(DisplayName = "[2] - Check Last Access Date for Overwrite")]
+        internal async Task Check_LastAccessDate_AfterOverwrite()
         {
-            _normalFileCopyOperation.Run();
+            var expectedSmallerLastAccessDate = new FileInfo(TEST_DIRECTORY_OVERWRITE_PATH + "\\count.txt").LastAccessTime;
+
+            await Task.Run(_overwriteCopyOperation.Run);
+            
+            var actualBiggerLastAccessDate = new FileInfo(TEST_DIRECTORY_OVERWRITE_PATH + "\\count.txt").LastAccessTime;
+
+            Assert.True(actualBiggerLastAccessDate > expectedSmallerLastAccessDate);
         }
 
-        [Fact(DisplayName = "[2] - Check Assertion for Overwrite")]
-        internal void Copy_Normal_Files_Catch_Exception()
-        {
-            Assert.ThrowsAnyAsync<FileConflictException>(() => _normalFileCopyOperation.Run());
-        }
-
-        [Fact(DisplayName = "[3] - Copy With Overwrite")]
-        internal async void Copy_Normal_Files_Copy_Overwrite()
-        {
-            await Task.Run(_copyOperation.Run);
-        }
-
-        [Fact(DisplayName = "[4] - Are TotalBytes Equal After Copy Overwrite")]
-        internal void Are_TotalBytes_Equals_After_Copy()
-        {
-            var afterCopyTotalByte = GetTotalByteOnDirectory(TEST_DIRECTORY_OVERWRITE_PATH);
-
-            var beforeCopyTotalByte = GetTotalByteOnTestDirectory();
-
-            Assert.Equal(beforeCopyTotalByte, afterCopyTotalByte);
-        }
+    
 
         [Fact(DisplayName = "[5] - Are Total Filr Count  Equal After Copy Overwrite")]
-        internal void Are_Total_File_Count_Equals_After_Copy()
+        internal void Equal_TotalFileCount_AfterOverwriteCopy()
         {
-            Assert.Equal(_copyOperation.GetNewFileList().Count(), _normalFileCopyOperation.GetNewFileList().Count());
+            var expectedFileCount = _overwriteCopyOperation.GetNewFileList().Count();
+            var actualFileCount = _copyOperation.GetNewFileList().Count();
+
+            Assert.Equal(expectedFileCount, actualFileCount);
         }
     }
 }

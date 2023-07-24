@@ -4,8 +4,15 @@
     {
         private readonly string DELIMITER = "|";
 
-        public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath) => await Task.Run(() => WriteTextFileCallback(newFileList, oldFileList, targetPath));
+        public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath) 
+            => await Task.Run(() => WriteTextFileCallback(newFileList, oldFileList, targetPath));
 
+        /*
+         *
+         * Callback for Write method.
+         * Write files to text file.
+         * 
+         */
         private void WriteTextFileCallback(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath)
         {
             try
@@ -18,6 +25,14 @@
             }
             catch { }
         }
-        private string GetFormattedString(FileInfo f) => $"{f.Name} {DELIMITER} {f.FullName} {DELIMITER} {f.CreationTime} {DELIMITER} {f.LastWriteTime} {DELIMITER} {f.LastAccessTime}\n";
+
+
+        /*
+         * 
+         *  String format for writing text file
+         * 
+         */
+        private string GetFormattedString(FileInfo f) => 
+            $"{f.Name} {DELIMITER} {f.FullName} {DELIMITER} {f.CreationTime} {DELIMITER} {f.LastWriteTime} {DELIMITER} {f.LastAccessTime}\n";
     }
 }

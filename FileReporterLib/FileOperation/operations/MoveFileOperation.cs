@@ -39,6 +39,13 @@ namespace FileReporterDecorator.FileOperation.operations
             this.setTimeLabelAction = setTimeLabelAction;
         }
 
+
+        /*
+         * 
+         * Callback for MoveFileCallback. 
+         * This method Move file to target path and show on screen which file moved.
+         * 
+         */
         private void MoveFile(string file)
         {
             showOnScreenCallback(_moveCounter.COUNTER, totalFileCount, file);
@@ -50,6 +57,13 @@ namespace FileReporterDecorator.FileOperation.operations
             lock (_moveCounter)
                 _moveCounter.COUNTER++;
         }
+
+        /*
+         * 
+         * This method move files also, if user selected the Empty Folder option,
+         * Move Empty folders to target path and removed from destination path.
+         * 
+         */
         private void MoveFileCallback()
         {
             ForEachParallel(_scanProcess.GetNewFileList(), threadCount, file => ThrowCopyAndMoveException(() => MoveFile(file), () => { }));
@@ -58,24 +72,32 @@ namespace FileReporterDecorator.FileOperation.operations
                 ForEachParallel(_scanProcess.GetEmptyDirectoryList(), threadCount,
                     dir => ThrowCopyAndMoveException(() =>
                     {
-                        if (!Directory.Exists(dir.Replace(destinationPath, targetPath)))
-                            Directory.Move(dir, dir.Replace(destinationPath, targetPath));
-
-                        Directory.Delete(dir, true);  
+                        Directory.CreateDirectory(dir.Replace(destinationPath, targetPath));
+                        Directory.Delete(dir, true);
                     }, () => { }));
 
+            ForEachParallel(_scanProcess.GetEmptyDirectoryList(), threadCount, dir => Directory.Delete(dir, true));
             var dirList = _scanProcess.GetDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
             ForEachParallel(dirList, threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
         }
 
 
-
+        /*
+         *
+         * Remove Directory if directory is empty.
+         */
         private void RemoveDirectory(DirectoryInfo dir)
         {
             if (dir.GetFiles().Length == 0)
                 dir.Delete(true);
         }
 
+
+        /*
+         * 
+         * Trigger method for Move Operation. 
+         * 
+         */
         public override async Task Run()
         {
             _scanProcess.GetDirectoryList().ToList().ForEach(d => Directory.CreateDirectory(d.Replace(destinationPath, targetPath)));

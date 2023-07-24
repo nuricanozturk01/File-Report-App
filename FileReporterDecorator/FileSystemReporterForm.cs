@@ -34,8 +34,25 @@ namespace FileReporterApp
             _errorLabelTextCallback = str => SetErrorLabelText(str);
         }
 
+        /*
+         * 
+         * 
+         * Set error label. Written for callback. 
+         * 
+         */
         private void SetErrorLabelText(string msg) => RequireInvoke(() => ErrorLabel.Text = msg);
+
+
         private IDateOption GetDateOption() => GetSelectedDateOption(CreatedDateRadioButton.Checked, ModifiedDateRadioButton.Checked);
+
+        /*
+         * 
+         *
+         * This method calculate the total file count on the directory (include subfolders).
+         * 
+         * It can control the permissions, if not success throw the UnAuthorizedException and return 0.
+         * 
+         */
         private int GetTotalFileCount()
         {
             var fileCount = 0;
@@ -52,15 +69,37 @@ namespace FileReporterApp
             }
             return fileCount;
         }
+
+        /*
+         * 
+         * Set progress bar to minimum value. Written for callback
+         *  
+         */
         private void MinimumProgressBar() => ScanProgressBar.Value = ScanProgressBar.Minimum;
+
+        /*
+         * 
+         * Set Scanned, moved or copied time label. Written for callback
+         *  
+         */
         private void SetTimeLabel(string str) => TimeLabel.Text = str;
 
-
+        /*
+         * 
+         * Create Scan Process 
+         * 
+         */
         public FileOperation CreateScanProcess()
         {
             return new ScanDirectoryOperation(null, DateTimePicker.Value, _totalFileCount, _threadCount,
                  _destinationPath, _dateOption, _showOnScreenProgressCallback, _showMaximizeOnScreenCallback);
         }
+
+        /*
+         * 
+         * Create Transport Process like (Ntfs, EmptyFolder, Overwrite) and decorate it.
+         * 
+         */
         public FileOperation CreateTransportProcess(FileOperation process, FileOperation scanProcess)
         {
             if (NtfsChoiceBox.Checked)
@@ -74,9 +113,13 @@ namespace FileReporterApp
 
             return process;
         }
+        /*
+         * 
+         * Create Operation Process like (Move or Copy). If take any error, return the empty Operation 
+         * 
+         */
         public FileOperation CreateOperationProcess(FileOperation scanProcess, bool moveOption, bool copyOption)
         {
-
             if (moveOption)
                 return new MoveFileOperation(scanProcess, _totalFileCount,
                     _threadCount, _destinationPath, _targetPath,
@@ -91,6 +134,11 @@ namespace FileReporterApp
 
             return new EmptyOperation();
         }
+        /*
+         * 
+         * Initialize the input values and validate it. 
+         * 
+         */
         private bool InitMembers(bool isReport)
         {
             _threadCount = (int)ThreadCounter.Value;
@@ -109,7 +157,11 @@ namespace FileReporterApp
         }
 
 
-
+        /*
+         * 
+         * Run this method when user click on the Run Button. This method create the processes. trigger method. 
+         * 
+         */
         private async void RunButton_Click(object sender, EventArgs e)
         {
             if (!InitMembers(false))
@@ -124,6 +176,13 @@ namespace FileReporterApp
 
             await operationProcess.Run();
         }
+
+
+        /*
+         * 
+         * Callback for Report Button.
+         * 
+         */
         private async void ReportButtonCallback()
         {
 
@@ -152,10 +211,21 @@ namespace FileReporterApp
                 TimeLabel.Text = "Report is ready!";
             }
         }
+        /*
+         * 
+         *  Run this method when user click on the Report Button. This method create the report process. trigger method. 
+         * 
+         */
         private async void ReportButton_ClickAsync(object sender, EventArgs e)
         {
             ThrowException(ReportButtonCallback, () => MessageBox.Show("Please select the file!"));
         }
+
+        /*
+         * 
+         *  Change and reset the other options on GUI when user select the Move Radio Button
+         * 
+         */
         private void MoveRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             browseTargetButton.Enabled = MoveRadioButton.Checked;
@@ -163,6 +233,13 @@ namespace FileReporterApp
             OverwriteChoiceBox.Enabled = true;
             NtfsChoiceBox.Enabled = false;
         }
+
+        /**
+         * 
+         *
+         * This method written for when user selected the copy radio button, program will set automatically 
+         *
+         */
         private void CopyRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             browseTargetButton.Enabled = CopyRadioButton.Checked;
@@ -170,6 +247,12 @@ namespace FileReporterApp
             OverwriteChoiceBox.Enabled = true;
             NtfsChoiceBox.Enabled = true;
         }
+
+        /*
+        * 
+        * This method written for selecting destination path
+        * 
+        */
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             var folderBrowser = new FolderBrowserDialog();
@@ -177,6 +260,9 @@ namespace FileReporterApp
             if (folderBrowser.ShowDialog() == DialogResult.OK)
                 PathTextBox.Text = folderBrowser.SelectedPath;
         }
+        /*
+         * This method for Copy and Move operations. You can select the Target Path.  
+         */
         private void BrowseTargetButton_Click(object sender, EventArgs e)
         {
             var folderBrowser = new FolderBrowserDialog();
@@ -184,6 +270,12 @@ namespace FileReporterApp
             if (folderBrowser.ShowDialog() == DialogResult.OK)
                 TargetPathTextBox.Text = folderBrowser.SelectedPath;
         }
+
+        /*
+         * 
+         * Cleaning inputs 
+         * 
+         */
         private void CleanButton_Click(object sender, EventArgs e)
         {
             ThreadCounter.Value = 1;
@@ -199,12 +291,29 @@ namespace FileReporterApp
             TimeLabel.ResetText();
             ScannedSizeLabel.ResetText();
         }
+
+        /*
+         * 
+         *  Change and reset the other options on GUI when user select the Scan Radio Button
+         * 
+         */
         private void ScanRadioButton_CheckedChanged(object sender, EventArgs e)
         {
+            OverwriteChoiceBox.Checked = false;
+            NtfsChoiceBox.Checked = false;
+            EmptyFoldersChoiceBox.Checked = false;
+
             EmptyFoldersChoiceBox.Enabled = false;
             OverwriteChoiceBox.Enabled = false;
             NtfsChoiceBox.Enabled = false;
         }
+
+        /*
+         * 
+         * 
+         * Set Progress Bar Max value and scannedSizeLabel  
+         * 
+         */
         private void ShowMaximizeOnScreen(int counter, TimeSpan elapsedTime)
         {
             ScanProgressBar.Value = ScanProgressBar.Maximum;
@@ -212,6 +321,13 @@ namespace FileReporterApp
             TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + elapsedTime;
         }
 
+        /**
+         * 
+         * Modify progress bar and show on screen.
+         * 
+         * Used with callback
+         * 
+         */
         private void ShowOnScreenProgress(int counter, int totalFileCount, string file)
         {
             if (counter % 100 == 0)
@@ -225,6 +341,14 @@ namespace FileReporterApp
                 });
             }
         }
+
+        /**
+         * 
+         * RequireInvoke method written for nested if clauses like 
+         * if (counter % 10 == 0)
+         *    if (RequireInvoke) // Necessary for escape the Cross Thread error
+         *        .....
+         */
         private void RequireInvoke(Action invoke)
         {
             if (InvokeRequired)
