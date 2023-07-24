@@ -6,7 +6,6 @@ namespace FileReporterAppTest.CopyTest
 
     public class CopyNtfsOperationTest : IClassFixture<CopyNtfsTestDataCreator>
     {
-        private readonly int WAIT_MINUTE_COPY_SECOND = 5;
         private readonly FileOperation _scannerOperation;
         private readonly FileOperation _copyOperation;
         public CopyNtfsOperationTest(CopyNtfsTestDataCreator copyTestDataCreator)

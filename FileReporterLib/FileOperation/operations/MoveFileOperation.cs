@@ -1,6 +1,8 @@
 ﻿using FileReporterDecorator.Util;
+using FileReporterLib.Util;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Security.AccessControl;
 using static FileReporterDecorator.Util.ExceptionUtil;
 using static FileReporterDecorator.Util.ParallelWrapper;
 
@@ -38,13 +40,13 @@ namespace FileReporterDecorator.FileOperation.operations
         }
 
         private void MoveFile(string file)
-        {   
+        {
             showOnScreenCallback(_moveCounter.COUNTER, totalFileCount, file);
 
             ThrowCopyConflictException(
                 () => File.Move(file, file.Replace(destinationPath, targetPath), _scanProcess.IsOwerrite()),
                 () => errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Moved!"));
-            
+
             lock (_moveCounter)
                 _moveCounter.COUNTER++;
         }
@@ -58,6 +60,7 @@ namespace FileReporterDecorator.FileOperation.operations
                     {
                         if (!Directory.Exists(dir.Replace(destinationPath, targetPath)))
                             Directory.Move(dir, dir.Replace(destinationPath, targetPath));
+
                         Directory.Delete(dir, true);  
                     }, () => { }));
 

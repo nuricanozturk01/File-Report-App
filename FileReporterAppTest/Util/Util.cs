@@ -6,7 +6,7 @@ namespace FileReporterAppTest.Util
     {
 
         //DEFAULT THREAD COUNT
-        public readonly static int DEFAULT_THREAD_COUNT = 4;
+        public readonly static int DEFAULT_THREAD_COUNT = 12;
 
         //EMPTY ACTIONS
         public readonly static Action<string, string> EMPTY_SHOW_CONFLICT_MESSAGE_CALLBACK = (str1, st2) => { };

@@ -1,5 +1,7 @@
 ﻿using FileReporterDecorator.Util;
+using FileReporterLib.Util;
 using System.Diagnostics;
+using System.Security.AccessControl;
 using static FileReporterDecorator.Util.ExceptionUtil;
 using static FileReporterDecorator.Util.ParallelWrapper;
 namespace FileReporterDecorator.FileOperation.operations
@@ -41,7 +43,8 @@ namespace FileReporterDecorator.FileOperation.operations
 
         private void CopyFileCallback()
         {
-            ForEachParallel(scanProcess.GetNewFileList(), threadCount, file => CopyFiles(file));
+            ForEachParallel(scanProcess.GetNewFileList(), threadCount, file => ThrowUnAuthorizedException(() => CopyFiles(file), 
+                () => errorLabelTextCallback.Invoke("Copied files if necessary permissions valid!")));
 
             if (scanProcess.IsEmptyFolder())
                 ForEachParallel(scanProcess.GetEmptyDirectoryList(), threadCount,
@@ -50,7 +53,6 @@ namespace FileReporterDecorator.FileOperation.operations
 
         private void CopyFiles(string file)
         {
-
             lock (_newLocker)
                 _newLocker.COUNTER++;
 

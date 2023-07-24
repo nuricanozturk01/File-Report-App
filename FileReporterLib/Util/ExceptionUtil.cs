@@ -51,19 +51,19 @@
             }
         }
 
-        public static bool ThrowUnAuthorizedException(Action action, Action exceptionAction)
+        public static void ThrowUnAuthorizedException(Action action, Action exceptionAction)
         {
             try
             {
                 action.Invoke();
-                return true;
             }
             catch
             {
                 exceptionAction.Invoke();
-                return false;
             }
         }
+
+     
         public static void ThrowFileNotFoundException(Action action, Action finallyAction)
         {
             try

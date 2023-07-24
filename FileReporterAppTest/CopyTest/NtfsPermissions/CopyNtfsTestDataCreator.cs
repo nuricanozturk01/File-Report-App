@@ -9,8 +9,6 @@ namespace FileReporterAppTest.CopyTest
 
         public CopyNtfsTestDataCreator()
         {
-
-            var totalFileCount = GetTotalFileCountOnTestDirectory();
             var dateTime = GetXDayBeforeFromToday(20);
 
             _scanOperation = ScanBuilder.CreateScanProcess(dateTime, GetCreatedDate());

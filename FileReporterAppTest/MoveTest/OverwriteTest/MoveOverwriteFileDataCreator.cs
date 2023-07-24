@@ -20,7 +20,7 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
         }
         public void Dispose()
         {
-            Directory.Delete(MOVE_TEST_DIRECTORY_OVERWRITE_PATH, true);
+           // Directory.Delete(MOVE_TEST_DIRECTORY_OVERWRITE_PATH, true);
         }
     }
 }
