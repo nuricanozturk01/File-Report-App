@@ -22,6 +22,11 @@ namespace FileReporterAppTest.CopyTest
             WaitSecond(3, () => { });
         }
 
+        /*
+         * 
+         * Check Empty folder count 
+         * 
+         */
 
         [Fact(DisplayName = "[1] - Are Equal Empty Folder Count")]
         public void Equal_EmptyFolderCount_AfterMove()

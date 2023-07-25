@@ -14,13 +14,13 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
         public MoveOverwriteFileDataCreator()
         {
 
-
             var dateTime = GetXDayBeforeFromToday(50);
-
+            // Scan Operation
             _scanOperation = ScanBuilder.CreateScanProcess(dateTime, MOVE_OPERATION_BACKUP, GetCreatedDate());
 
             _scanOperation.Run();
 
+            // Before move, file on test directory 
             _expectedLastAccessSmallerFile = new FileInfo(TEST_DIRECTORY_PATH + "\\count.txt");
 
             _moveOperation = MoveBuilder.Create_Move_Overwrite_Operation(_scanOperation, MOVE_OPERATION_BACKUP, TEST_DIRECTORY_PATH);

@@ -67,6 +67,7 @@ namespace FileReporterAppTest
                                                   EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK);
             }
 
+            // Create Scan operation with destination path parameter
             public static FileOperation CreateScanProcess(DateTime dateTime, string destination, IDateOption dateOpt)
             {
                 var totalFileCount = GetTotalFileCountOnTestDirectory();
@@ -110,7 +111,7 @@ namespace FileReporterAppTest
                 return CreateTransportProcess(moveProcess, TransactionOperationEnum.EMPTY_FOLDER, scanProcess);
             }
 
-
+            // Create move operation with empty folder feature added destination and target parameters
             public static FileOperation Create_Move_EmptyFolder_Operation(FileOperation scanProcess, string destination, string target)
             {
                 var moveProcess = Create_Move_Operation(scanProcess, destination, target);
@@ -162,6 +163,7 @@ namespace FileReporterAppTest
                 return CreateTransportProcess(process, TransactionOperationEnum.EMPTY_FOLDER, scanProcess); // decorate
             }
 
+            // Create copy operation with all decorators (ntfs, empty folder, Overwrite
             public static FileOperation Create_Copy_Full_Operation(FileOperation scanProcess, string destinationPath, string targetPath)
             {
                 var process = CreateOperationProcess(scanProcess, OperationEnum.COPY, GetTotalFileCountOnTestDirectory(),

@@ -24,8 +24,14 @@ namespace FileReporterAppTest.CopyTest
             WaitSecond(7, () => { });
         }
 
+        /*
+         * 
+         * 
+         * Check file counts are equal 
+         *
+         */
 
-        [Fact(DisplayName = "[2] - Equal after move operation file count")]
+        [Fact(DisplayName = "[1] - Equal after move operation file count")]
         internal void Equal_AfterMoveOperation_FileCount()
         {
             var actualFileCountOnTestDirectory = GetTotalFileCountOnDirectory(MOVE_OPERATION_BACKUP_PATH);
@@ -38,8 +44,14 @@ namespace FileReporterAppTest.CopyTest
         }
 
 
-        [Fact(DisplayName = "[3] - Move Are Total Bytes Are Equal")]
-        internal async void Run_Check_Total_Byte()
+        /*
+         * 
+         * 
+         * Check Total Bytes Are Equal 
+         * 
+         */
+        [Fact(DisplayName = "[2] - Move Are Total Bytes Are Equal")]
+        internal async void Equal_TotalBytes_MoveOperation()
         {
             var t = Task.Run(() => GetTotalByteOnDirectory(MOVE_TEST_DIRECTORY_PATH));
             

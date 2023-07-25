@@ -18,7 +18,7 @@ namespace FileReporterAppTest.CopyTest
             _copyOperation.Run();
         }
 
-        [Fact(DisplayName = "[2] - Check NTFS Permissions After Copy")]
+        [Fact(DisplayName = "[1] - Check NTFS Permissions After Copy")]
         internal void Equal_NtfsPermissions_AfterCopy()
         {
             var expectedNtfsPermissions = _scannerOperation.GetNewFileList().Select(d => new FileInfo(d)).ToList();

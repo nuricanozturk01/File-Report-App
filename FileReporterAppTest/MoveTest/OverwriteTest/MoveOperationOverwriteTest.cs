@@ -11,17 +11,30 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
         private readonly FileInfo? _expectedLastAccessSmallerFile;
         public MoveOperationOverwriteTest(MoveOverwriteFileDataCreator moveTestDataCreator)
         {
-           // Directory.CreateDirectory(MOVE_TEST_DIRECTORY_OVERWRITE_PATH);
-
             _ScannerOperation = moveTestDataCreator._scanOperation;
             _expectedLastAccessSmallerFile = moveTestDataCreator._expectedLastAccessSmallerFile;
             _moveOperation = moveTestDataCreator._moveOperation;
-            _expectedLastAccessSmallerFile = _ScannerOperation.GetNewFileList().Select(f => new FileInfo(f)).FirstOrDefault(f => f.FullName == TEST_DIRECTORY_PATH + "\\count.txt");
-            _moveOperation.Run();
 
-            WaitSecond(5, () => { });
+            _expectedLastAccessSmallerFile = 
+                _ScannerOperation.GetNewFileList().Select(f => new FileInfo(f)).FirstOrDefault(f => f.FullName == TEST_DIRECTORY_PATH + "\\count.txt");
+
+            Task.WaitAll(Task.Run(_moveOperation.Run));
+
+            WaitSecond(10, () => { });
         }
 
+        private async Task MoveFiles()
+        {
+            var moveTask = Task.Run(_moveOperation.Run);
+
+            await Task.WhenAll(moveTask);
+        }
+
+        /*
+         * 
+         * Check Overwrite is succussful. 
+         * 
+         */
 
         [Fact(DisplayName = "[1] - Check Last Access Date for Overwrite")]
         internal void Check_LastAccessDate_AfterOverwrite()

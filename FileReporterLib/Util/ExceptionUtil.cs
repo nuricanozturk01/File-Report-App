@@ -2,7 +2,9 @@
 {
     /*
      * This class written for converting (try catch) exception handling keywords to functional structure so,
-     * code looks like more clear.
+     * code looks like more clear. 
+     * 
+     * Not good implementation but looks like more clear. 
      */
 
     public class ExceptionUtil

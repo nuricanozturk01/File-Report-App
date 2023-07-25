@@ -25,7 +25,7 @@ namespace FileReporterAppTest.CopyTest
          * Check Equal Empty directory count before and after copy operation.
          * 
          */
-        [Fact(DisplayName = "[2] - Are Equal Empty Folder Count After Copy")]
+        [Fact(DisplayName = "[1] - Are Equal Empty Folder Count After Copy")]
         public void Equal_EmptyFolderCount_AfterCopy()
         {
             var expectedEmptyFileCountAfterCopy = FindEmptyDirectories(TEST_DIRECTORY_PATH).Count();
@@ -41,7 +41,7 @@ namespace FileReporterAppTest.CopyTest
          * After merge, if distinct emptyFileCount are equal the expectedEmptyFileList.Count(), test is successful
          * 
          */
-        [Fact(DisplayName = "[3] Are Equal Empty Folder Names")]
+        [Fact(DisplayName = "[2] Are Equal Empty Folder Names")]
         public void Are_Equal_Empty_Folder_Names()
         {
             var expectedEmptyFileList = _scannerOperation.GetEmptyDirectoryList()

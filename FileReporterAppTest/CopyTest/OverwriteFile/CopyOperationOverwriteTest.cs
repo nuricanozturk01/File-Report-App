@@ -23,22 +23,35 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
         }
 
         
+        /*
+         * 
+         * 
+         * Check LastAccessDate After Copy 
+         * 
+         */
 
-        [Fact(DisplayName = "[2] - Check Last Access Date for Overwrite")]
-        internal async Task Check_LastAccessDate_AfterOverwrite()
+        [Fact(DisplayName = "[1] - Check Last Access Date for Overwrite")]
+        internal void Check_LastAccessDate_AfterOverwrite()
         {
             var expectedSmallerLastAccessDate = new FileInfo(TEST_DIRECTORY_OVERWRITE_PATH + "\\count.txt").LastAccessTime;
 
-            await Task.Run(_overwriteCopyOperation.Run);
-            
+            _overwriteCopyOperation.Run();
+
+            WaitSecond(7, () => { });
+
             var actualBiggerLastAccessDate = new FileInfo(TEST_DIRECTORY_OVERWRITE_PATH + "\\count.txt").LastAccessTime;
 
             Assert.True(actualBiggerLastAccessDate > expectedSmallerLastAccessDate);
         }
 
-    
 
-        [Fact(DisplayName = "[5] - Are Total Filr Count  Equal After Copy Overwrite")]
+        /*
+         * 
+         * Check total file count After Copy 
+         * 
+         */
+
+        [Fact(DisplayName = "[2] - Are Total Filr Count  Equal After Copy Overwrite")]
         internal void Equal_TotalFileCount_AfterOverwriteCopy()
         {
             var expectedFileCount = _overwriteCopyOperation.GetNewFileList().Count();
