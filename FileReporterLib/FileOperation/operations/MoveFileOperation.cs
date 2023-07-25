@@ -71,7 +71,7 @@ namespace FileReporterDecorator.FileOperation.operations
                         Directory.Delete(dir, true);
                     }, () => { }));
 
-            ForEachParallel(_scanProcess.GetEmptyDirectoryList(), _threadCount, dir => Directory.Delete(dir, true));
+            //ForEachParallel(_scanProcess.GetEmptyDirectoryList(), _threadCount, dir => Directory.Delete(dir, true));
 
             var dirList = _scanProcess.GetDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
 
