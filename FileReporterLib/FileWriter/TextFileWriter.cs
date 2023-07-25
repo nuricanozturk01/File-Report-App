@@ -4,8 +4,10 @@
     {
         private readonly string DELIMITER = "|";
 
-        public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath) 
-            => await Task.Run(() => WriteTextFileCallback(newFileList, oldFileList, targetPath));
+        public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath)
+        {
+            await Task.Run(() => WriteTextFileCallback(newFileList, oldFileList, targetPath));
+        }
 
         /*
          *
@@ -19,7 +21,7 @@
             {
                 if (newFileList != null)
                     File.WriteAllLines(targetPath, newFileList.AsParallel().Select(f => GetFormattedString(f)));
-
+                
                 if (oldFileList != null)
                     File.AppendAllLines(targetPath, oldFileList.AsParallel().Select(f => GetFormattedString(f)));
             }
@@ -32,7 +34,10 @@
          *  String format for writing text file
          * 
          */
-        private string GetFormattedString(FileInfo f) => 
-            $"{f.Name} {DELIMITER} {f.FullName} {DELIMITER} {f.CreationTime} {DELIMITER} {f.LastWriteTime} {DELIMITER} {f.LastAccessTime}\n";
+        private string GetFormattedString(FileInfo f)
+        {
+            return $"{f.Name} {DELIMITER} {f.FullName} {DELIMITER} {f.CreationTime} {DELIMITER} {f.LastWriteTime} {DELIMITER} {f.LastAccessTime}\n";
+        }
+           
     }
 }

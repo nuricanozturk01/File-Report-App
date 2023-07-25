@@ -6,9 +6,10 @@ namespace FileReporterLib.FileWriter
     {
         private XLWorkbook _workBook;
 
-
         public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath)
-            => await WriteExcelFileCallback(targetPath, newFileList, oldFileList);
+        {
+            await WriteExcelFileCallback(targetPath, newFileList, oldFileList);
+        }
 
         /*
          * 
@@ -30,6 +31,7 @@ namespace FileReporterLib.FileWriter
         private void WriteExcel(List<FileInfo> newFileList, List<FileInfo> oldFileList)
         {
             _workBook = new XLWorkbook();
+
             var workSheet = _workBook.AddWorksheet("new_file_report");
             var oldWorkSheet = _workBook.AddWorksheet("old_file_report");
 
@@ -39,7 +41,7 @@ namespace FileReporterLib.FileWriter
             writeListToExcel(newFileList, workSheet, "New");
             writeListToExcel(oldFileList, oldWorkSheet, "Old");
         }
-        
+
         /*
         * 
         * Write the fileList lists to excel
@@ -68,9 +70,10 @@ namespace FileReporterLib.FileWriter
          * Creating and modifying excel cells.
          * 
          */
-        private void CreateCell(IXLCell cell, string cellValue, XLAlignmentHorizontalValues horizontalAlignment,                                   XLAlignmentVerticalValues verticalAlignment)
+        private void CreateCell(IXLCell cell, string cellValue, XLAlignmentHorizontalValues horizontalAlignment, XLAlignmentVerticalValues verticalAlignment)
         {
             var excelCell = cell;
+
             excelCell.Value = cellValue;
             excelCell.Style.Alignment.Horizontal = horizontalAlignment;
             excelCell.Style.Alignment.Vertical = verticalAlignment;
@@ -83,16 +86,21 @@ namespace FileReporterLib.FileWriter
          */
         private void PrepareTitles(IXLWorksheet workSheet)
         {
-            var titleCells = new string[2, 6] { { "A1", "B1", "C1", "D1", "E1", "F1" },
-                { "File Path","File Created Date", "File Modified Date", "File Accessed Date", "File Size (bytes)", "FileStatus" } };
+            var titleCells = new string[2, 6]
+            {
+                { "A1", "B1", "C1", "D1", "E1", "F1" },
+                { "File Path","File Created Date", "File Modified Date", "File Accessed Date", "File Size (bytes)", "FileStatus" }
+            };
 
             for (int i = 0; i < 6; i++)
             {
                 var cell = workSheet.Cell(titleCells[0, i]);
+
                 cell.Value = titleCells[1, i];
 
                 cell.Style.Font.Bold = true;
                 cell.Style.Alignment.WrapText = true;
+
                 cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 cell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
             }

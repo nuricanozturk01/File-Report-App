@@ -425,6 +425,7 @@ namespace FileReporterApp
             // ModifiedDateRadioButton
             // 
             ModifiedDateRadioButton.AutoSize = true;
+            ModifiedDateRadioButton.ForeColor = Color.Black;
             ModifiedDateRadioButton.Location = new Point(189, 31);
             ModifiedDateRadioButton.Margin = new Padding(5);
             ModifiedDateRadioButton.Name = "ModifiedDateRadioButton";

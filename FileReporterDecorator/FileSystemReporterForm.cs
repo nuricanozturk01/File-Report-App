@@ -42,7 +42,12 @@ namespace FileReporterApp
          */
         private void SetErrorLabelText(string msg) => RequireInvoke(() => ErrorLabel.Text = msg);
 
-
+        /*
+         * 
+         * 
+         * Get Selected Date Option 
+         * 
+         */
         private IDateOption GetDateOption() => GetSelectedDateOption(CreatedDateRadioButton.Checked, ModifiedDateRadioButton.Checked);
 
 
@@ -114,13 +119,13 @@ namespace FileReporterApp
         public FileOperation CreateOperationProcess(FileOperation scanProcess, bool moveOption, bool copyOption)
         {
             if (moveOption)
-                return new MoveFileOperation(scanProcess, _threadCount, _destinationPath, 
-                                             _targetPath,_showOnScreenProgressCallbackOverride,_setTimeLabelCallback, 
+                return new MoveFileOperation(scanProcess, _threadCount, _destinationPath,
+                                             _targetPath, _showOnScreenProgressCallbackOverride, _setTimeLabelCallback,
                                              _showMaximizeOnScreenCallback, _errorLabelTextCallback);
 
             else if (copyOption)
-                return new CopyFileOperation(scanProcess, _threadCount, _destinationPath, 
-                                             _targetPath, _showOnScreenProgressCallbackOverride, _showMaximizeOnScreenCallback, 
+                return new CopyFileOperation(scanProcess, _threadCount, _destinationPath,
+                                             _targetPath, _showOnScreenProgressCallbackOverride, _showMaximizeOnScreenCallback,
                                              _setTimeLabelCallback, _errorLabelTextCallback);
 
             return new EmptyOperation();
@@ -347,7 +352,7 @@ namespace FileReporterApp
             TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + elapsedTime;
         }
 
-        /**
+        /*
          * 
          * Modify progress bar and show on screen.
          * 
@@ -380,7 +385,7 @@ namespace FileReporterApp
 
 
 
-        /**
+        /*
          * 
          * RequireInvoke method written for nested if clauses like 
          * if (counter % 10 == 0)

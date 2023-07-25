@@ -74,6 +74,9 @@ namespace FileReporterDecorator.FileOperation.operations
             });
         }
 
+
+
+
         /*
          * 
          * Classify the files (date) and add files to list.
@@ -93,18 +96,29 @@ namespace FileReporterDecorator.FileOperation.operations
         /*
          * 
          * 
+         * Clear all lists on decorator abstract class. 
+         * 
+         */
+        private void ClearAllList()
+        {
+            GetNewFileList().Clear();
+            GetOldFileList().Clear();
+            GetDirectoryList().Clear();
+            GetUnAccessFolderDirectoryList().Clear();
+        }
+
+
+
+        /*
+         * 
+         * 
          * Trigger method for Scan Operation 
          * 
          */
         public async override Task Run()
         {
-            _locker.COUNTER = 0;
-
-            GetNewFileList().Clear();
-            GetOldFileList().Clear();
-            GetDirectoryList().Clear();
-            GetUnAccessFolderDirectoryList().Clear();
-
+            ClearAllList();
+         
             _locker.COUNTER = 0;
 
             var stopWatch = new Stopwatch();
@@ -115,7 +129,7 @@ namespace FileReporterDecorator.FileOperation.operations
 
             stopWatch.Stop();
 
-            _saveDialogUnAccessAuthorizeCallback.Invoke(GetUnAccessFolderDirectoryList().ToList());
+            _saveDialogUnAccessAuthorizeCallback.Invoke(GetUnAccessFolderDirectoryList().ToList()); // Save unauthorize files to selected directory
 
             _showOnScreenCallbackMaximize(_locker.COUNTER, stopWatch.Elapsed);
 

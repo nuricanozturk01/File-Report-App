@@ -19,7 +19,6 @@ namespace FileReporterDecorator.FileOperation
         private bool _emptyFolder;
 
 
-
         public FileOperation()
         {
             _newFileList = new();

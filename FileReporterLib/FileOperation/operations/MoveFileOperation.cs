@@ -16,8 +16,8 @@ namespace FileReporterDecorator.FileOperation.operations
         private readonly Action<string> _setTimeLabelAction;
         private readonly Action<int, TimeSpan> _showOnScreenCallbackMaximize;
         private readonly Action<string> _errorLabelTextCallback;
+        private readonly COUNTER_LOCK _moveCounter = new COUNTER_LOCK();
 
-        private COUNTER_LOCK _moveCounter = new COUNTER_LOCK();
 
         public MoveFileOperation(FileOperation scanProcess, int threadCount, string destinationPath,
                                  string targetPath, Action<int, string> showOnScreenCallback,
@@ -46,8 +46,9 @@ namespace FileReporterDecorator.FileOperation.operations
             _showOnScreenCallback(_moveCounter.COUNTER, file);
 
             ThrowCopyConflictException(
-                () => File.Move(file, file.Replace(_destinationPath, _targetPath), _scanProcess.IsOwerrite()),
-                () => _errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Moved!"));
+                () => File.Move(file, file.Replace(_destinationPath, _targetPath), _scanProcess.IsOwerrite()), // Action parameter
+                () => _errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Moved!") // Handled exception action parameter
+                );
 
             lock (_moveCounter)
                 _moveCounter.COUNTER++;
@@ -64,19 +65,27 @@ namespace FileReporterDecorator.FileOperation.operations
             ForEachParallel(_scanProcess.GetNewFileList(), _threadCount, file => ThrowCopyAndMoveException(() => MoveFile(file), () => { }));
 
             if (_scanProcess.IsEmptyFolder())
-                ForEachParallel(_scanProcess.GetEmptyDirectoryList(), _threadCount,
-                    dir => ThrowCopyAndMoveException(() =>
-                    {
-                        Directory.CreateDirectory(dir.Replace(_destinationPath, _targetPath));
-                        Directory.Delete(dir, true);
-                    }, () => { }));
+                ForEachParallel(_scanProcess.GetEmptyDirectoryList(), _threadCount, dir => ThrowCopyAndMoveException(() => CreateEmptyDirectoryThenDelete(dir), () => { }));
 
-            //ForEachParallel(_scanProcess.GetEmptyDirectoryList(), _threadCount, dir => Directory.Delete(dir, true));
+            var directoryList = _scanProcess.GetDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
 
-            var dirList = _scanProcess.GetDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
-
-            ForEachParallel(dirList, _threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
+            ForEachParallel(directoryList, _threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
         }
+
+
+
+
+        /*
+         * 
+         * Writed For If Empty Folder Option are checked, Create empty directories on target path and delete it. 
+         * 
+         */
+        private void CreateEmptyDirectoryThenDelete(string dir)
+        {
+            Directory.CreateDirectory(dir.Replace(_destinationPath, _targetPath));
+            Directory.Delete(dir, true);
+        }
+
 
 
         /*
