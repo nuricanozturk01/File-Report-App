@@ -6,7 +6,6 @@ namespace FileReporterDecorator.FileOperation
     public abstract class FileOperation
     {
         protected Action<FileInfo, FileInfo> _copyNtfsPermissions;
-
         private readonly ConcurrentBag<string> _newFileList;
         private readonly ConcurrentBag<string> _oldFileList;
         private readonly ConcurrentBag<string> _directoryList;
@@ -28,6 +27,10 @@ namespace FileReporterDecorator.FileOperation
             _emptyDirectoryList = new();
         }
 
+
+
+
+
         public bool IsOwerrite() => _isOverwrite;
         public bool IsEmptyFolder() => _emptyFolder;
         public bool IsCopyNtfsPermissions() => _copyNtfsPermissions != null;
@@ -36,9 +39,13 @@ namespace FileReporterDecorator.FileOperation
         // Get NtfsPermissionAction action. implemented on NtfsSecurityOptionDecorator
         public Action<FileInfo, FileInfo> GetNtfsPermissionAction() => _copyNtfsPermissions;
 
-
         // Get total file count (old and new)
         public int GetTotalFileCount() => _newFileList.Count + _oldFileList.Count;
+
+
+
+
+
 
         // Set NtfsPermissionAction action. implemented on NtfsSecurityOptionDecorator
         public void SetNtfsPermissionAction(Action<FileInfo, FileInfo> action) => _copyNtfsPermissions = action;
@@ -53,6 +60,10 @@ namespace FileReporterDecorator.FileOperation
 
         // Set overwrite file option
         public void SetOverwrite(bool overwrite) => _isOverwrite = overwrite;
+
+
+
+
 
 
 
@@ -78,6 +89,11 @@ namespace FileReporterDecorator.FileOperation
         public void AddUnAccessDirectoryList(string dir) => _unAccessFolderList.Add(dir);
 
 
+
+
+
+
+
         // Get newFileList
         public ConcurrentBag<string> GetNewFileList() => _newFileList;
 
@@ -95,6 +111,11 @@ namespace FileReporterDecorator.FileOperation
 
         // Get unaccess folder directoryList
         public ConcurrentBag<string> GetUnAccessFolderDirectoryList() => _unAccessFolderList;
+
+
+
+
+
 
         public abstract Task Run();
     }

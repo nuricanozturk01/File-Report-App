@@ -6,7 +6,6 @@
      * 
      * Not good implementation but looks like more clear. 
      */
-
     public class ExceptionUtil
     {
         public static void ThrowException(Action action, Action nullReferenceExceptionAction)
@@ -22,6 +21,10 @@
         }
 
 
+
+
+
+
         public static void ThrowCopyAndMoveException(Action action, Action nullReferenceExceptionAction)
         {
             try
@@ -33,6 +36,11 @@
                 nullReferenceExceptionAction.Invoke();
             }
         }
+
+
+
+
+
 
         public static void ThrowCopyConflictException(Action action, Action nullReferenceExceptionAction)
         {
@@ -47,6 +55,12 @@
                 throw new Exception();
             }
         }
+
+
+
+
+
+
         public static void ThrowGeneralException(Action action, Action exceptionAction)
         {
             try
@@ -58,6 +72,8 @@
                 exceptionAction.Invoke();
             }
         }
+
+
 
         private static bool TryInvoke(Action action)
         {
@@ -71,6 +87,11 @@
                 return false;
             }
         }
+
+
+
+
+
         public static void ThrowUnAuthorizedException(Action action, Action exceptionAction)
         {
             try
@@ -83,6 +104,11 @@
                 exceptionAction.Invoke();
             }
         }
+
+
+
+
+
 
         public static void ThrowFileNotFoundException(Action action, Action finallyAction)
         {

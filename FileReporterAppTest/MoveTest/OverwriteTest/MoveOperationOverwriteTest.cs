@@ -14,9 +14,10 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
             _ScannerOperation = moveTestDataCreator._scanOperation;
             _expectedLastAccessSmallerFile = moveTestDataCreator._expectedLastAccessSmallerFile;
             _moveOperation = moveTestDataCreator._moveOperation;
-
-            _expectedLastAccessSmallerFile = 
-                _ScannerOperation.GetNewFileList().Select(f => new FileInfo(f)).FirstOrDefault(f => f.FullName == TEST_DIRECTORY_PATH + "\\count.txt");
+            var testingFilePath = TEST_DIRECTORY_PATH + "\\count.txt";
+            _expectedLastAccessSmallerFile = _ScannerOperation.GetNewFileList()
+                                            .Select(f => new FileInfo(f))
+                                            .FirstOrDefault(f => f.FullName == testingFilePath);
 
             Task.WaitAll(Task.Run(_moveOperation.Run));
 

@@ -53,14 +53,13 @@ namespace FileReporterAppTest.CopyTest
         [Fact(DisplayName = "[2] - Move Are Total Bytes Are Equal")]
         internal async void Equal_TotalBytes_MoveOperation()
         {
-            var t = Task.Run(() => GetTotalByteOnDirectory(MOVE_TEST_DIRECTORY_PATH));
+            var roralByteTask = Task.Run(() => GetTotalByteOnDirectory(MOVE_TEST_DIRECTORY_PATH));
             
-            await Task.WhenAll(t);
+            await Task.WhenAll(roralByteTask);
             
             WaitSecond(3, () => { });
 
-
-            Assert.Equal(_expectedTotalByteOnTestDirectory, t.Result);
+            Assert.Equal(_expectedTotalByteOnTestDirectory, roralByteTask.Result);
         }
     }
 }

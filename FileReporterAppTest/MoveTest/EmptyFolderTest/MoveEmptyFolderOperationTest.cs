@@ -19,6 +19,7 @@ namespace FileReporterAppTest.CopyTest
             _moveOperation = moveTestDataCreator._moveOperation;
 
             _moveOperation.Run();
+
             WaitSecond(3, () => { });
         }
 
@@ -34,7 +35,9 @@ namespace FileReporterAppTest.CopyTest
             var expectedEmptyFolderCount = _scannerOperation.GetEmptyDirectoryList().Count();
 
             var actualEmptyFolderCount = FindEmptyDirectories(MOVE_TEST_DIRECTORY_PATH_EMPTY).Count();
+            
             WaitSecond(3, () => { });
+            
             Assert.Equal(expectedEmptyFolderCount, actualEmptyFolderCount);
         }
 

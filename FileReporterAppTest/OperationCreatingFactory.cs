@@ -41,14 +41,14 @@ namespace FileReporterAppTest
                     DEFAULT_THREAD_COUNT, destinationPath, targetPath,
                     EMPTY_SHOW_ON_SCREEN_CALLBACK,
                     EMPTY_SHOW_TIME_CALLBACK, EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK,
-                    EMPTY_ERROR_LABEL_CALLBACK);
+                    EMPTY_ERROR_LABEL_CALLBACK, EMPTY_SHOW_PROGRESS_BAR_ACTION);
 
             else if (operation == OperationEnum.COPY)
                 return new CopyFileOperation(scanProcess,
                     DEFAULT_THREAD_COUNT, destinationPath, targetPath,
                     EMPTY_SHOW_ON_SCREEN_CALLBACK,
                     EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK, EMPTY_SHOW_TIME_CALLBACK,
-                    EMPTY_ERROR_LABEL_CALLBACK);
+                    EMPTY_ERROR_LABEL_CALLBACK, EMPTY_SHOW_PROGRESS_BAR_ACTION);
 
             return new EmptyOperation();
         }
@@ -62,7 +62,7 @@ namespace FileReporterAppTest
             {
                 var totalFileCount = GetTotalFileCountOnTestDirectory();
 
-                return new ScanDirectoryOperation(new EmptyOperation(), dateTime, totalFileCount,
+                return new ScanDirectoryOperation(new EmptyOperation(), dateTime,
                                                   DEFAULT_THREAD_COUNT, TEST_DIRECTORY_PATH, dateOpt,
                                                   EMPTY_SHOW_ON_SCREEN_CALLBACK, 
                                                   EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK, EMPTY_UNAUTHORIZED_REPORT_ACTION);
@@ -73,7 +73,7 @@ namespace FileReporterAppTest
             {
                 var totalFileCount = GetTotalFileCountOnTestDirectory();
 
-                return new ScanDirectoryOperation(new EmptyOperation(), dateTime, totalFileCount,
+                return new ScanDirectoryOperation(new EmptyOperation(), dateTime,
                                                   DEFAULT_THREAD_COUNT, destination, dateOpt,
                                                   EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK, 
                                                   EMPTY_UNAUTHORIZED_REPORT_ACTION);

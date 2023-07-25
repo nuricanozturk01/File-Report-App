@@ -5,6 +5,8 @@
         private readonly FileOperation _fileOperation;
         private readonly FileOperation _scanProcess;
         
+
+
         /*
          * 
          * decorate the empty folder feature to main operation 
@@ -17,6 +19,10 @@
             _fileOperation = fileOperation;
         }
 
+
+
+
+
         /*
          * 
          *  Trigger Method for Empty Folder Operation.
@@ -24,7 +30,6 @@
         public override async Task Run()
         {
             await _fileOperation.Run();
-
         }
     }
 }

@@ -43,6 +43,12 @@ namespace FileReporterLib.Util
             return hasAccess;
         }
 
+
+
+
+
+
+
         /*
          * 
          * returns the if least one valid, true.

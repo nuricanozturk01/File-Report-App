@@ -16,6 +16,7 @@ namespace FileReporterAppTest.Util
         public readonly static Action<List<string>> EMPTY_UNAUTHORIZED_REPORT_ACTION = list => { };
         public readonly static Action<int, TimeSpan> EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK = (num, timeSpan) => { };
         public readonly static Action<string> EMPTY_ERROR_LABEL_CALLBACK = str => { };
+        public readonly static Action EMPTY_SHOW_PROGRESS_BAR_ACTION = () => { };
 
 
         public static string PATH_PREFIX = @"C:\Users\hp\Desktop\";

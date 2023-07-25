@@ -13,14 +13,22 @@ namespace FileReporterDecorator.FileOperation.operations
         private readonly Action<string> _setTimeLabelAction;
         private readonly Action<string> _errorLabelTextCallback;
         private readonly Action<int, TimeSpan> _showOnScreenCallbackMaximize;
+        private readonly Action _StartOperationCallback;
         private readonly FileOperation _scanProcess;
 
         private COUNTER_LOCK _newLocker = new COUNTER_LOCK();
 
+
+
+
+
+
+
         public CopyFileOperation(FileOperation scanProcess, int threadCount, string destinationPath, string targetPath,
             Action<int, string> showOnScreenCallback, Action<int, TimeSpan> showMaxProgressBar,
-            Action<string> setTimeLabelAction, Action<string> errorLabelTextCallback)
+            Action<string> setTimeLabelAction, Action<string> errorLabelTextCallback, Action StartOperationCallback)
         {
+            _StartOperationCallback = StartOperationCallback;
             _showOnScreenCallbackMaximize = showMaxProgressBar;
             _scanProcess = scanProcess;
             _threadCount = threadCount;
@@ -30,6 +38,14 @@ namespace FileReporterDecorator.FileOperation.operations
             _setTimeLabelAction = setTimeLabelAction;
             _errorLabelTextCallback = errorLabelTextCallback;
         }
+
+
+
+
+
+
+
+
 
         /*
          *
@@ -48,6 +64,13 @@ namespace FileReporterDecorator.FileOperation.operations
                 () => CopyFiles(file),
                 () => _errorLabelTextCallback.Invoke("Copied files if necessary permissions valid!")));
         }
+
+
+
+
+
+
+
 
         /*
          *
@@ -73,6 +96,11 @@ namespace FileReporterDecorator.FileOperation.operations
         }
 
 
+
+
+
+
+
         /*
          *
          * Trigger method for CopyFileOperation.
@@ -84,6 +112,8 @@ namespace FileReporterDecorator.FileOperation.operations
 
             var stopWatch = new Stopwatch();
 
+            _StartOperationCallback.Invoke();
+            
             stopWatch.Start();
 
             await Task.Run(() => CopyFileCallback());

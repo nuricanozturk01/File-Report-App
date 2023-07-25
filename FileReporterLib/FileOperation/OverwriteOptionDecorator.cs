@@ -2,8 +2,11 @@
 {
     public class OverwriteOptionDecorator : FileOperationDecorator
     {
+
         private readonly FileOperation _fileOperation;
         private readonly FileOperation scanProcess;
+
+
 
        /*
        * 
@@ -17,6 +20,11 @@
         }
 
 
+
+
+
+
+
         /*
          * 
          * 
@@ -28,7 +36,6 @@
         {
             scanProcess.SetOverwrite(true);
             await _fileOperation.Run();
-
         }
     }
 }

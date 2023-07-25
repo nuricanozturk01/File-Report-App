@@ -5,9 +5,7 @@ namespace FileReporterDecorator.FileOperation.operations
 {
     public class ScanDirectoryOperation : FileOperation
     {
-
         private readonly string _destinationPath;
-        private readonly int _totalFileCount;
         private readonly int _threadCount;
         private readonly FileOperation _fileOperation;
         private readonly Action<int, string> _showOnScreenCallback;
@@ -16,9 +14,11 @@ namespace FileReporterDecorator.FileOperation.operations
         private readonly IDateOption _dateOption;
         private readonly DateTime _dateTime;
 
+
+
+
         public ScanDirectoryOperation(
-            FileOperation fileOperation, DateTime dateTime,
-            int totalFileCount, int threadCount,
+            FileOperation fileOperation, DateTime dateTime, int threadCount,
             string targetPath, IDateOption dateOption,
             Action<int, string> showOnScreenCallback,
             Action<int, TimeSpan> showOnScreenCallbackMaximize,
@@ -26,7 +26,6 @@ namespace FileReporterDecorator.FileOperation.operations
         {
             _saveDialogUnAccessAuthorizeCallback = saveDialogUnAccessAuthorizeCallback;
             _dateTime = dateTime;
-            _totalFileCount = totalFileCount;
             _threadCount = threadCount;
             _showOnScreenCallback = showOnScreenCallback;
             _destinationPath = targetPath;
@@ -34,6 +33,11 @@ namespace FileReporterDecorator.FileOperation.operations
             _dateOption = dateOption;
             _fileOperation = fileOperation;
         }
+
+
+
+
+
 
 
         /*
@@ -62,7 +66,7 @@ namespace FileReporterDecorator.FileOperation.operations
 
                     else AddEmptyDirectoryList(name.FullName);
 
-                    if (String.IsNullOrWhiteSpace(name.Name) || name.Name is null)
+                    if (string.IsNullOrWhiteSpace(name.Name) || name.Name is null)
                         return;
 
                     ScanFileSystemAndClassifyFiles(subDir);
@@ -73,6 +77,11 @@ namespace FileReporterDecorator.FileOperation.operations
                 }
             });
         }
+
+
+
+
+
 
 
 
@@ -93,6 +102,16 @@ namespace FileReporterDecorator.FileOperation.operations
             else AddOldFileList(file);
         }
 
+
+
+
+
+
+
+
+
+
+
         /*
          * 
          * 
@@ -106,6 +125,12 @@ namespace FileReporterDecorator.FileOperation.operations
             GetDirectoryList().Clear();
             GetUnAccessFolderDirectoryList().Clear();
         }
+
+
+
+
+
+
 
 
 
@@ -129,9 +154,9 @@ namespace FileReporterDecorator.FileOperation.operations
 
             stopWatch.Stop();
 
-            _saveDialogUnAccessAuthorizeCallback.Invoke(GetUnAccessFolderDirectoryList().ToList()); // Save unauthorize files to selected directory
-
             _showOnScreenCallbackMaximize(_locker.COUNTER, stopWatch.Elapsed);
+
+            _saveDialogUnAccessAuthorizeCallback.Invoke(GetUnAccessFolderDirectoryList().ToList()); // Save unauthorize files to selected directory
 
             if (_fileOperation != null && _fileOperation.GetType().Name != "EmptyOperation")
                 await _fileOperation.Run();

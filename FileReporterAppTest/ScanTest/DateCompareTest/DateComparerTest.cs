@@ -4,7 +4,7 @@ namespace FileReporterAppTest.ScanTest
     public class DateComparerTest : IClassFixture<DateComparerDataCreator>
     {
         private readonly FileOperation _scanOperation;
-        private DateTime dateTime;
+        private readonly DateTime dateTime;
 
         private readonly List<string> _oldFileList;
         private readonly List<string> _newFileList;

@@ -16,6 +16,13 @@ namespace FileReporterDecorator.FileOperation.operations
             _scanProcess = scanProcess;
         }
 
+
+
+
+
+
+
+
         /*
          * 
          *  Trigger method for export report opearation. This method call the WriteFile method on FileWRiter singleton class.

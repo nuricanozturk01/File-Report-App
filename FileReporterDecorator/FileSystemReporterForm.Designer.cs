@@ -109,7 +109,7 @@ namespace FileReporterApp
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1064, 833);
+            panel1.Size = new Size(1064, 775);
             panel1.TabIndex = 0;
             // 
             // label4
@@ -124,7 +124,7 @@ namespace FileReporterApp
             // ErrorLabel
             // 
             ErrorLabel.AutoSize = true;
-            ErrorLabel.Location = new Point(27, 789);
+            ErrorLabel.Location = new Point(27, 730);
             ErrorLabel.MinimumSize = new Size(501, 0);
             ErrorLabel.Name = "ErrorLabel";
             ErrorLabel.Size = new Size(501, 20);
@@ -144,7 +144,7 @@ namespace FileReporterApp
             // TimeLabel
             // 
             TimeLabel.AutoSize = true;
-            TimeLabel.Location = new Point(27, 744);
+            TimeLabel.Location = new Point(27, 699);
             TimeLabel.MinimumSize = new Size(501, 0);
             TimeLabel.Name = "TimeLabel";
             TimeLabel.Size = new Size(501, 20);
@@ -154,7 +154,7 @@ namespace FileReporterApp
             // ScannigLabel
             // 
             ScannigLabel.AutoSize = true;
-            ScannigLabel.Location = new Point(27, 691);
+            ScannigLabel.Location = new Point(27, 669);
             ScannigLabel.MinimumSize = new Size(1000, 0);
             ScannigLabel.Name = "ScannigLabel";
             ScannigLabel.Size = new Size(1000, 20);
@@ -164,7 +164,7 @@ namespace FileReporterApp
             // ScannedSizeLabel
             // 
             ScannedSizeLabel.AutoSize = true;
-            ScannedSizeLabel.Location = new Point(27, 645);
+            ScannedSizeLabel.Location = new Point(27, 632);
             ScannedSizeLabel.MinimumSize = new Size(501, 0);
             ScannedSizeLabel.Name = "ScannedSizeLabel";
             ScannedSizeLabel.Size = new Size(501, 20);
@@ -480,7 +480,7 @@ namespace FileReporterApp
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(1064, 833);
+            ClientSize = new Size(1064, 775);
             Controls.Add(panel1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(5);

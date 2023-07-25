@@ -18,7 +18,15 @@ namespace FileReporterLib.FileWriter
             _excelFileWriter = new ExcelFileWriter();
         }
 
+
+
+
+
         public static FileWriter GetInstance() => _fileWriter is null ? new FileWriter() : _fileWriter;
+
+
+
+
 
         /*
          * 

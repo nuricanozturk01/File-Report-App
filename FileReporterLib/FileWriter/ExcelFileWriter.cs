@@ -11,6 +11,10 @@ namespace FileReporterLib.FileWriter
             await WriteExcelFileCallback(targetPath, newFileList, oldFileList);
         }
 
+
+
+
+
         /*
          * 
          * Callback for Write Method. 
@@ -20,6 +24,10 @@ namespace FileReporterLib.FileWriter
         {
             ThrowFileNotFoundException(() => WriteExcel(newFileList, oldFileList), () => _workBook.SaveAs(targetPath));
         }
+
+
+
+
 
 
 
@@ -41,6 +49,11 @@ namespace FileReporterLib.FileWriter
             writeListToExcel(newFileList, workSheet, "New");
             writeListToExcel(oldFileList, oldWorkSheet, "Old");
         }
+
+
+
+
+
 
         /*
         * 
@@ -65,6 +78,12 @@ namespace FileReporterLib.FileWriter
             }
         }
 
+
+
+
+
+
+
         /*
          * 
          * Creating and modifying excel cells.
@@ -78,6 +97,12 @@ namespace FileReporterLib.FileWriter
             excelCell.Style.Alignment.Horizontal = horizontalAlignment;
             excelCell.Style.Alignment.Vertical = verticalAlignment;
         }
+
+
+
+
+
+
 
         /*
          * 

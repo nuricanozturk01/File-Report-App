@@ -8,7 +8,9 @@ namespace FileReporterAppTest.ScanTest
         public ScanOperationTest(ScanTestDataCreator scanTestDataCreator)
         {
             _scanOperation = scanTestDataCreator._fileOperation;
+            
             _scanOperation.Run(); // scan operation start
+
             WaitSecond(1, () => { });
         }
 
@@ -22,6 +24,7 @@ namespace FileReporterAppTest.ScanTest
         public void Equal_File_Counts_Are_Equal_Before_And_After()
         {
             WaitSecond(2, () => { });
+            
             Assert.Equal(GetTotalFileCountOnTestDirectory(), _scanOperation.GetTotalFileCount());
         }
     }

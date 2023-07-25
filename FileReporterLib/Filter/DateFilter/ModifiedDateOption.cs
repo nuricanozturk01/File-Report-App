@@ -9,6 +9,10 @@
          */
         public bool SetDate(FileInfo srcDate, DateTime date) => srcDate.LastWriteTime.Date >= date.Date;
 
+
+
+
+
         /*
          * 
          * Compare the folder LastWriteTime dates

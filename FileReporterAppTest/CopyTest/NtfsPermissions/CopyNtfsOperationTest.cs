@@ -15,6 +15,7 @@ namespace FileReporterAppTest.CopyTest
 
             _scannerOperation = copyTestDataCreator._scanOperation;
             _copyOperation = copyTestDataCreator._copyOperation;
+
             _copyOperation.Run();
         }
 

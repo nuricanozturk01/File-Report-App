@@ -4,10 +4,20 @@
     {
         private readonly string DELIMITER = "|";
 
+
+
+
+
         public async void Write(List<FileInfo> newFileList, List<FileInfo> oldFileList, string targetPath)
         {
             await Task.Run(() => WriteTextFileCallback(newFileList, oldFileList, targetPath));
         }
+
+
+
+
+
+
 
         /*
          *
@@ -27,6 +37,15 @@
             }
             catch { }
         }
+
+
+
+
+
+
+
+
+
 
 
         /*

@@ -42,10 +42,11 @@ namespace FileReporterAppTest.CopyTest
          * 
          */
         [Fact(DisplayName = "[2] Are Equal Empty Folder Names")]
-        public void Are_Equal_Empty_Folder_Names()
+        public void Equal_EmptyFolderNames_AfterCopy()
         {
             var expectedEmptyFileList = _scannerOperation.GetEmptyDirectoryList()
-                .Select(i => Regex.Match(i, @"[^\\]+$").Value).ToList();
+                                        .Select(i => Regex.Match(i, @"[^\\]+$").Value)
+                                        .ToList();
 
             var actualEmptyFileList = FindEmptyDirectories(TEST_DIRECTORY_PATH_EMPTY)
                                    .Select(i => Regex.Match(i, @"[^\\]+$").Value)

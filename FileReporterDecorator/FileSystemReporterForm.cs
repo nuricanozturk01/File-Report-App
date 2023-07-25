@@ -15,12 +15,17 @@ namespace FileReporterApp
         private readonly Action<string> _setTimeLabelCallback;
         private readonly Action<string> _errorLabelTextCallback;
         private readonly Action<List<string>> _saveDialogUnAccessAuthorizeCallback;
+        private readonly Action _StartOperationCallback;
 
         private int _threadCount;
         private int _totalFileCount;
         private string _destinationPath;
         private string? _targetPath;
         private IDateOption _dateOption;
+
+
+
+
 
         public FileSystemReporterForm()
         {
@@ -30,9 +35,16 @@ namespace FileReporterApp
             _showOnScreenProgressCallback = (counter, fileCount, file) => ShowOnScreenProgress(counter, fileCount, file);
             _showOnScreenProgressCallbackOverride = (counter, file) => ShowOnScreenProgress(counter, file);
             _showMaximizeOnScreenCallback = (counter, elapsedTime) => ShowMaximizeOnScreen(counter, elapsedTime);
+            _StartOperationCallback = StartOperation;
             _setTimeLabelCallback = (text) => SetTimeLabel(text);
             _errorLabelTextCallback = str => SetErrorLabelText(str);
         }
+
+
+
+
+
+
 
         /*
          * 
@@ -41,6 +53,11 @@ namespace FileReporterApp
          * 
          */
         private void SetErrorLabelText(string msg) => RequireInvoke(() => ErrorLabel.Text = msg);
+
+
+
+
+
 
         /*
          * 
@@ -51,12 +68,22 @@ namespace FileReporterApp
         private IDateOption GetDateOption() => GetSelectedDateOption(CreatedDateRadioButton.Checked, ModifiedDateRadioButton.Checked);
 
 
+
+
+
+
         /*
          * 
          * Set progress bar to minimum value. Written for callback
          *  
          */
         private void MinimumProgressBar() => ScanProgressBar.Value = ScanProgressBar.Minimum;
+
+
+
+
+
+
 
         /*
          * 
@@ -65,6 +92,11 @@ namespace FileReporterApp
          */
         private void SetTimeLabel(string str) => TimeLabel.Text = str;
 
+
+
+
+
+
         /*
          * 
          * Create Scan Process 
@@ -72,7 +104,7 @@ namespace FileReporterApp
          */
         public FileOperation CreateScanProcess()
         {
-            return new ScanDirectoryOperation(null, DateTimePicker.Value, _totalFileCount, _threadCount,
+            return new ScanDirectoryOperation(null, DateTimePicker.Value, _threadCount,
                  _destinationPath, _dateOption, _showOnScreenProgressCallbackOverride, _showMaximizeOnScreenCallback, _saveDialogUnAccessAuthorizeCallback);
         }
 
@@ -86,9 +118,13 @@ namespace FileReporterApp
          */
         public FileOperation CreateScanProcessWithoutSaveUnaccessFolders()
         {
-            return new ScanDirectoryOperation(null, DateTimePicker.Value, _totalFileCount, _threadCount,
+            return new ScanDirectoryOperation(new EmptyOperation(), DateTimePicker.Value, _threadCount,
                  _destinationPath, _dateOption, _showOnScreenProgressCallbackOverride, _showMaximizeOnScreenCallback, empty => { });
         }
+
+
+
+
 
 
 
@@ -111,6 +147,15 @@ namespace FileReporterApp
 
             return process;
         }
+
+
+
+
+
+
+
+
+
         /*
          * 
          * Create Operation Process like (Move or Copy). If take any error, return the empty Operation 
@@ -121,15 +166,24 @@ namespace FileReporterApp
             if (moveOption)
                 return new MoveFileOperation(scanProcess, _threadCount, _destinationPath,
                                              _targetPath, _showOnScreenProgressCallbackOverride, _setTimeLabelCallback,
-                                             _showMaximizeOnScreenCallback, _errorLabelTextCallback);
+                                             _showMaximizeOnScreenCallback, _errorLabelTextCallback, _StartOperationCallback);
 
             else if (copyOption)
                 return new CopyFileOperation(scanProcess, _threadCount, _destinationPath,
                                              _targetPath, _showOnScreenProgressCallbackOverride, _showMaximizeOnScreenCallback,
-                                             _setTimeLabelCallback, _errorLabelTextCallback);
+                                             _setTimeLabelCallback, _errorLabelTextCallback, _StartOperationCallback);
 
             return new EmptyOperation();
         }
+
+
+
+
+
+
+
+
+
         /*
          * 
          * Initialize the input values and validate it. 
@@ -150,6 +204,11 @@ namespace FileReporterApp
         }
 
 
+
+
+
+
+
         /*
          * 
          * Run this method when user click on the Run Button. This method create the processes. trigger method. 
@@ -162,8 +221,6 @@ namespace FileReporterApp
 
             FileOperation scanProcess = ScanRadioButton.Checked ? CreateScanProcess() : CreateScanProcessWithoutSaveUnaccessFolders();
 
-            ScanProgressBar.Style = ProgressBarStyle.Marquee;
-            ScanProgressBar.MarqueeAnimationSpeed = 30;
 
             await scanProcess.Run();
 
@@ -175,6 +232,21 @@ namespace FileReporterApp
 
             ScanProgressBar.Value = ScanProgressBar.Maximum;
         }
+
+
+
+        /*
+         * 
+         * 
+         * Start the progress bar. 
+         * 
+         */
+        private void StartOperation()
+        {
+            ScanProgressBar.Style = ProgressBarStyle.Marquee;
+            ScanProgressBar.MarqueeAnimationSpeed = 30;
+        }
+
 
 
         /*
@@ -200,6 +272,13 @@ namespace FileReporterApp
                 ErrorLabel.Text = "Report is ready!";
             }
         }
+
+
+
+
+
+
+
 
 
         /*
@@ -250,6 +329,14 @@ namespace FileReporterApp
             ThrowException(ReportButtonCallback, () => MessageBox.Show("Please select the file!"));
         }
 
+
+
+
+
+
+
+
+
         /*
          * 
          *  Change and reset the other options on GUI when user select the Move Radio Button
@@ -262,6 +349,14 @@ namespace FileReporterApp
             OverwriteChoiceBox.Enabled = true;
             NtfsChoiceBox.Enabled = false;
         }
+
+
+
+
+
+
+
+
 
         /**
          * 
@@ -277,6 +372,15 @@ namespace FileReporterApp
             NtfsChoiceBox.Enabled = true;
         }
 
+
+
+
+
+
+
+
+
+
         /*
         * 
         * This method written for selecting destination path
@@ -289,6 +393,14 @@ namespace FileReporterApp
             if (folderBrowser.ShowDialog() == DialogResult.OK)
                 PathTextBox.Text = folderBrowser.SelectedPath;
         }
+
+
+
+
+
+
+
+
         /*
          * This method for Copy and Move operations. You can select the Target Path.  
          */
@@ -300,9 +412,17 @@ namespace FileReporterApp
                 TargetPathTextBox.Text = folderBrowser.SelectedPath;
         }
 
+
+
+
+
+
+
+
+
         /*
          * 
-         * Cleaning inputs 
+         * Cleaning inputs and set thread count is 1. 
          * 
          */
         private void CleanButton_Click(object sender, EventArgs e)
@@ -319,7 +439,17 @@ namespace FileReporterApp
             ScannigLabel.ResetText();
             TimeLabel.ResetText();
             ScannedSizeLabel.ResetText();
+            ErrorLabel.ResetText();
         }
+
+
+
+
+
+
+
+
+
 
         /*
          * 
@@ -337,6 +467,15 @@ namespace FileReporterApp
             NtfsChoiceBox.Enabled = false;
         }
 
+
+
+
+
+
+
+
+
+
         /*
          * 
          * 
@@ -352,6 +491,16 @@ namespace FileReporterApp
             TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + elapsedTime;
         }
 
+
+
+
+
+
+
+
+
+
+
         /*
          * 
          * Modify progress bar and show on screen.
@@ -365,15 +514,27 @@ namespace FileReporterApp
             {
                 RequireInvoke(() =>
                 {
-
                     ScannedSizeLabel.Text = counter + " items were scanned";
-
                     ScannigLabel.Text = file;
-
                 });
             }
         }
 
+
+
+
+
+
+
+
+
+        /*
+         * 
+         * Modify progress bar and show on screen without totalFile parameter.
+         * 
+         * Used with callback
+         * 
+         */
         private void ShowOnScreenProgress(int counter, string file)
         {
             RequireInvoke(() =>
@@ -382,6 +543,17 @@ namespace FileReporterApp
                 ScannigLabel.Text = file;
             });
         }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

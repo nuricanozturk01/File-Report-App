@@ -14,6 +14,9 @@ namespace FileReporterDecorator.Util
             Parallel.ForEach(fileList, new ParallelOptions { MaxDegreeOfParallelism = threadCount }, file => action.Invoke(file));
         }
 
+
+
+
         public static void ForEachParallel(List<DirectoryInfo> fileList, int threadCount, Action<DirectoryInfo> action)
         {
             Parallel.ForEach(fileList, new ParallelOptions { MaxDegreeOfParallelism = threadCount }, file => action.Invoke(file));

@@ -9,6 +9,9 @@
          */
         public bool SetDate(FileInfo srcDate, DateTime date) => srcDate.LastAccessTime.Date >= date.Date;
 
+
+
+
         /*
          * 
          * Compare the folder LastAccessTime dates

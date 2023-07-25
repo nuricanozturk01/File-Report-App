@@ -19,6 +19,7 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
 
             // Defined other copy operation (Without any decorator) for test overwrite
             _copyOperation = CopyBuilder.Create_Copy_Operation(_ScannerOperation, TEST_DIRECTORY_OVERWRITE_PATH);
+
             _copyOperation.Run(); // copy operation run (first copy)
         }
 

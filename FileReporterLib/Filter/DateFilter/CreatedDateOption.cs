@@ -9,6 +9,11 @@
          */
         public bool SetDate(FileInfo srcDate, DateTime date) => srcDate.CreationTime.Date >= date.Date;
 
+
+
+
+
+
         /*
          * 
          * Compare the folder Creation dates  

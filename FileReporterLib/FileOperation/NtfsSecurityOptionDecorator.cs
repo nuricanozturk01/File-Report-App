@@ -5,6 +5,9 @@
         private readonly FileOperation _fileOperation;
         private readonly FileOperation scanProcess;
 
+
+
+
         public NtfsSecurityOptionDecorator(FileOperation fileOperation, FileOperation scanProcess)
         {
 
@@ -13,6 +16,12 @@
             scanProcess.SetNtfsPermissions(true);
             scanProcess.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
         }
+
+
+
+
+
+
         /*
          * 
          * Set  and move NTFS permissions destination file to target file 
@@ -24,6 +33,11 @@
             security.SetAccessRuleProtection(true, true);
             targetFile.SetAccessControl(security);
         }
+
+
+
+
+
 
         /*
          * 
