@@ -43,6 +43,7 @@ namespace FileReporterAppTest.CopyTest.OverwriteFile
             if (_expectedLastAccessSmallerFile != null)
             {
                 Assert.True(actualBiggerLastAccessDate.LastAccessTime > _expectedLastAccessSmallerFile.LastAccessTime);
+                Assert.True(_expectedLastAccessSmallerFile.LastAccessTime < actualBiggerLastAccessDate.LastAccessTime);
             }
             
         }

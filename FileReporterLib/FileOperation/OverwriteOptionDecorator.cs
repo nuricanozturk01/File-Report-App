@@ -26,8 +26,6 @@
          */
         public override async Task Run()
         {
-            _fileOperation.SetOverwrite(true);
-            SetOverwrite(true);
             scanProcess.SetOverwrite(true);
             await _fileOperation.Run();
 

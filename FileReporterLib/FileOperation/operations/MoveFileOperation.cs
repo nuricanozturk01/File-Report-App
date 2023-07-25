@@ -1,8 +1,5 @@
 ﻿using FileReporterDecorator.Util;
-using FileReporterLib.Util;
-using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Security.AccessControl;
 using static FileReporterDecorator.Util.ExceptionUtil;
 using static FileReporterDecorator.Util.ParallelWrapper;
 
@@ -11,32 +8,30 @@ namespace FileReporterDecorator.FileOperation.operations
     public class MoveFileOperation : FileOperation
     {
         private readonly FileOperation _scanProcess;
-        private readonly int totalFileCount;
-        private readonly int threadCount;
-        private readonly string destinationPath;
-        private readonly string targetPath;
-        private readonly Action<int, int, string> showOnScreenCallback;
-        private readonly Action minimumProgressBar;
-        private readonly Action<string> setTimeLabelAction;
 
-        private Action<int, TimeSpan> _showOnScreenCallbackMaximize;
-        private readonly Action<string> errorLabelTextCallback;
+        private readonly int _threadCount;
+        private readonly string _destinationPath;
+        private readonly string _targetPath;
+        private readonly Action<int, string> _showOnScreenCallback;
+        private readonly Action<string> _setTimeLabelAction;
+        private readonly Action<int, TimeSpan> _showOnScreenCallbackMaximize;
+        private readonly Action<string> _errorLabelTextCallback;
+
         private COUNTER_LOCK _moveCounter = new COUNTER_LOCK();
 
-        public MoveFileOperation(FileOperation scanProcess, int totalFileCount, int threadCount, string destinationPath,
-            string targetPath, Action<int, int, string> showOnScreenCallback, Action minimumProgressBar,
-            Action<string> setTimeLabelAction, Action<int, TimeSpan> showMaxProgressBar, Action<string> _errorLabelTextCallback)
+        public MoveFileOperation(FileOperation scanProcess, int threadCount, string destinationPath,
+                                 string targetPath, Action<int, string> showOnScreenCallback,
+                                Action<string> setTimeLabelAction, Action<int, TimeSpan> showMaxProgressBar,
+                                Action<string> errorLabelTextCallback)
         {
             _showOnScreenCallbackMaximize = showMaxProgressBar;
-            errorLabelTextCallback = _errorLabelTextCallback;
+            _errorLabelTextCallback = errorLabelTextCallback;
             _scanProcess = scanProcess;
-            this.totalFileCount = totalFileCount;
-            this.threadCount = threadCount;
-            this.destinationPath = destinationPath;
-            this.targetPath = targetPath;
-            this.showOnScreenCallback = showOnScreenCallback;
-            this.minimumProgressBar = minimumProgressBar;
-            this.setTimeLabelAction = setTimeLabelAction;
+            _threadCount = threadCount;
+            _destinationPath = destinationPath;
+            _targetPath = targetPath;
+            _showOnScreenCallback = showOnScreenCallback;
+            _setTimeLabelAction = setTimeLabelAction;
         }
 
 
@@ -48,11 +43,11 @@ namespace FileReporterDecorator.FileOperation.operations
          */
         private void MoveFile(string file)
         {
-            showOnScreenCallback(_moveCounter.COUNTER, totalFileCount, file);
+            _showOnScreenCallback(_moveCounter.COUNTER, file);
 
             ThrowCopyConflictException(
-                () => File.Move(file, file.Replace(destinationPath, targetPath), _scanProcess.IsOwerrite()),
-                () => errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Moved!"));
+                () => File.Move(file, file.Replace(_destinationPath, _targetPath), _scanProcess.IsOwerrite()),
+                () => _errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Moved!"));
 
             lock (_moveCounter)
                 _moveCounter.COUNTER++;
@@ -66,19 +61,21 @@ namespace FileReporterDecorator.FileOperation.operations
          */
         private void MoveFileCallback()
         {
-            ForEachParallel(_scanProcess.GetNewFileList(), threadCount, file => ThrowCopyAndMoveException(() => MoveFile(file), () => { }));
+            ForEachParallel(_scanProcess.GetNewFileList(), _threadCount, file => ThrowCopyAndMoveException(() => MoveFile(file), () => { }));
 
             if (_scanProcess.IsEmptyFolder())
-                ForEachParallel(_scanProcess.GetEmptyDirectoryList(), threadCount,
+                ForEachParallel(_scanProcess.GetEmptyDirectoryList(), _threadCount,
                     dir => ThrowCopyAndMoveException(() =>
                     {
-                        Directory.CreateDirectory(dir.Replace(destinationPath, targetPath));
+                        Directory.CreateDirectory(dir.Replace(_destinationPath, _targetPath));
                         Directory.Delete(dir, true);
                     }, () => { }));
 
-            ForEachParallel(_scanProcess.GetEmptyDirectoryList(), threadCount, dir => Directory.Delete(dir, true));
+            ForEachParallel(_scanProcess.GetEmptyDirectoryList(), _threadCount, dir => Directory.Delete(dir, true));
+
             var dirList = _scanProcess.GetDirectoryList().Select(d => new DirectoryInfo(d)).ToList();
-            ForEachParallel(dirList, threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
+
+            ForEachParallel(dirList, _threadCount, dir => ThrowCopyAndMoveException(() => RemoveDirectory(dir), () => { }));
         }
 
 
@@ -100,9 +97,7 @@ namespace FileReporterDecorator.FileOperation.operations
          */
         public override async Task Run()
         {
-            _scanProcess.GetDirectoryList().ToList().ForEach(d => Directory.CreateDirectory(d.Replace(destinationPath, targetPath)));
-
-            minimumProgressBar.Invoke();
+            _scanProcess.GetDirectoryList().ToList().ForEach(d => Directory.CreateDirectory(d.Replace(_destinationPath, _targetPath)));
 
             var stopWatch = new Stopwatch();
 
@@ -114,7 +109,7 @@ namespace FileReporterDecorator.FileOperation.operations
 
             _showOnScreenCallbackMaximize(_moveCounter.COUNTER, stopWatch.Elapsed);
 
-            setTimeLabelAction.Invoke("Copy Operation was completed! Total Elapsed Time: " + stopWatch.Elapsed);
+            _setTimeLabelAction.Invoke("Copy Operation was completed! Total Elapsed Time: " + stopWatch.Elapsed);
         }
     }
 }

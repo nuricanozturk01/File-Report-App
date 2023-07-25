@@ -1,44 +1,34 @@
 ﻿using FileReporterDecorator.Util;
-using FileReporterLib.Util;
 using System.Diagnostics;
-using System.Security.AccessControl;
 using static FileReporterDecorator.Util.ExceptionUtil;
 using static FileReporterDecorator.Util.ParallelWrapper;
 namespace FileReporterDecorator.FileOperation.operations
 {
     public class CopyFileOperation : FileOperation
     {
-        private readonly int totalFileCount;
-        private readonly int threadCount;
-        private readonly string destinationPath;
-        private readonly string targetPath;
-        private readonly Action<int, int, string> showOnScreenCallback;
-        private readonly Action minimumProgressBar;
-        private readonly Action<string> setTimeLabelAction;
-        private readonly Action<string> errorLabelTextCallback;
+        private readonly int _threadCount;
+        private readonly string _destinationPath;
+        private readonly string _targetPath;
+        private readonly Action<int, string> _showOnScreenCallback;
+        private readonly Action<string> _setTimeLabelAction;
+        private readonly Action<string> _errorLabelTextCallback;
         private readonly Action<int, TimeSpan> _showOnScreenCallbackMaximize;
+        private readonly FileOperation _scanProcess;
 
-        private readonly FileOperation scanProcess;
         private COUNTER_LOCK _newLocker = new COUNTER_LOCK();
-        
-        public CopyFileOperation(FileOperation scanProcess, int totalFileCount, int threadCount,
-            string destinationPath, string targetPath,
-            Action<int, int, string> showOnScreenCallback,
-            Action minimumProgressBar,
-            Action<int, TimeSpan> showMaxProgressBar,
-            Action<string> setTimeLabelAction,
-            Action<string> errorLabelTextCallback)
+
+        public CopyFileOperation(FileOperation scanProcess, int threadCount, string destinationPath, string targetPath,
+            Action<int, string> showOnScreenCallback, Action<int, TimeSpan> showMaxProgressBar,
+            Action<string> setTimeLabelAction, Action<string> errorLabelTextCallback)
         {
             _showOnScreenCallbackMaximize = showMaxProgressBar;
-            this.scanProcess = scanProcess;
-            this.totalFileCount = totalFileCount;
-            this.threadCount = threadCount;
-            this.destinationPath = destinationPath;
-            this.targetPath = targetPath;
-            this.showOnScreenCallback = showOnScreenCallback;
-            this.minimumProgressBar = minimumProgressBar;
-            this.setTimeLabelAction = setTimeLabelAction;
-            this.errorLabelTextCallback = errorLabelTextCallback;
+            _scanProcess = scanProcess;
+            _threadCount = threadCount;
+            _destinationPath = destinationPath;
+            _targetPath = targetPath;
+            _showOnScreenCallback = showOnScreenCallback;
+            _setTimeLabelAction = setTimeLabelAction;
+            _errorLabelTextCallback = errorLabelTextCallback;
         }
 
         /*
@@ -48,15 +38,15 @@ namespace FileReporterDecorator.FileOperation.operations
          */
         private void CopyFileCallback()
         {
-            if (scanProcess.IsEmptyFolder())
-                ForEachParallel(scanProcess.GetEmptyDirectoryList(), threadCount,
-                    dir => Directory.CreateDirectory(dir.Replace(destinationPath, targetPath)));
+            if (_scanProcess.IsEmptyFolder())
+                ForEachParallel(_scanProcess.GetEmptyDirectoryList(), _threadCount,
+                    dir => Directory.CreateDirectory(dir.Replace(_destinationPath, _targetPath)));
 
-         
-            ForEachParallel(scanProcess.GetNewFileList(), threadCount, 
+
+            ForEachParallel(_scanProcess.GetNewFileList(), _threadCount,
                 file => ThrowUnAuthorizedException(
-                () => CopyFiles(file), 
-                () => errorLabelTextCallback.Invoke("Copied files if necessary permissions valid!")));
+                () => CopyFiles(file),
+                () => _errorLabelTextCallback.Invoke("Copied files if necessary permissions valid!")));
         }
 
         /*
@@ -69,17 +59,17 @@ namespace FileReporterDecorator.FileOperation.operations
             lock (_newLocker)
                 _newLocker.COUNTER++;
 
-            showOnScreenCallback(_newLocker.COUNTER, totalFileCount, file);
+            _showOnScreenCallback(_newLocker.COUNTER, file);
 
-            var targetFile = file.Replace(destinationPath, targetPath);
+            var targetFile = file.Replace(_destinationPath, _targetPath);
 
             ThrowCopyConflictException(
-                () => File.Copy(file, targetFile, scanProcess.IsOwerrite()),
-                () => errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Copied!"));
+                () => File.Copy(file, targetFile, _scanProcess.IsOwerrite()),
+                () => _errorLabelTextCallback.Invoke("Files Are Conflicted! Non Conflicted Files Are Copied!"));
 
 
-            if (scanProcess.IsCopyNtfsPermissions())
-                scanProcess.GetNtfsPermissionAction().Invoke(new FileInfo(file), new FileInfo(file.Replace(destinationPath, targetPath)));
+            if (_scanProcess.IsCopyNtfsPermissions())
+                _scanProcess.GetNtfsPermissionAction().Invoke(new FileInfo(file), new FileInfo(file.Replace(_destinationPath, _targetPath)));
         }
 
 
@@ -90,9 +80,7 @@ namespace FileReporterDecorator.FileOperation.operations
          */
         public override async Task Run()
         {
-            scanProcess.GetDirectoryList().ToList().ForEach(d => Directory.CreateDirectory(d.Replace(destinationPath, targetPath)));
-
-            minimumProgressBar.Invoke();
+            _scanProcess.GetDirectoryList().ToList().ForEach(d => Directory.CreateDirectory(d.Replace(_destinationPath, _targetPath)));
 
             var stopWatch = new Stopwatch();
 
@@ -104,7 +92,7 @@ namespace FileReporterDecorator.FileOperation.operations
 
             _showOnScreenCallbackMaximize(_locker.COUNTER, stopWatch.Elapsed);
 
-            setTimeLabelAction.Invoke("Copy Operation was completed! Total Elapsed Time: " + stopWatch.Elapsed);
+            _setTimeLabelAction.Invoke("Copy Operation was completed! Total Elapsed Time: " + stopWatch.Elapsed);
         }
     }
 }

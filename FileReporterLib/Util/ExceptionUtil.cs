@@ -84,7 +84,6 @@
             }
         }
 
-
         public static void ThrowFileNotFoundException(Action action, Action finallyAction)
         {
             try

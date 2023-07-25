@@ -37,16 +37,16 @@ namespace FileReporterAppTest
         {
 
             if (operation == OperationEnum.MOVE)
-                return new MoveFileOperation(scanProcess, totalFileCount,
+                return new MoveFileOperation(scanProcess,
                     DEFAULT_THREAD_COUNT, destinationPath, targetPath,
-                    EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_SHOW_MIN_PROGRESSBAR_CALLBACK,
+                    EMPTY_SHOW_ON_SCREEN_CALLBACK,
                     EMPTY_SHOW_TIME_CALLBACK, EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK,
                     EMPTY_ERROR_LABEL_CALLBACK);
 
             else if (operation == OperationEnum.COPY)
-                return new CopyFileOperation(scanProcess, totalFileCount,
+                return new CopyFileOperation(scanProcess,
                     DEFAULT_THREAD_COUNT, destinationPath, targetPath,
-                    EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_SHOW_MIN_PROGRESSBAR_CALLBACK,
+                    EMPTY_SHOW_ON_SCREEN_CALLBACK,
                     EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK, EMPTY_SHOW_TIME_CALLBACK,
                     EMPTY_ERROR_LABEL_CALLBACK);
 
@@ -64,7 +64,8 @@ namespace FileReporterAppTest
 
                 return new ScanDirectoryOperation(new EmptyOperation(), dateTime, totalFileCount,
                                                   DEFAULT_THREAD_COUNT, TEST_DIRECTORY_PATH, dateOpt,
-                                                  EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK);
+                                                  EMPTY_SHOW_ON_SCREEN_CALLBACK, 
+                                                  EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK, EMPTY_UNAUTHORIZED_REPORT_ACTION);
             }
 
             // Create Scan operation with destination path parameter
@@ -74,7 +75,8 @@ namespace FileReporterAppTest
 
                 return new ScanDirectoryOperation(new EmptyOperation(), dateTime, totalFileCount,
                                                   DEFAULT_THREAD_COUNT, destination, dateOpt,
-                                                  EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK);
+                                                  EMPTY_SHOW_ON_SCREEN_CALLBACK, EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK, 
+                                                  EMPTY_UNAUTHORIZED_REPORT_ACTION);
             }
         }
         // MOVE PROCESSES

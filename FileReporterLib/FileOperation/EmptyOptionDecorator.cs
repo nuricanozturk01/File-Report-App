@@ -15,7 +15,6 @@
             _scanProcess = scanProcess;
             _scanProcess.SetEmptyFolder(true);
             _fileOperation = fileOperation;
-            _fileOperation.SetEmptyFolder(true);
         }
 
         /*

@@ -2,8 +2,6 @@
 using FileReporterDecorator.FileOperation;
 using FileReporterDecorator.FileOperation.operations;
 using FileReporterLib.Filter.DateFilter;
-using FileReporterLib.Util;
-using System.Security.AccessControl;
 using static FileReporterDecorator.Util.ExceptionUtil;
 using static FileReportServiceLib.Util.OptionCreator;
 
@@ -12,10 +10,11 @@ namespace FileReporterApp
     public partial class FileSystemReporterForm : Form
     {
         private readonly Action<int, int, string> _showOnScreenProgressCallback;
+        private readonly Action<int, string> _showOnScreenProgressCallbackOverride;
         private readonly Action<int, TimeSpan> _showMaximizeOnScreenCallback;
-        private readonly Action _minimumProgressBarCallback;
         private readonly Action<string> _setTimeLabelCallback;
         private readonly Action<string> _errorLabelTextCallback;
+        private readonly Action<List<string>> _saveDialogUnAccessAuthorizeCallback;
 
         private int _threadCount;
         private int _totalFileCount;
@@ -27,9 +26,10 @@ namespace FileReporterApp
         {
             InitializeComponent();
 
+            _saveDialogUnAccessAuthorizeCallback = unAuthorizedList => SaveUnAuthorizedFolders(unAuthorizedList);
             _showOnScreenProgressCallback = (counter, fileCount, file) => ShowOnScreenProgress(counter, fileCount, file);
+            _showOnScreenProgressCallbackOverride = (counter, file) => ShowOnScreenProgress(counter, file);
             _showMaximizeOnScreenCallback = (counter, elapsedTime) => ShowMaximizeOnScreen(counter, elapsedTime);
-            _minimumProgressBarCallback = () => MinimumProgressBar();
             _setTimeLabelCallback = (text) => SetTimeLabel(text);
             _errorLabelTextCallback = str => SetErrorLabelText(str);
         }
@@ -45,30 +45,6 @@ namespace FileReporterApp
 
         private IDateOption GetDateOption() => GetSelectedDateOption(CreatedDateRadioButton.Checked, ModifiedDateRadioButton.Checked);
 
-        /*
-         * 
-         *
-         * This method calculate the total file count on the directory (include subfolders).
-         * 
-         * It can control the permissions, if not success throw the UnAuthorizedException and return 0.
-         * 
-         */
-        private int GetTotalFileCount()
-        {
-            var fileCount = 0;
-            try
-            {
-                if (AccessControl.HasAccessAllow(_destinationPath, FileSystemRights.FullControl, FileSystemRights.ReadAttributes, FileSystemRights.ListDirectory, FileSystemRights.ReadAndExecute | FileSystemRights.Synchronize))
-                    fileCount = new DirectoryInfo(PathTextBox.Text).GetFiles("*.*", SearchOption.AllDirectories).Length;
-
-                else throw new UnauthorizedAccessException("You cannot access this directory!");
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                ErrorLabel.Text = ex.Message;
-            }
-            return fileCount;
-        }
 
         /*
          * 
@@ -92,8 +68,25 @@ namespace FileReporterApp
         public FileOperation CreateScanProcess()
         {
             return new ScanDirectoryOperation(null, DateTimePicker.Value, _totalFileCount, _threadCount,
-                 _destinationPath, _dateOption, _showOnScreenProgressCallback, _showMaximizeOnScreenCallback);
+                 _destinationPath, _dateOption, _showOnScreenProgressCallbackOverride, _showMaximizeOnScreenCallback, _saveDialogUnAccessAuthorizeCallback);
         }
+
+
+
+
+        /*
+         * 
+         * Create Scan Process For Report
+         * 
+         */
+        public FileOperation CreateScanProcessWithoutSaveUnaccessFolders()
+        {
+            return new ScanDirectoryOperation(null, DateTimePicker.Value, _totalFileCount, _threadCount,
+                 _destinationPath, _dateOption, _showOnScreenProgressCallbackOverride, _showMaximizeOnScreenCallback, empty => { });
+        }
+
+
+
 
         /*
          * 
@@ -121,16 +114,14 @@ namespace FileReporterApp
         public FileOperation CreateOperationProcess(FileOperation scanProcess, bool moveOption, bool copyOption)
         {
             if (moveOption)
-                return new MoveFileOperation(scanProcess, _totalFileCount,
-                    _threadCount, _destinationPath, _targetPath,
-                    _showOnScreenProgressCallback, _minimumProgressBarCallback,
-                    _setTimeLabelCallback, _showMaximizeOnScreenCallback, _errorLabelTextCallback);
+                return new MoveFileOperation(scanProcess, _threadCount, _destinationPath, 
+                                             _targetPath,_showOnScreenProgressCallbackOverride,_setTimeLabelCallback, 
+                                             _showMaximizeOnScreenCallback, _errorLabelTextCallback);
 
             else if (copyOption)
-                return new CopyFileOperation(scanProcess, _totalFileCount,
-                    _threadCount, _destinationPath, _targetPath,
-                    _showOnScreenProgressCallback, _minimumProgressBarCallback,
-                    _showMaximizeOnScreenCallback, _setTimeLabelCallback, _errorLabelTextCallback);
+                return new CopyFileOperation(scanProcess, _threadCount, _destinationPath, 
+                                             _targetPath, _showOnScreenProgressCallbackOverride, _showMaximizeOnScreenCallback, 
+                                             _setTimeLabelCallback, _errorLabelTextCallback);
 
             return new EmptyOperation();
         }
@@ -150,9 +141,6 @@ namespace FileReporterApp
 
             bool isValid = DataValidator.ValidateData(_threadCount, _destinationPath, _targetPath, isReport, _threadCount, ThreadCounter, CopyRadioButton, MoveRadioButton);
 
-            if (isValid)
-                _totalFileCount = GetTotalFileCount();
-
             return isValid;
         }
 
@@ -167,7 +155,11 @@ namespace FileReporterApp
             if (!InitMembers(false))
                 return;
 
-            FileOperation scanProcess = CreateScanProcess();
+            FileOperation scanProcess = ScanRadioButton.Checked ? CreateScanProcess() : CreateScanProcessWithoutSaveUnaccessFolders();
+
+            ScanProgressBar.Style = ProgressBarStyle.Marquee;
+            ScanProgressBar.MarqueeAnimationSpeed = 30;
+
             await scanProcess.Run();
 
             FileOperation operationProcess = CreateOperationProcess(scanProcess, MoveRadioButton.Checked, CopyRadioButton.Checked);
@@ -175,6 +167,33 @@ namespace FileReporterApp
             operationProcess = CreateTransportProcess(operationProcess, scanProcess);
 
             await operationProcess.Run();
+
+            ScanProgressBar.Value = ScanProgressBar.Maximum;
+        }
+
+
+        /*
+         * 
+         * Save the unauthorizated files. 
+         * 
+         */
+        private void SaveUnAuthorizedFolders(List<string> unAuthorizedFileList)
+        {
+            Stream myStream;
+            SaveUnAccessFileDialog.Title = "Save As Unaccess Folders";
+            SaveUnAccessFileDialog.Filter = "txt files (*.txt)|*.txt";
+            SaveUnAccessFileDialog.FilterIndex = 1;
+            SaveUnAccessFileDialog.RestoreDirectory = true;
+
+            if (SaveUnAccessFileDialog.ShowDialog() == DialogResult.OK && (myStream = SaveUnAccessFileDialog.OpenFile()) != null)
+            {
+                myStream.Close();
+
+                File.WriteAllLines(SaveUnAccessFileDialog.FileName, unAuthorizedFileList);
+                ErrorLabel.Text = "Report is loading...";
+                ScanProgressBar.Value = ScanProgressBar.Maximum;
+                ErrorLabel.Text = "Report is ready!";
+            }
         }
 
 
@@ -189,7 +208,6 @@ namespace FileReporterApp
             if (!InitMembers(true))
                 return;
 
-            ThreadCounter.Value = 4;
             Stream myStream;
 
             SaveDialog.Filter = "txt files (*.txt)|*.txt|Excel Files (*.xlsx)|*.xlsx";
@@ -200,17 +218,23 @@ namespace FileReporterApp
             {
                 myStream.Close();
 
-                FileOperation scanProcess = CreateScanProcess();
+                FileOperation scanProcess = CreateScanProcessWithoutSaveUnaccessFolders();
                 await scanProcess.Run();
+
+                ErrorLabel.Text = "Report is loading...";
 
                 var reportProcess = new ExportReportOperation(scanProcess, GetFileFormat(SaveDialog.FilterIndex), SaveDialog.FileName);
 
                 await reportProcess.Run();
 
                 ScanProgressBar.Value = ScanProgressBar.Maximum;
-                TimeLabel.Text = "Report is ready!";
+                ErrorLabel.Text = "Report is ready!";
             }
         }
+
+
+
+
         /*
          * 
          *  Run this method when user click on the Report Button. This method create the report process. trigger method. 
@@ -316,7 +340,9 @@ namespace FileReporterApp
          */
         private void ShowMaximizeOnScreen(int counter, TimeSpan elapsedTime)
         {
+            ScanProgressBar.Style = ProgressBarStyle.Continuous;
             ScanProgressBar.Value = ScanProgressBar.Maximum;
+
             ScannedSizeLabel.Text = counter + " items were scanned!";
             TimeLabel.Text = "Scan was completed! Total Elapsed Time: " + elapsedTime;
         }
@@ -334,13 +360,25 @@ namespace FileReporterApp
             {
                 RequireInvoke(() =>
                 {
+
                     ScannedSizeLabel.Text = counter + " items were scanned";
-                    ScanProgressBar.Value = (int)Math.Min(ScanProgressBar.Maximum, ((double)counter / (double)totalFileCount) * 100.0);
+
                     ScannigLabel.Text = file;
 
                 });
             }
         }
+
+        private void ShowOnScreenProgress(int counter, string file)
+        {
+            RequireInvoke(() =>
+            {
+                ScannedSizeLabel.Text = counter + " items were scanned";
+                ScannigLabel.Text = file;
+            });
+        }
+
+
 
         /**
          * 

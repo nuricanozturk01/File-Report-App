@@ -10,10 +10,6 @@
 
             _fileOperation = fileOperation;
             this.scanProcess = scanProcess;
-            SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
-            SetNtfsPermissions(true);
-            _fileOperation.SetNtfsPermissions(true);
-            _fileOperation.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
             scanProcess.SetNtfsPermissions(true);
             scanProcess.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
         }
@@ -36,8 +32,6 @@
          */
         public override async Task Run()
         {
-            _fileOperation.SetNtfsPermissions(true);
-            _fileOperation.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
             scanProcess.SetNtfsPermissions(true);
             scanProcess.SetNtfsPermissionAction((sourceFileInfo, targetFileInfo) => CopyNtfsPermissions(sourceFileInfo, targetFileInfo));
             await _fileOperation.Run();

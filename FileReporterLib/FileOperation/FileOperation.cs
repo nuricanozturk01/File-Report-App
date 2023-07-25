@@ -11,6 +11,7 @@ namespace FileReporterDecorator.FileOperation
         private readonly ConcurrentBag<string> _oldFileList;
         private readonly ConcurrentBag<string> _directoryList;
         private readonly ConcurrentBag<string> _emptyDirectoryList;
+        private readonly ConcurrentBag<string> _unAccessFolderList;
         protected static COUNTER_LOCK _locker = new();
 
         private bool _isOverwrite;
@@ -23,6 +24,7 @@ namespace FileReporterDecorator.FileOperation
         {
             _newFileList = new();
             _oldFileList = new();
+            _unAccessFolderList = new();
             _directoryList = new();
             _emptyDirectoryList = new();
         }
@@ -72,6 +74,11 @@ namespace FileReporterDecorator.FileOperation
         public void AddEmptyDirectoryList(string dir) => _emptyDirectoryList.Add(dir);
 
 
+
+        // Add Empty Directory to Directory List
+        public void AddUnAccessDirectoryList(string dir) => _unAccessFolderList.Add(dir);
+
+
         // Get newFileList
         public ConcurrentBag<string> GetNewFileList() => _newFileList;
 
@@ -85,6 +92,10 @@ namespace FileReporterDecorator.FileOperation
 
         // Get emptyDirectoryList
         public ConcurrentBag<string> GetEmptyDirectoryList() => _emptyDirectoryList;
+
+
+        // Get unaccess folder directoryList
+        public ConcurrentBag<string> GetUnAccessFolderDirectoryList() => _unAccessFolderList;
 
         public abstract Task Run();
     }

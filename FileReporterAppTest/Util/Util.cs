@@ -10,10 +10,10 @@ namespace FileReporterAppTest.Util
 
         //EMPTY ACTIONS
         public readonly static Action<string, string> EMPTY_SHOW_CONFLICT_MESSAGE_CALLBACK = (str1, st2) => { };
-        public readonly static Action<int, int, string> EMPTY_SHOW_ON_SCREEN_CALLBACK = (num, num2, str) => { };
-        public readonly static Action<int, TimeSpan> EMPTY_SHOW_MAXIMIZE_PROGRESSBAR_CALLBACK = (num, timeSpan) => { };
+        public readonly static Action<int, string> EMPTY_SHOW_ON_SCREEN_CALLBACK = (num, str) => { };
         public readonly static Action EMPTY_SHOW_MIN_PROGRESSBAR_CALLBACK = () => { };
         public readonly static Action<string> EMPTY_SHOW_TIME_CALLBACK = str => { };
+        public readonly static Action<List<string>> EMPTY_UNAUTHORIZED_REPORT_ACTION = list => { };
         public readonly static Action<int, TimeSpan> EMPTY_MAXIMIZE_PROGRESSBAR_CALLBACK = (num, timeSpan) => { };
         public readonly static Action<string> EMPTY_ERROR_LABEL_CALLBACK = str => { };
 
@@ -218,13 +218,9 @@ namespace FileReporterAppTest.Util
             foreach (var directory in Directory.GetDirectories(root))
             {
                 if (!Directory.EnumerateFileSystemEntries(directory).Any())
-                {
                     emptyDirectories.Add(directory);
-                }
-                else
-                {
-                    emptyDirectories.AddRange(FindEmptyDirectories(directory));
-                }
+                
+                else emptyDirectories.AddRange(FindEmptyDirectories(directory));
             }
 
             return emptyDirectories;

@@ -10,18 +10,21 @@ namespace FileReporterDecorator.FileOperation.operations
         private readonly int _totalFileCount;
         private readonly int _threadCount;
         private readonly FileOperation _fileOperation;
-        private readonly Action<int, int, string> _showOnScreenCallback;
+        private readonly Action<int, string> _showOnScreenCallback;
         private readonly Action<int, TimeSpan> _showOnScreenCallbackMaximize;
+        private readonly Action<List<string>> _saveDialogUnAccessAuthorizeCallback;
         private readonly IDateOption _dateOption;
         private readonly DateTime _dateTime;
-        private int _unAccessFolderCounter = 0; // Dont Permission Folder without locked folder subfolders
 
         public ScanDirectoryOperation(
             FileOperation fileOperation, DateTime dateTime,
             int totalFileCount, int threadCount,
             string targetPath, IDateOption dateOption,
-            Action<int, int, string> showOnScreenCallback, Action<int, TimeSpan> showOnScreenCallbackMaximize)
+            Action<int, string> showOnScreenCallback,
+            Action<int, TimeSpan> showOnScreenCallbackMaximize,
+            Action<List<string>> saveDialogUnAccessAuthorizeCallback)
         {
+            _saveDialogUnAccessAuthorizeCallback = saveDialogUnAccessAuthorizeCallback;
             _dateTime = dateTime;
             _totalFileCount = totalFileCount;
             _threadCount = threadCount;
@@ -38,23 +41,23 @@ namespace FileReporterDecorator.FileOperation.operations
          * Scan files (include subfolders) and classify it recursively.
          * 
          */
-        public void ScanFileSystemAndClassifyFiles(IDateOption dateOption, string path)
+        public void ScanFileSystemAndClassifyFiles(string path)
         {
-            try
+            foreach (string file in Directory.GetFiles(path))
             {
-                foreach (string file in Directory.GetFiles(path))
+                ClassifyBySelectedDate(_dateOption, file);
+
+                lock (_locker)
+                    _locker.COUNTER++;
+            }
+
+            Parallel.ForEach(Directory.GetDirectories(path), new ParallelOptions { MaxDegreeOfParallelism = _threadCount }, subDir =>
+            {
+                var name = new DirectoryInfo(subDir);
+
+                try
                 {
-                    ClassifyBySelectedDate(dateOption, file);
-
-                    lock (_locker)
-                        _locker.COUNTER++;
-                }
-
-                Parallel.ForEach(Directory.GetDirectories(path), new ParallelOptions { MaxDegreeOfParallelism = _threadCount }, subDir =>
-                {
-                    var name = new DirectoryInfo(subDir);
-
-                    if (Directory.EnumerateFileSystemEntries(name.FullName).Any() && dateOption.SetDate(new DirectoryInfo(path), _dateTime))
+                    if (Directory.EnumerateFileSystemEntries(name.FullName).Any() && _dateOption.SetDate(new DirectoryInfo(path), _dateTime))
                         AddDirectoryList(name.FullName);
 
                     else AddEmptyDirectoryList(name.FullName);
@@ -62,13 +65,13 @@ namespace FileReporterDecorator.FileOperation.operations
                     if (String.IsNullOrWhiteSpace(name.Name) || name.Name is null)
                         return;
 
-                    ScanFileSystemAndClassifyFiles(dateOption, subDir);
-                });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                _unAccessFolderCounter++;
-            }
+                    ScanFileSystemAndClassifyFiles(subDir);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    AddUnAccessDirectoryList(name.FullName);
+                }
+            });
         }
 
         /*
@@ -79,7 +82,7 @@ namespace FileReporterDecorator.FileOperation.operations
         private void ClassifyBySelectedDate(IDateOption dateOption, string file)
         {
             if (_locker.COUNTER % 1000 == 0)
-                _showOnScreenCallback(_locker.COUNTER, _totalFileCount, file);
+                _showOnScreenCallback(_locker.COUNTER, file);
 
             if (dateOption.SetDate(new FileInfo(file), _dateTime))
                 AddNewFileList(file);
@@ -100,6 +103,7 @@ namespace FileReporterDecorator.FileOperation.operations
             GetNewFileList().Clear();
             GetOldFileList().Clear();
             GetDirectoryList().Clear();
+            GetUnAccessFolderDirectoryList().Clear();
 
             _locker.COUNTER = 0;
 
@@ -107,9 +111,11 @@ namespace FileReporterDecorator.FileOperation.operations
 
             stopWatch.Start();
 
-            await Task.Run(() => ScanFileSystemAndClassifyFiles(_dateOption, _destinationPath));
+            await Task.Run(() => ScanFileSystemAndClassifyFiles(_destinationPath));
 
             stopWatch.Stop();
+
+            _saveDialogUnAccessAuthorizeCallback.Invoke(GetUnAccessFolderDirectoryList().ToList());
 
             _showOnScreenCallbackMaximize(_locker.COUNTER, stopWatch.Elapsed);
 

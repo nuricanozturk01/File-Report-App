@@ -5,13 +5,14 @@ namespace FileReporterDecorator.FileOperation.operations
 {
     public class ExportReportOperation : FileOperation
     {
-        private readonly FileType fileFormat;
-        private readonly string path;
+        private readonly FileType _fileFormat;
+        private readonly string _destinationPath;
         private readonly FileOperation _scanProcess;
+        
         public ExportReportOperation(FileOperation scanProcess, FileType fileFormat, string path)
         {
-            this.fileFormat = fileFormat;
-            this.path = path;
+            _fileFormat = fileFormat;
+            _destinationPath = path;
             _scanProcess = scanProcess;
         }
 
@@ -25,7 +26,7 @@ namespace FileReporterDecorator.FileOperation.operations
             var _newFiles = _scanProcess.GetNewFileList().Select(newFile => new FileInfo(newFile)).ToList();
             var _oldFiles = _scanProcess.GetOldFileList().Select(oldFile => new FileInfo(oldFile)).ToList();
 
-            await Task.Run(() => FileWriter.WriteFile(_newFiles, _oldFiles, fileFormat, path));
+            await Task.Run(() => FileWriter.WriteFile(_newFiles, _oldFiles, _fileFormat, _destinationPath));
         }
     }
 }
